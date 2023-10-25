@@ -357,7 +357,7 @@ interface IList extends ICollection
      * @throws IndexOutOfBoundsException if the index is out of range
      *         ({@code index < 0 || index >= size()})
      */
-    function set(int $index, mixed $element): mixed;
+    function set(int $index, object $element): object;
 
     /**
      * Removes the element at the specified position in this list (optional
@@ -372,7 +372,7 @@ interface IList extends ICollection
      * @throws IndexOutOfBoundsException if the index is out of range
      *         ({@code index < 0 || index >= size()})
      */
-    function remove(int $index): mixed;
+    function remove(int $index): object;
 
 
     // Search Operations

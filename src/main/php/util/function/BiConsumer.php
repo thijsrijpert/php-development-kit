@@ -15,14 +15,14 @@ abstract class BiConsumer {
         protected readonly ClosureValidationHelper $closureHelper
     ){ }
 
-    abstract function accept($value, $value2): void;
+    abstract function accept(object $value, object $value2): void;
 
     public static function of(Closure $closure): BiConsumer {
         $helper = new ClosureValidationHelper($closure);
         $helper->assertParameterCount(BiConsumer::CLOSURE_PARAMETER_COUNT);
 
         return new class($helper) extends BiConsumer {
-            function accept($value, $value2): void {
+            function accept(object $value, object $value2): void {
                 try {
                     $this->closureHelper->getClosure()->call($this, $value, $value2);
                 } catch (TypeError $e) {

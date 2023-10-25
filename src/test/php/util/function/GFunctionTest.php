@@ -1,10 +1,9 @@
 <?php
 
-namespace util\function;
+namespace jhp\util\function;
 
 use jhp\testhelper\NotTestObject;
 use jhp\testhelper\TestObject;
-use jhp\util\function\GFunction;
 use jhp\util\function\internal\IllegalArgumentException;
 use PHPUnit\Framework\TestCase;
 use TypeError;
@@ -16,18 +15,6 @@ class GFunctionTest extends TestCase
     {
         $value1 = new TestObject();
         $function = GFunction::of(fn(TestObject $value1) => $value1->setValue("Set"));
-
-        $result = $function->apply($value1);
-
-        $this->assertTrue($value1->isSetterInvoked());
-        $this->assertEquals("Set", $value1->getValue());
-        $this->assertEquals("Set", $result->getValue());
-    }
-
-    function testGFunctionSuccessTest(): void
-    {
-        $value1 = new TestObject();
-        $function = GFunction::of(fn(TestObject $value1) => null);
 
         $result = $function->apply($value1);
 

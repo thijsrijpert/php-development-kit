@@ -15,7 +15,7 @@ abstract class Consumer {
         protected readonly ClosureValidationHelper $closureHelper
     ){ }
 
-    abstract function accept($value): void;
+    abstract function accept(object $value): void;
 
     public static function of(Closure $closure): Consumer {
         $closureHelper = new ClosureValidationHelper($closure);

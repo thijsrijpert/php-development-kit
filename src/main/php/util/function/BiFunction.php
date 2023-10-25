@@ -13,10 +13,10 @@ abstract class BiFunction {
 
     protected function __construct(
         protected readonly ClosureValidationHelper $closureHelper,
-        protected readonly ?string                 $returnType = null
+        protected ?string $returnType = null
     ){ }
 
-    abstract function apply($value, $value2): object;
+    abstract function apply(object $value, object $value2): object;
 
     public static function of(Closure $closure,
                               ?string $returnType = null
@@ -26,7 +26,7 @@ abstract class BiFunction {
         $helper->assertParameterCount(BiFunction::CLOSURE_PARAMETER_COUNT);
 
         return new class($helper, $returnType) extends BiFunction {
-            function apply($value, $value2): object {
+            function apply(object $value, object $value2): object {
                 try {
                     $result =  $this->closureHelper->getClosure()->call($this, $value, $value2);
                 } catch (TypeError $e) {

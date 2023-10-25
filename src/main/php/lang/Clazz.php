@@ -2,20 +2,27 @@
 
 namespace jhp\lang;
 
+use jhp\util\function\internal\NullPointerException;
+
 class Clazz
 {
 
     public function __construct(private readonly string $className) { }
 
-    public function getName() {
+    public function getName(): string {
         return $this->className;
+    }
+
+    public function equals(Clazz $other): bool {
+        return $this->getName() === $other->getName();
     }
 
     public static function from(string $type): Clazz {
         return new Clazz(strtolower($type));
     }
 
-    public static function of(mixed $value): Clazz {
+    public static function of(?object $value): Clazz
+    {
         if ($value === null) {
             throw new NullPointerException("Cannot create class reference, object is null");
         }

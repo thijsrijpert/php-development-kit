@@ -6,6 +6,7 @@ use ArrayIterator;
 use Iterator;
 use jhp\lang\Clazz;
 use jhp\lang\GType;
+use jhp\lang\IndexOutOfBoundsException;
 use jhp\util\function\Consumer;
 use jhp\util\function\internal\IllegalArgumentException;
 use jhp\util\function\internal\NullPointerException;
@@ -142,49 +143,82 @@ class ArrayList implements IList
         // TODO: Implement hashCode() method.
     }
 
-    function get(int $index): mixed
+    /**
+     * @throws IndexOutOfBoundsException
+     */
+    function get(int $index): object
     {
-        // TODO: Implement get() method.
+        if ($index < 0 || $index >= $this->size()) {
+            throw new IndexOutOfBoundsException("index is $index, while size is {$this->size()}");
+        }
+
+        return $this->array[$index];
     }
 
-    function set(int $index, mixed $element): mixed
+    /**
+     * @throws IndexOutOfBoundsException
+     */
+    function set(int $index, object $element): object
     {
-        // TODO: Implement set() method.
+        $current = $this->get($index);
+        $this->array[$index] = $element;
+        return $current;
     }
 
-    function remove(int $index): mixed
+    function remove(int $index): object
     {
-        // TODO: Implement remove() method.
+        $value = $this->get($index);
+        array_splice($this->array, $index, 1);
+        return $value;
     }
 
     function indexOf(object $o): int
     {
-        // TODO: Implement indexOf() method.
+        foreach ($this->array as $key => $value) {
+            if ($o == $value) {
+                return $key;
+            }
+        }
+
+        return -1;
     }
 
     function lastIndexOf(object $o): int
     {
-        // TODO: Implement lastIndexOf() method.
+        foreach (array_reverse($this->array) as $key => $value) {
+            if ($o == $value) {
+                return $this->size() - $key - 1;
+            }
+        }
+
+        return -1;
     }
 
     function listIterator(?int $index = null): ListIterator
     {
-        // TODO: Implement listIterator() method.
+        throw new NullPointerException();
     }
 
     function subList(int $fromIndex, int $toIndex): IList
     {
-        // TODO: Implement subList() method.
+        throw new NullPointerException();
     }
 
     function spliterator(): Spliterator
     {
-        // TODO: Implement spliterator() method.
+        throw new NullPointerException();
     }
 
     function removeIf(Predicate $filter): bool
     {
-        // TODO: Implement removeIf() method.
+        $modified = false;
+        foreach($this->array as $index => $value) {
+            if ($filter->test($value)) {
+                $modified = true;
+                $this->remove($index);
+            }
+        }
+        return $modified;
     }
 
     function stream(): Stream
@@ -197,9 +231,11 @@ class ArrayList implements IList
         throw new NullPointerException();
     }
 
-    function forEach(Consumer $action)
+    function forEach(Consumer $action): void
     {
-
+        foreach ($this->array as $value) {
+            $action->accept($value);
+        }
     }
 
     public function getIterator(): Traversable
@@ -232,8 +268,8 @@ class ArrayList implements IList
         unset($this->array[$offset]);
     }
 
-    private function checkObjectType(object $objectToBeAdded) {
-        if (Clazz::of($objectToBeAdded)->getName() !== $this->type->getName()) {
+    private function checkObjectType(object $objectToBeAdded): void {
+        if (Clazz::of($objectToBeAdded)->equals($this->type)) {
             throw new TypeError("Trying to add an object of type: " . Clazz::of($objectToBeAdded)->getName() .
                 "to array list of type: " . $this->type->getName());
         }

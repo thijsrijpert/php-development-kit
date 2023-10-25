@@ -13,10 +13,10 @@ abstract class GFunction {
 
     protected function __construct(
         protected readonly ClosureValidationHelper $closureHelper,
-        protected readonly ?string $returnType = null
+        protected ?string $returnType = null
     ){ }
 
-    abstract function apply($value): object;
+    abstract function apply(object $value): object;
 
     public static function of(Closure $closure,
                               ?string $returnType = null

@@ -3,6 +3,7 @@
 namespace jhp\util\function;
 
 use Closure;
+use jhp\lang\Clazz;
 use jhp\util\function\internal\ClosureValidationHelper;
 use jhp\util\function\internal\TypeErrorHelper;
 use TypeError;
@@ -17,20 +18,19 @@ abstract class UnaryOperator extends GFunction {
         $helper->assertParameterCount(GFunction::CLOSURE_PARAMETER_COUNT);
 
         return new class($closure, $returnType) extends UnaryOperator {
-            function apply($value): object {
-                if ($this->returnType !== null) {
-                    $this->closureHelper->validateType($value, $this->returnType);
-                }
-
+            function apply(object $value): object {
                 try {
                     $result =  $this->closureHelper->getClosure()->call($this, $value);
                 } catch (TypeError $e) {
                     throw TypeErrorHelper::convertToFunctionalTypeError($e);
                 }
 
-                if ($this->returnType !== null) {
-                    $this->closureHelper->validateType($result, $this->returnType);
+                if ($this->returnType === null) {
+                    $this->returnType = Clazz::of($result)->getName();
                 }
+
+                $this->closureHelper->validateType($value, $this->returnType);
+                $this->closureHelper->validateType($result, $this->returnType);
                 return $result;
             }
         };

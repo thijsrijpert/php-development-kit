@@ -1,6 +1,6 @@
 <?php
 
-namespace util\function;
+namespace jhp\util\function;
 
 use jhp\testhelper\NotTestObject;
 use jhp\testhelper\TestObject;
