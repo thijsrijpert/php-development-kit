@@ -8,14 +8,14 @@ use jhp\testhelper\TestObject;
 class RunnableTest extends TestCase
 {
 
-    function testSupplierSuccess(): void {
+    function testRunnableSuccess(): void {
 
         $testobject = new TestObject();
         $function = Runnable::of(fn() => $testobject->setValue("Set"));
 
         $function->run();
 
-        $this->assertTrue("DefaultValue", $testobject->isSetterInvoked());
+        $this->assertTrue($testobject->isSetterInvoked());
         $this->assertEquals("Set", $testobject->getValue());
     }
 }
