@@ -1,6 +1,6 @@
 <?php
 
-namespace jhp\util;
+namespace jhp\util\collection;
 
 class ListIterator
 {

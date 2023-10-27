@@ -1,6 +1,6 @@
 <?php
 
-namespace jhp\util;
+namespace jhp\util\collection;
 
 use ArrayIterator;
 use Iterator;
@@ -12,6 +12,7 @@ use jhp\util\function\internal\IllegalArgumentException;
 use jhp\util\function\internal\NullPointerException;
 use jhp\util\function\Predicate;
 use jhp\util\function\UnaryOperator;
+use jhp\util\Spliterator;
 use jhp\util\stream\Stream;
 use Traversable;
 use TypeError;
@@ -22,7 +23,8 @@ class ArrayList implements IList
 
     public function __construct(
         private readonly Clazz $type,
-        private array $array = []) {
+        private array $array = []
+    ) {
         foreach ($array as $key => $value) {
             $this->offsetSet($key, $value);
         }
@@ -44,10 +46,7 @@ class ArrayList implements IList
             return false;
         }
 
-        if (in_array($o, $this->array)) {
-            return true;
-        }
-        return false;
+        return $this->indexOf($o);
     }
 
     function iterator(): Iterator
@@ -110,37 +109,56 @@ class ArrayList implements IList
 
     function removeAll(ICollection $c): bool
     {
-        // TODO: Implement removeAll() method.
+        $modified = false;
+        foreach ($c as $value) {
+            $index = $this->indexOf($value);
+            if($index != -1) {
+                $this->remove($index);
+                $modified = true;
+            }
+        }
+        return $modified;
     }
 
     function retainAll(ICollection $c): bool
     {
-        // TODO: Implement retainAll() method.
+        $modified = false;
+        foreach ($this->array as $index => $value) {
+            if(!$c->contains($value)) {
+                $this->remove($index);
+                $modified = true;
+            }
+        }
+        return $modified;
     }
 
     function replaceAll(UnaryOperator $operator): void
     {
-        // TODO: Implement replaceAll() method.
+        foreach ($this->array as $key => $value) {
+            $this->array[$key] = $operator->apply($value);
+        }
     }
 
     function sort(Comparator $c): void
     {
-        // TODO: Implement sort() method.
+        usort($this->array, $c->getClosure());
     }
 
     function clear(): void
     {
-        // TODO: Implement clear() method.
+        foreach ($this->array as $key => $value) {
+            $this->remove($key);
+        }
     }
 
     function equals(object $o): bool
     {
-        // TODO: Implement equals() method.
-    }
+        if(!($o instanceof ArrayList) || $o->size() !== $this->size()) {
+            return false;
+        }
 
-    function hashCode(): int
-    {
-        // TODO: Implement hashCode() method.
+        return count(array_diff($this->array, $o->toArray())) === 0
+            && count(array_diff($o->toArray(), $this->array)) === 0;
     }
 
     /**
@@ -269,7 +287,7 @@ class ArrayList implements IList
     }
 
     private function checkObjectType(object $objectToBeAdded): void {
-        if (Clazz::of($objectToBeAdded)->equals($this->type)) {
+        if (!Clazz::of($objectToBeAdded)->equals($this->type)) {
             throw new TypeError("Trying to add an object of type: " . Clazz::of($objectToBeAdded)->getName() .
                 "to array list of type: " . $this->type->getName());
         }

@@ -2,7 +2,7 @@
 
 namespace jhp\util;
 
-class Spliterator
+interface Spliterator
 {
 
 }

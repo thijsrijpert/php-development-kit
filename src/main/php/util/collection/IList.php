@@ -1,9 +1,25 @@
 <?php
 
-namespace jhp\util;
+namespace jhp\util\collection;
 
 use Iterator;
+use jhp\util\a;
+use jhp\util\c;
+use jhp\util\ClassCastException;
+use jhp\util\e;
+use jhp\util\element;
+use jhp\util\fromIndex;
 use jhp\util\function\UnaryOperator;
+use jhp\util\IllegalArgumentException;
+use jhp\util\index;
+use jhp\util\IndexOutOfBoundsException;
+use jhp\util\NullPointerException;
+use jhp\util\o;
+use jhp\util\operator;
+use jhp\util\Spliterator;
+use jhp\util\the;
+use jhp\util\toIndex;
+use jhp\util\UnsupportedOperationException;
 
 interface IList extends ICollection
 {
@@ -306,25 +322,6 @@ interface IList extends ICollection
      * @return {@code true} if the specified object is equal to this list
      */
     function equals(object $o): bool;
-
-    /**
-     * Returns the hash code value for this list.  The hash code of a list
-     * is defined to be the result of the following calculation:
-     * <pre>{@code
-     *     int hashCode = 1;
-     *     for (E e : list)
-     *         hashCode = 31*hashCode + (e==null ? 0 : e.hashCode());
-     * }</pre>
-     * This ensures that {@code list1.equals(list2)} implies that
-     * {@code list1.hashCode()==list2.hashCode()} for any two lists,
-     * {@code list1} and {@code list2}, as required by the general
-     * contract of {@link Object#hashCode}.
-     *
-     * @return the hash code value for this list
-     * @see Object#equals(Object)
-     * @see #equals(Object)
-     */
-    function hashCode(): int;
 
 
     // Positional Access Operations

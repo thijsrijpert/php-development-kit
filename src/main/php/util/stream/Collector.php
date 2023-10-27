@@ -2,14 +2,11 @@
 
 namespace jhp\util\stream;
 
-use Closure;
+use jhp\util\collection\Set;
 use jhp\util\function\BiConsumer;
 use jhp\util\function\BinaryOperator;
 use jhp\util\function\GFunction;
-use jhp\util\function\internal\ClosureValidationHelper;
 use jhp\util\function\Supplier;
-use jhp\util\IList;
-use jhp\util\Set;
 
 abstract class Collector {
 

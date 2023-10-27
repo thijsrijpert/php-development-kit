@@ -2,7 +2,9 @@
 
 namespace jhp\util\stream;
 
-use jhp\util\Comparator;
+use jhp\util\collection\Comparator;
+use jhp\util\collection\ICollection;
+use jhp\util\collection\IList;
 use jhp\util\function\BiConsumer;
 use jhp\util\function\BiFunction;
 use jhp\util\function\BinaryOperator;
@@ -12,7 +14,6 @@ use jhp\util\function\IntFunction;
 use jhp\util\function\Predicate;
 use jhp\util\function\ToFloatFunction;
 use jhp\util\function\ToIntFunction;
-use jhp\util\IList;
 use jhp\util\Optional;
 
 /**

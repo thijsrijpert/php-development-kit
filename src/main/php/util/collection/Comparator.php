@@ -1,11 +1,12 @@
 <?php
 
-namespace jhp\util;
+namespace jhp\util\collection;
 
 use Closure;
+use jhp\util\function\FunctionalInterface;
 use jhp\util\function\internal\ClosureValidationHelper;
 
-abstract class Comparator {
+abstract class Comparator implements FunctionalInterface {
 
     private const CLOSURE_PARAMETER_COUNT = 2;
 
@@ -14,6 +15,11 @@ abstract class Comparator {
     ){ }
 
     abstract function compare($value, $value2): int;
+
+    public function getClosure(): Closure
+    {
+        return $this->closure;
+    }
 
     public static function of(Closure $closure) {
         $helper = new ClosureValidationHelper($closure);

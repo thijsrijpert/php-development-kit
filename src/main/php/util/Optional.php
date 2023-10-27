@@ -2,7 +2,309 @@
 
 namespace jhp\util;
 
+use Exception;use jhp\util\function\Consumer;use jhp\util\function\GFunction;use jhp\util\function\internal\NullPointerException;use jhp\util\function\Predicate;use jhp\util\function\Runnable;use jhp\util\function\Supplier;use jhp\util\stream\Stream;
 class Optional
 {
+   private function __construct(private readonly ?object $value = null) {}
 
+
+    /**
+     * Returns an empty {@code Optional} instance.  No value is present for this
+     * {@code Optional}.
+     *
+     * @apiNote
+     * Though it may be tempting to do so, avoid testing if an object is empty
+     * by comparing with {@code ==} or {@code !=} against instances returned by
+     * {@code Optional.empty()}.  There is no guarantee that it is a singleton.
+     * Instead, use {@link #isEmpty()} or {@link #isPresent()}.
+     *
+     * @return an empty {@code Optional}
+     */
+    public static function empty(): Optional {
+       return new Optional();
+    }
+
+    /**
+     * Returns an {@code Optional} describing the given non-{@code null}
+     * value.
+     *
+     * @param value the value to describe, which must be non-{@code null}
+     * @param <T> the type of the value
+     * @return an {@code Optional} with the value present
+     */
+    public static function of(object $value): Optional {
+        return new Optional($value);
+    }
+
+    /**
+     * Returns an {@code Optional} describing the given value, if
+     * non-{@code null}, otherwise returns an empty {@code Optional}.
+     *
+     * @param value the possibly-{@code null} value to describe
+     * @param <T> the type of the value
+     * @return an {@code Optional} with a present value if the specified value
+     *         is non-{@code null}, otherwise an empty {@code Optional}
+     */
+    public static function ofNullable(?object $value): Optional {
+        return new Optional($value);
+    }
+
+    /**
+     * If a value is present, returns the value, otherwise throws
+     * {@code NoSuchElementException}.
+     *
+     * @apiNote
+     * The preferred alternative to this method is {@link #orElseThrow()}.
+     *
+     * @return the non-{@code null} value described by this {@code Optional}
+     * @throws NoSuchElementException if no value is present
+     */
+    public function get(): object {
+        if ($this->value == null) {
+            throw new NoSuchElementException("No value present");
+        }
+        return $this->value;
+    }
+
+    /**
+     * If a value is present, returns {@code true}, otherwise {@code false}.
+     *
+     * @return {@code true} if a value is present, otherwise {@code false}
+     */
+    public function isPresent(): bool {
+        return $this->value != null;
+    }
+
+    /**
+     * If a value is  not present, returns {@code true}, otherwise
+     * {@code false}.
+     *
+     * @return  {@code true} if a value is not present, otherwise {@code false}
+     * @since   11
+     */
+    public function isEmpty(): bool {
+        return $this->value == null;
+    }
+
+    /**
+     * If a value is present, performs the given action with the value,
+     * otherwise does nothing.
+     *
+     * @param action the action to be performed, if a value is present
+     */
+    public function ifPresent(Consumer $action): void {
+        if ($this->value != null) {
+            $action->accept($this->value);
+        }
+    }
+
+    /**
+     * If a value is present, performs the given action with the value,
+     * otherwise performs the given empty-based action.
+     *
+     * @param action the action to be performed, if a value is present
+     * @param emptyAction the empty-based action to be performed, if no value is
+     *        present
+     * @throws NullPointerException if a value is present and the given action
+     *         is {@code null}, or no value is present and the given empty-based
+     *         action is {@code null}.
+     * @since 9
+     */
+    public function ifPresentOrElse(Consumer $action, Runnable $emptyAction): void {
+        if ($this->value != null) {
+            $action->accept($this->value);
+        } else {
+            $emptyAction->run();
+        }
+    }
+
+    /**
+     * If a value is present, and the value matches the given predicate,
+     * returns an {@code Optional} describing the value, otherwise returns an
+     * empty {@code Optional}.
+     *
+     * @param predicate the predicate to apply to a value, if present
+     * @return an {@code Optional} describing the value of this
+     *         {@code Optional}, if a value is present and the value matches the
+     *         given predicate, otherwise an empty {@code Optional}
+     * @throws NullPointerException if the predicate is {@code null}
+     */
+    public function filter(Predicate $predicate): Optional {
+        if (!$this->isPresent()) {
+            return $this;
+        }
+
+        return $predicate->test($this->value) ? $this : Optional::empty();
+    }
+
+    /**
+     * If a value is present, returns an {@code Optional} describing (as if by
+     * {@link #ofNullable}) the result of applying the given mapping function to
+     * the value, otherwise returns an empty {@code Optional}.
+     *
+     * <p>If the mapping function returns a {@code null} result then this method
+     * returns an empty {@code Optional}.
+     *
+     * @apiNote
+     * This method supports post-processing on {@code Optional} values, without
+     * the need to explicitly check for a return status.  For example, the
+     * following code traverses a stream of URIs, selects one that has not
+     * yet been processed, and creates a path from that URI, returning
+     * an {@code Optional<Path>}:
+     *
+     * <pre>{@code
+     *     Optional<Path> p =
+     *         uris.stream().filter(uri -> !isProcessedYet(uri))
+     *                       .findFirst()
+     *                       .map(Paths::get);
+     * }</pre>
+     *
+     * Here, {@code findFirst} returns an {@code Optional<URI>}, and then
+     * {@code map} returns an {@code Optional<Path>} for the desired
+     * URI if one exists.
+     *
+     * @param mapper the mapping function to apply to a value, if present
+     * @param <U> The type of the value returned from the mapping function
+     * @return an {@code Optional} describing the result of applying a mapping
+     *         function to the value of this {@code Optional}, if a value is
+     *         present, otherwise an empty {@code Optional}
+     * @throws NullPointerException if the mapping function is {@code null}
+     */
+    public function map(GFunction $mapper) {
+        if (!$this->isPresent()) {
+            return Optional::empty();
+        } else {
+            return Optional::ofNullable($mapper->apply($this->value));
+        }
+    }
+
+    /**
+     * If a value is present, returns the result of applying the given
+     * {@code Optional}-bearing mapping function to the value, otherwise returns
+     * an empty {@code Optional}.
+     *
+     * <p>This method is similar to {@link #map(Function)}, but the mapping
+     * function is one whose result is already an {@code Optional}, and if
+     * invoked, {@code flatMap} does not wrap it within an additional
+     * {@code Optional}.
+     *
+     * @param <U> The type of value of the {@code Optional} returned by the
+     *            mapping function
+     * @param mapper the mapping function to apply to a value, if present
+     * @return the result of applying an {@code Optional}-bearing mapping
+     *         function to the value of this {@code Optional}, if a value is
+     *         present, otherwise an empty {@code Optional}
+     * @throws NullPointerException if the mapping function is {@code null} or
+     *         returns a {@code null} result
+     */
+    public function flatMap(GFunction $mapper): Optional {
+        if (!$this->isPresent()) {
+            return Optional::empty();
+        }
+        return Optional::of($mapper->apply($this->value));
+    }
+
+    /**
+     * If a value is present, returns an {@code Optional} describing the value,
+     * otherwise returns an {@code Optional} produced by the supplying function.
+     *
+     * @param supplier the supplying function that produces an {@code Optional}
+     *        to be returned
+     * @return returns an {@code Optional} describing the value of this
+     *         {@code Optional}, if a value is present, otherwise an
+     *         {@code Optional} produced by the supplying function.
+     * @since 9
+     */
+    public function or(Supplier $supplier): Optional {
+        if ($this->isPresent()) {
+            return $this;
+        }
+        return Optional::of($supplier->get());
+    }
+
+    /**
+     * If a value is present, returns a sequential {@link Stream} containing
+     * only that value, otherwise returns an empty {@code Stream}.
+     *
+     * @apiNote
+     * This method can be used to transform a {@code Stream} of optional
+     * elements to a {@code Stream} of present value elements:
+     * <pre>{@code
+     *     Stream<Optional<T>> os = ..
+     *     Stream<T> s = os.flatMap(Optional::stream)
+     * }</pre>
+     *
+     * @return the optional value as a {@code Stream}
+     * @since 9
+     */
+    public function stream(): Stream {
+        throw new NullPointerException();
+    }
+
+    /**
+     * If a value is present, returns the value, otherwise returns
+     * {@code other}.
+     *
+     * @param other the value to be returned, if no value is present.
+     *        May be {@code null}.
+     * @return the value, if present, otherwise {@code other}
+     */
+    public function orElse(object $other): object {
+        return $this->value != null ? $this->value : $other;
+    }
+
+    /**
+     * If a value is present, returns the value, otherwise returns the result
+     * produced by the supplying function.
+     *
+     * @param supplier the supplying function that produces a value to be returned
+     * @return the value, if present, otherwise the result produced by the
+     *         supplying function
+     * @throws NullPointerException if no value is present and the supplying
+     *         function is {@code null}
+     */
+    public function orElseGet(Supplier $supplier): object {
+        return $this->value != null ? $this->value : $supplier->get();
+    }
+
+    /**
+     * If a value is present, returns the value, otherwise throws
+     * {@code NoSuchElementException}.
+     *
+     * @return the non-{@code null} value described by this {@code Optional}
+     * @throws NoSuchElementException if no value is present
+     * @throws Exception
+     * @since 10
+     */
+    public function orElseThrow(?Supplier $exceptionSupplier = null): object {
+        if ($this->value == null && $exceptionSupplier === null) {
+            throw new NoSuchElementException("No value present");
+        } else if($this->value == null) {
+            $e = $exceptionSupplier->get();
+            $e instanceof Exception
+                ? throw $e
+                : throw new NoSuchElementException("No value present, actual error supplier supplies invalid type");
+        }
+        return $this->value;
+    }
+
+    /**
+     * Indicates whether some other object is "equal to" this {@code Optional}.
+     * The other object is considered equal if:
+     * <ul>
+     * <li>it is also an {@code Optional} and;
+     * <li>both instances have no value present or;
+     * <li>the present values are "equal to" each other via {@code equals()}.
+     * </ul>
+     *
+     * @param obj an object to be tested for equality
+     * @return {@code true} if the other object is "equal to" this object
+     *         otherwise {@code false}
+     */
+    public function equals(object $obj): bool {
+        if ($this->value == $obj->value) {
+            return true;
+        }
+        return false;
+    }
 }

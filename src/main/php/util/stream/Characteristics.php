@@ -2,6 +2,8 @@
 
 namespace jhp\util\stream;
 
+use jhp\util\collection\Set;
+
 /**
  * Characteristics indicating properties of a {@code Collector}, which can
  * be used to optimize reduction implementations.
