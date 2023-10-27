@@ -23,13 +23,13 @@ class ArrayListTest extends TestCase
     }
 
     function testInitInvalidDataType() {
-        $this->assertThrows(TypeError::class);
+        $this->expectException(TypeError::class);
         $this->data[5] = (new NotTestObject())->setValue("Six");
         new ArrayList(Clazz::from(TestObject::class), $this->data);
     }
 
     function testInitNotAnObject() {
-        $this->assertThrows(TypeError::class);
+        $this->expectException(TypeError::class);
         $this->data[5] = 6;
         new ArrayList(Clazz::from(TestObject::class), $this->data);
     }
@@ -86,7 +86,7 @@ class ArrayListTest extends TestCase
     }
 
     function testAddInvalidType() {
-        $this->assertThrows(TypeError::class);
+        $this->expectException(TypeError::class);
         $input = (new NotTestObject())->setValue("Six");
         $list = new ArrayList(Clazz::from(TestObject::class), $this->data);
 
@@ -105,7 +105,7 @@ class ArrayListTest extends TestCase
     }
 
     function testAddInvalidIndexed() {
-        $this->assertThrows(TypeError::class);
+        $this->expectException(TypeError::class);
         $input = (new NotTestObject())->setValue("Six");
         $list = new ArrayList(Clazz::from(TestObject::class), $this->data);
 
