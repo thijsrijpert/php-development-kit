@@ -12,7 +12,7 @@ class ArrayListTest extends TestCase
 {
     private array $data;
 
-    function setUp() {
+    function setUp(): void {
         $this->data = [
             (new TestObject())->setValue("One"),
             (new TestObject())->setValue("Two"),
