@@ -21,13 +21,14 @@ abstract class Comparator implements FunctionalInterface {
         return $this->closure;
     }
 
-    public static function of(Closure $closure) {
+    public static function of(Closure $closure): Comparator
+    {
         $helper = new ClosureValidationHelper($closure);
         $helper->assertParameterCount(Comparator::CLOSURE_PARAMETER_COUNT);
 
         return new class($closure) extends Comparator {
             function compare($value, $value2): int {
-                return $this->closure->call($this, $value);
+                return $this->closure->call($this, $value, $value2);
             }
         };
     }

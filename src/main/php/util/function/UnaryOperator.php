@@ -17,7 +17,7 @@ abstract class UnaryOperator extends GFunction {
         $helper = new ClosureValidationHelper($closure);
         $helper->assertParameterCount(GFunction::CLOSURE_PARAMETER_COUNT);
 
-        return new class($closure, $returnType) extends UnaryOperator {
+        return new class($helper, $returnType) extends UnaryOperator {
             function apply(object $value): object {
                 try {
                     $result =  $this->closureHelper->getClosure()->call($this, $value);

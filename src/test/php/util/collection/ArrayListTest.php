@@ -2,6 +2,7 @@
 
 namespace jhp\util\collection;
 
+use jhp\lang\IndexOutOfBoundsException;
 use PHPUnit\Framework\TestCase;
 use jhp\lang\Clazz;
 use jhp\testhelper\NotTestObject;
@@ -93,6 +94,9 @@ class ArrayListTest extends TestCase
         $list->add($input);
     }
 
+    /**
+     * @throws IndexOutOfBoundsException
+     */
     function testAddAndGetIndexed() {
         $input = (new TestObject())->setValue("Six");
         $list = new ArrayList(Clazz::from(TestObject::class), $this->data);

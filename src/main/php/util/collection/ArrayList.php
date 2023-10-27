@@ -46,7 +46,7 @@ class ArrayList implements IList
             return false;
         }
 
-        return $this->indexOf($o);
+        return $this->indexOf($o) > 0;
     }
 
     function iterator(): Iterator
