@@ -2,6 +2,7 @@
 
 namespace jhp\util\function;
 
+use PHPUnit\Framework\TestCase;
 use jhp\testhelper\TestObject;
 
 class RunnableTest extends TestCase

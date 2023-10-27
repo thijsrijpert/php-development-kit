@@ -2,6 +2,7 @@
 
 namespace jhp\util\collection;
 
+use PHPUnit\Framework\TestCase;
 use jhp\lang\Clazz;
 use jhp\testhelper\NotTestObject;
 use jhp\testhelper\TestObject;
