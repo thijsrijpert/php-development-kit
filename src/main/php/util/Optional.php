@@ -281,9 +281,9 @@ class Optional
             throw new NoSuchElementException("No value present");
         } else if($this->value == null) {
             $e = $exceptionSupplier->get();
-            $e instanceof Exception
-                ? throw $e
-                : throw new NoSuchElementException("No value present, actual error supplier supplies invalid type");
+            throw $e instanceof Exception
+                ? $e
+                : new NoSuchElementException("No value present, actual error supplier supplies invalid type");
         }
         return $this->value;
     }
