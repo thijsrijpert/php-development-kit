@@ -14,7 +14,7 @@ abstract class Comparator implements FunctionalInterface {
         protected readonly Closure $closure
     ){ }
 
-    abstract function compare($value, $value2): int;
+    abstract function compare(object $value, object $value2): int;
 
     public function getClosure(): Closure
     {

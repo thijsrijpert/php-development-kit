@@ -1,6 +1,7 @@
 <?php
 
 namespace jhp\lang;
+
 use jhp\util\function\internal\NullPointerException;
 
 /**

@@ -4,10 +4,10 @@ namespace jhp\lang;
 
 use jhp\util\function\internal\NullPointerException;
 
-class Clazz
+final readonly class Clazz
 {
 
-    public function __construct(private readonly string $className) { }
+    public function __construct(private string $className) { }
 
     public function getName(): string {
         return $this->className;

@@ -16,5 +16,8 @@
   },
   "require-dev": {
     "phpunit/phpunit": "^10"
+  },
+  "require": {
+    "voku/stringy": "^6.5"
   }
 }
