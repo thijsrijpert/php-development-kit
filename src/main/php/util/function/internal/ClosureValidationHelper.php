@@ -3,7 +3,7 @@
 namespace jhp\util\function\internal;
 
 use Closure;
-use jhp\lang\Clazz;
+use jhp\lang\TClass;
 use jhp\lang\GType;
 use ReflectionException;
 use ReflectionFunction;
@@ -39,7 +39,7 @@ class ClosureValidationHelper
     private function isValidType(mixed $value, string $type): bool {
         $actual = GType::of($value);
         if ($actual->isObject()) {
-            return Clazz::of($value)->getName() === Clazz::from($type)->getName();
+            return TClass::of($value)->getName() === TClass::from($type)->getName();
         }
 
         $expected = GType::from($type);

@@ -1,6 +1,10 @@
 <?php
 namespace jhp\lang;
 
+use jhp\lang\exception\NumberFormatException;
+use jhp\lang\exception\UnsupportedOperationException;
+use TypeError;
+
 /**
  * The {@code Integer} class wraps a value of the primitive type
  * {@code int} in an object. An object of type {@code Integer}
@@ -48,7 +52,7 @@ class TInteger extends TNumber implements Comparable {
     /**
      * All possible chars for representing a number as a String
      */
-    public const digits = [
+    private const digits = [
         '0' => 0 , '1' => 1 , '2' => 2 , '3' => 3, '4' => 4 , '5' => 5,
         '6' => 6, '7' => 7, '8' => 8, '9' => 9, 'a' => 10, 'b' => 11,
         'c' => 12, 'd' => 13, 'e' => 14, 'f' => 15, 'g' => 16, 'h' => 17,
@@ -268,32 +272,6 @@ class TInteger extends TNumber implements Comparable {
         throw new UnsupportedOperationException();
     }
 
-    const DigitTens = [
-        '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
-        '1', '1', '1', '1', '1', '1', '1', '1', '1', '1',
-        '2', '2', '2', '2', '2', '2', '2', '2', '2', '2',
-        '3', '3', '3', '3', '3', '3', '3', '3', '3', '3',
-        '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-        '5', '5', '5', '5', '5', '5', '5', '5', '5', '5',
-        '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
-        '7', '7', '7', '7', '7', '7', '7', '7', '7', '7',
-        '8', '8', '8', '8', '8', '8', '8', '8', '8', '8',
-        '9', '9', '9', '9', '9', '9', '9', '9', '9', '9',
-    ];
-
-    const DigitOnes = [
-        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-    ];
-
     /**
      * Parses the string argument as a signed integer in the radix
      * specified by the second argument. The characters in the string
@@ -511,7 +489,7 @@ class TInteger extends TNumber implements Comparable {
      * after a widening primitive conversion.
      * @jls 5.1.2 Widening Primitive Conversions
      */
-    public function doubleValue(): int {
+    public function doubleValue(): float {
         throw new UnsupportedOperationException();
     }
 
@@ -537,7 +515,7 @@ class TInteger extends TNumber implements Comparable {
      *          {@code Integer} object.
      */
     public function hashCode(): int {
-        throw new UnsupportedOperationException();
+        return $this->value;
     }
 
     /**
@@ -549,8 +527,8 @@ class TInteger extends TNumber implements Comparable {
      *
      * @return a hash code value for a {@code int} value.
      */
-    public static function asHashCode(int $value) {
-        throw new UnsupportedOperationException();
+    public static function asHashCode(int $value): int {
+        return $value;
     }
 
     /**
@@ -710,8 +688,12 @@ class TInteger extends TNumber implements Comparable {
      *           comparison).
      * @since   1.2
      */
-    public function compareTo(TInteger $anotherInteger): int {
-        return $this->value <=> $anotherInteger->value;
+    public function compareTo(object $o): int {
+        if ($o instanceof TInteger) {
+            return $this->value <=> $o->value;
+        }
+
+        throw new TypeError("Trying to compare Integer with: " . TClass::of($o)->getName());
     }
 
     /**
@@ -816,7 +798,7 @@ class TInteger extends TNumber implements Comparable {
      *
      * @since 1.5
      */
-    public const SIZE = 32;
+    public const SIZE = TInteger::BYTES * 8;
 
     /**
      * The number of bytes used to represent a {@code int} value in two's
@@ -824,7 +806,7 @@ class TInteger extends TNumber implements Comparable {
      *
      * @since 1.8
      */
-    public const BYTES = 4;
+    public const BYTES = PHP_INT_SIZE;
 
     /**
      * Returns an {@code int} value with at most a single one-bit, in the

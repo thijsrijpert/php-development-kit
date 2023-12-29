@@ -142,4 +142,8 @@ class Character implements Serializable, Comparable
      */
     public const MAX_RADIX = 36;
 
+    public function compareTo(object $o): int
+    {
+        // TODO: Implement compareTo() method.
+    }
 }

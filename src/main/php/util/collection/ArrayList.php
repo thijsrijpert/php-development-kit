@@ -4,9 +4,9 @@ namespace jhp\util\collection;
 
 use ArrayIterator;
 use Iterator;
-use jhp\lang\Clazz;
+use jhp\lang\exception\IndexOutOfBoundsException;
 use jhp\lang\GType;
-use jhp\lang\IndexOutOfBoundsException;
+use jhp\lang\TClass;
 use jhp\util\function\Consumer;
 use jhp\util\function\internal\IllegalArgumentException;
 use jhp\util\function\internal\NullPointerException;
@@ -22,8 +22,8 @@ class ArrayList implements IList
 {
 
     public function __construct(
-        private readonly Clazz $type,
-        private array $array = []
+        private readonly TClass $type,
+        private array           $array = []
     ) {
         foreach ($array as $key => $value) {
             $this->offsetSet($key, $value);
@@ -42,7 +42,7 @@ class ArrayList implements IList
 
     function contains(object $o): bool
     {
-        if (Clazz::of($o)->getName() !== $this->type->getName()) {
+        if (TClass::of($o)->getName() !== $this->type->getName()) {
             return false;
         }
 
@@ -287,8 +287,8 @@ class ArrayList implements IList
     }
 
     private function checkObjectType(object $objectToBeAdded): void {
-        if (!Clazz::of($objectToBeAdded)->equals($this->type)) {
-            throw new TypeError("Trying to add an object of type: " . Clazz::of($objectToBeAdded)->getName() .
+        if (!TClass::of($objectToBeAdded)->equals($this->type)) {
+            throw new TypeError("Trying to add an object of type: " . TClass::of($objectToBeAdded)->getName() .
                 "to array list of type: " . $this->type->getName());
         }
     }

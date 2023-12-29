@@ -1,6 +1,6 @@
 <?php
 
-namespace jhp\lang;
+namespace jhp\lang\exception;
 
 use RuntimeException;
 

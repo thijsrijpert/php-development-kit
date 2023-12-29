@@ -2,7 +2,7 @@
 
 namespace jhp\lang;
 
-interface CharSequence
+class System
 {
 
 }

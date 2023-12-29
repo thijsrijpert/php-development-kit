@@ -2,11 +2,10 @@
 
 namespace jhp\util\collection;
 
-use jhp\lang\IndexOutOfBoundsException;
-use PHPUnit\Framework\TestCase;
-use jhp\lang\Clazz;
+use jhp\lang\TClass;
 use jhp\testhelper\NotTestObject;
 use jhp\testhelper\TestObject;
+use PHPUnit\Framework\TestCase;
 use TypeError;
 
 class ArrayListTest extends TestCase
@@ -26,17 +25,17 @@ class ArrayListTest extends TestCase
     function testInitInvalidDataType() {
         $this->expectException(TypeError::class);
         $this->data[5] = (new NotTestObject())->setValue("Six");
-        new ArrayList(Clazz::from(TestObject::class), $this->data);
+        new ArrayList(TClass::from(TestObject::class), $this->data);
     }
 
     function testInitNotAnObject() {
         $this->expectException(TypeError::class);
         $this->data[5] = 6;
-        new ArrayList(Clazz::from(TestObject::class), $this->data);
+        new ArrayList(TClass::from(TestObject::class), $this->data);
     }
 
     function testSize() {
-        $list = new ArrayList(Clazz::from(TestObject::class), $this->data);
+        $list = new ArrayList(TClass::from(TestObject::class), $this->data);
 
         $result = $list->size();
 
@@ -44,7 +43,7 @@ class ArrayListTest extends TestCase
     }
 
     function testIsEmptyFilled() {
-        $list = new ArrayList(Clazz::from(TestObject::class), $this->data);
+        $list = new ArrayList(TClass::from(TestObject::class), $this->data);
 
         $result = $list->isEmpty();
 
@@ -52,7 +51,7 @@ class ArrayListTest extends TestCase
     }
 
     function testIsEmptyEmpty() {
-        $list = new ArrayList(Clazz::from(TestObject::class));
+        $list = new ArrayList(TClass::from(TestObject::class));
 
         $result = $list->isEmpty();
 
@@ -60,7 +59,7 @@ class ArrayListTest extends TestCase
     }
 
     function testContainsTrue() {
-        $list = new ArrayList(Clazz::from(TestObject::class), $this->data);
+        $list = new ArrayList(TClass::from(TestObject::class), $this->data);
 
         $result = $list->contains((new TestObject())->setValue("Three"));
 
@@ -68,7 +67,7 @@ class ArrayListTest extends TestCase
     }
 
     function testContainsFalse() {
-        $list = new ArrayList(Clazz::from(TestObject::class), $this->data);
+        $list = new ArrayList(TClass::from(TestObject::class), $this->data);
 
         $result = $list->contains((new TestObject())->setValue("Zero"));
 
@@ -77,7 +76,7 @@ class ArrayListTest extends TestCase
 
     function testAddAndGet() {
         $input = (new TestObject())->setValue("Six");
-        $list = new ArrayList(Clazz::from(TestObject::class), $this->data);
+        $list = new ArrayList(TClass::from(TestObject::class), $this->data);
 
         $result = $list->add($input);
         $addedValue = $list->get(5);
@@ -89,7 +88,7 @@ class ArrayListTest extends TestCase
     function testAddInvalidType() {
         $this->expectException(TypeError::class);
         $input = (new NotTestObject())->setValue("Six");
-        $list = new ArrayList(Clazz::from(TestObject::class), $this->data);
+        $list = new ArrayList(TClass::from(TestObject::class), $this->data);
 
         $list->add($input);
     }
@@ -111,15 +110,15 @@ class ArrayListTest extends TestCase
     function testAddInvalidIndexed() {
         $this->expectException(TypeError::class);
         $input = (new NotTestObject())->setValue("Six");
-        $list = new ArrayList(Clazz::from(TestObject::class), $this->data);
+        $list = new ArrayList(TClass::from(TestObject::class), $this->data);
 
         $list->add(3, $input);
     }
 
     function testContainsAllTrue() {
-        $list = new ArrayList(Clazz::from(TestObject::class), $this->data);
+        $list = new ArrayList(TClass::from(TestObject::class), $this->data);
 
-        $result = $list->containsAll(new ArrayList(Clazz::from(TestObject::class), [
+        $result = $list->containsAll(new ArrayList(TClass::from(TestObject::class), [
             (new TestObject())->setValue("Three"),
             (new TestObject())->setValue("Two")]
         ));
@@ -128,9 +127,9 @@ class ArrayListTest extends TestCase
     }
 
     function testContainsAllFalse() {
-        $list = new ArrayList(Clazz::from(TestObject::class), $this->data);
+        $list = new ArrayList(TClass::from(TestObject::class), $this->data);
 
-        $result = $list->containsAll(new ArrayList(Clazz::from(TestObject::class), [
+        $result = $list->containsAll(new ArrayList(TClass::from(TestObject::class), [
                 (new TestObject())->setValue("Zero"),
                 (new TestObject())->setValue("Two")]
         ));

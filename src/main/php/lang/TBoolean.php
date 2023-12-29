@@ -25,7 +25,7 @@ use jhp\util\function\internal\NullPointerException;
  * @author  Arthur van Hoff
  * @since   1.0
  */
-class TBoolean
+class TBoolean extends TObject
 {
 
     private function __construct(private readonly bool $value) {
@@ -92,8 +92,31 @@ class TBoolean
      * @return the string representation of the specified {@code boolean}
      * @since 1.4
      */
-    public static function toString(bool $b): string {
+    public static function asString(bool $b): string {
         return $b ? "true" : "false";
+    }
+
+    /**
+     * Returns a hash code for this {@code Boolean} object.
+     *
+     * @return  the integer {@code 1231} if this object represents
+     * {@code true}; returns the integer {@code 1237} if this
+     * object represents {@code false}.
+     */
+    public function hashCode(): int {
+        return TBoolean::asHashCode($this->value);
+    }
+
+    /**
+     * Returns a hash code for a {@code boolean} value; compatible with
+     * {@code Boolean.hashCode()}.
+     *
+     * @param value the value to hash
+     * @return a hash code value for a {@code boolean} value.
+     * @since 1.8
+     */
+    public static function asHashCode(bool $value): int {
+        return $value ? 1231 : 1237;
     }
 
     /**

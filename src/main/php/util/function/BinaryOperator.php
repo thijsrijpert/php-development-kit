@@ -3,7 +3,7 @@
 namespace jhp\util\function;
 
 use Closure;
-use jhp\lang\Clazz;
+use jhp\lang\TClass;
 use jhp\util\function\internal\ClosureValidationHelper;
 use jhp\util\function\internal\TypeErrorHelper;
 use TypeError;
@@ -26,7 +26,7 @@ abstract class BinaryOperator extends BiFunction {
                 }
 
                 if ($this->returnType === null) {
-                    $this->returnType = Clazz::of($result)->getName();
+                    $this->returnType = TClass::of($result)->getName();
                 }
 
                 $this->closureHelper->validateType($result, $this->returnType);
