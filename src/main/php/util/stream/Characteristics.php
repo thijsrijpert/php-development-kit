@@ -5,7 +5,7 @@ namespace jhp\util\stream;
 use jhp\util\collection\Set;
 
 /**
- * Characteristics indicating properties of a {@code Collector}, which can
+ * Characteristics indicating properties of a Collector, which can
  * be used to optimize reduction implementations.
  */
 enum Characteristics {
@@ -15,7 +15,7 @@ enum Characteristics {
      * called concurrently with the same result container from multiple
      * threads.
      *
-     * <p>If a {@code CONCURRENT} collector is not also {@code UNORDERED},
+     * <p>If a CONCURRENT collector is not also UNORDERED,
      * then it should only be evaluated concurrently if applied to an
      * unordered data source.
      */

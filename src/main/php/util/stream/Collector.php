@@ -42,11 +42,11 @@ abstract class Collector {
 
     /**
      * Perform the final transformation from the intermediate accumulation type
-     * {@code A} to the final result type {@code R}.
+     * A to the final result type R.
      *
-     * <p>If the characteristic {@code IDENTITY_FINISH} is
+     * <p>If the characteristic IDENTITY_FINISH is
      * set, this function may be presumed to be an identity transform with an
-     * unchecked cast from {@code A} to {@code R}.
+     * unchecked cast from A to R.
      *
      * @return GFunction a function which transforms the intermediate result to the final
      * result
@@ -54,7 +54,7 @@ abstract class Collector {
     abstract function finisher(): GFunction;
 
     /**
-     * Returns a {@code Set} of {@code Collector.Characteristics} indicating
+     * Returns a Set of Collector.Characteristics indicating
      * the characteristics of this Collector.  This set should be immutable.
      *
      * @return Set an immutable set of collector characteristics

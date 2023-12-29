@@ -27,28 +27,28 @@ interface IList extends ICollection
 
     /**
      * Returns the number of elements in this list.  If this list contains
-     * more than {@code Integer.MAX_VALUE} elements, returns
-     * {@code Integer.MAX_VALUE}.
+     * more than Integer.MAX_VALUE elements, returns
+     * Integer.MAX_VALUE.
      *
      * @return int the number of elements in this list
      */
     function size(): int;
 
     /**
-     * Returns {@code true} if this list contains no elements.
+     * Returns true if this list contains no elements.
      *
-     * @return bool {@code true} if this list contains no elements
+     * @return bool true if this list contains no elements
      */
     function isEmpty(): bool;
 
     /**
-     * Returns {@code true} if this list contains the specified element.
-     * More formally, returns {@code true} if and only if this list contains
-     * at least one element {@code e} such that
-     * {@code Objects.equals(o, e)}.
+     * Returns true if this list contains the specified element.
+     * More formally, returns true if and only if this list contains
+     * at least one element e such that
+     * Objects.equals(o, e).
      *
      * @param o element whose presence in this list is to be tested
-     * @return {@code true} if this list contains the specified element
+     * @return true if this list contains the specified element
      * @throws ClassCastException if the type of the specified element
      *         is incompatible with this list
      * (<a href="ICollection.html#optional-restrictions">optional</a>)
@@ -98,8 +98,8 @@ interface IList extends ICollection
      * on what elements may be added.
      *
      * @param e element to be appended to this list
-     * @return {@code true} (as specified by {@link ICollection#add})
-     * @throws UnsupportedOperationException if the {@code add} operation
+     * @return true (as specified by {@link ICollection#add})
+     * @throws UnsupportedOperationException if the add operation
      *         is not supported by this list
      * @throws ClassCastException if the class of the specified element
      *         prevents it from being added to this list
@@ -113,11 +113,11 @@ interface IList extends ICollection
     // Bulk Modification Operations
 
     /**
-     * Returns {@code true} if this list contains all of the elements of the
+     * Returns true if this list contains all of the elements of the
      * specified collection.
      *
      * @param  c collection to be checked for containment in this list
-     * @return {@code true} if this list contains all of the elements of the
+     * @return true if this list contains all of the elements of the
      *         specified collection
      * @throws ClassCastException if the types of one or more elements
      *         in the specified collection are incompatible with this
@@ -146,8 +146,8 @@ interface IList extends ICollection
      * @param index index at which to insert the first element from the
      *              specified collection
      * @param c collection containing elements to be added to this list
-     * @return {@code true} if this list changed as a result of the call
-     * @throws UnsupportedOperationException if the {@code addAll} operation
+     * @return true if this list changed as a result of the call
+     * @throws UnsupportedOperationException if the addAll operation
      *         is not supported by this list
      * @throws ClassCastException if the class of an element of the specified
      *         collection prevents it from being added to this list
@@ -157,7 +157,7 @@ interface IList extends ICollection
      * @throws IllegalArgumentException if some property of an element of the
      *         specified collection prevents it from being added to this list
      * @throws IndexOutOfBoundsException if the index is out of range
-     *         ({@code index < 0 || index > size()})
+     *         (index < 0 || index > size())
      */
     function addAll(int|ICollection $a, ICollection $b = null): bool;
 
@@ -166,8 +166,8 @@ interface IList extends ICollection
      * specified collection (optional operation).
      *
      * @param c collection containing elements to be removed from this list
-     * @return {@code true} if this list changed as a result of the call
-     * @throws UnsupportedOperationException if the {@code removeAll} operation
+     * @return true if this list changed as a result of the call
+     * @throws UnsupportedOperationException if the removeAll operation
      *         is not supported by this list
      * @throws ClassCastException if the class of an element of this list
      *         is incompatible with the specified collection
@@ -188,8 +188,8 @@ interface IList extends ICollection
      * specified collection.
      *
      * @param c collection containing elements to be retained in this list
-     * @return {@code true} if this list changed as a result of the call
-     * @throws UnsupportedOperationException if the {@code retainAll} operation
+     * @return true if this list changed as a result of the call
+     * @throws UnsupportedOperationException if the retainAll operation
      *         is not supported by this list
      * @throws ClassCastException if the class of an element of this list
      *         is incompatible with the specified collection
@@ -209,7 +209,7 @@ interface IList extends ICollection
      * the operator are relayed to the caller.
      *
      * @implSpec
-     * The default implementation is equivalent to, for this {@code list}:
+     * The default implementation is equivalent to, for this list:
      * <pre>{@code
      *     final ListIterator<E> li = list.listIterator();
      *     while (li.hasNext()) {
@@ -217,8 +217,8 @@ interface IList extends ICollection
      *     }
      * }</pre>
      *
-     * If the list's list-iterator does not support the {@code set} operation
-     * then an {@code UnsupportedOperationException} will be thrown when
+     * If the list's list-iterator does not support the set operation
+     * then an UnsupportedOperationException will be thrown when
      * replacing the first element.
      *
      * @param operator the operator to apply to each element
@@ -240,11 +240,11 @@ interface IList extends ICollection
      * reorder equal elements.
      *
      * <p>All elements in this list must be <i>mutually comparable</i> using the
-     * specified comparator (that is, {@code c.compare(e1, e2)} must not throw
-     * a {@code ClassCastException} for any elements {@code e1} and {@code e2}
+     * specified comparator (that is, c.compare(e1, e2) must not throw
+     * a ClassCastException for any elements e1 and e2
      * in the list).
      *
-     * <p>If the specified comparator is {@code null} then all elements in this
+     * <p>If the specified comparator is null then all elements in this
      * list must implement the {@link Comparable} interface and the elements'
      * {@linkplain Comparable natural ordering} should be used.
      *
@@ -280,13 +280,13 @@ interface IList extends ICollection
      * Fourth Annual ACM-SIAM Symposium on Discrete Algorithms, pp 467-474,
      * January 1993.
      *
-     * @param c the {@code Comparator} used to compare list elements.
-     *          A {@code null} value indicates that the elements'
+     * @param c the Comparator used to compare list elements.
+     *          A null value indicates that the elements'
      *          {@linkplain Comparable natural ordering} should be used
      * @throws ClassCastException if the list contains elements that are not
      *         <i>mutually comparable</i> using the specified comparator
      * @throws UnsupportedOperationException if the list's list-iterator does
-     *         not support the {@code set} operation
+     *         not support the set operation
      * @throws IllegalArgumentException
      *         (<a href="ICollection.html#optional-restrictions">optional</a>)
      *         if the comparator is found to violate the {@link Comparator}
@@ -299,7 +299,7 @@ interface IList extends ICollection
      * Removes all the elements from this list (optional operation).
      * The list will be empty after this call returns.
      *
-     * @throws UnsupportedOperationException if the {@code clear} operation
+     * @throws UnsupportedOperationException if the clear operation
      *         is not supported by this list
      */
     function clear(): void;
@@ -309,17 +309,17 @@ interface IList extends ICollection
 
     /**
      * Compares the specified object with this list for equality.  Returns
-     * {@code true} if and only if the specified object is also a list, both
+     * true if and only if the specified object is also a list, both
      * lists have the same size, and all corresponding pairs of elements in
-     * the two lists are <i>equal</i>.  (Two elements {@code e1} and
-     * {@code e2} are <i>equal</i> if {@code Objects.equals(e1, e2)}.)
+     * the two lists are <i>equal</i>.  (Two elements e1 and
+     * e2 are <i>equal</i> if Objects.equals(e1, e2).)
      * In other words, two lists are defined to be
      * equal if they contain the same elements in the same order.  This
      * definition ensures that the equals method works properly across
-     * different implementations of the {@code List} interface.
+     * different implementations of the List interface.
      *
      * @param o the object to be compared for equality with this list
-     * @return {@code true} if the specified object is equal to this list
+     * @return true if the specified object is equal to this list
      */
     function equals(object $o): bool;
 
@@ -332,7 +332,7 @@ interface IList extends ICollection
      * @param index index of the element to return
      * @return the element at the specified position in this list
      * @throws IndexOutOfBoundsException if the index is out of range
-     *         ({@code index < 0 || index >= size()})
+     *         (index < 0 || index >= size())
      */
     function get(int $index): mixed;
 
@@ -343,7 +343,7 @@ interface IList extends ICollection
      * @param index index of the element to replace
      * @param element element to be stored at the specified position
      * @return the element previously at the specified position
-     * @throws UnsupportedOperationException if the {@code set} operation
+     * @throws UnsupportedOperationException if the set operation
      *         is not supported by this list
      * @throws ClassCastException if the class of the specified element
      *         prevents it from being added to this list
@@ -352,7 +352,7 @@ interface IList extends ICollection
      * @throws IllegalArgumentException if some property of the specified
      *         element prevents it from being added to this list
      * @throws IndexOutOfBoundsException if the index is out of range
-     *         ({@code index < 0 || index >= size()})
+     *         (index < 0 || index >= size())
      */
     function set(int $index, object $element): object;
 
@@ -364,10 +364,10 @@ interface IList extends ICollection
      *
      * @param index the index of the element to be removed
      * @return the element previously at the specified position
-     * @throws UnsupportedOperationException if the {@code remove} operation
+     * @throws UnsupportedOperationException if the remove operation
      *         is not supported by this list
      * @throws IndexOutOfBoundsException if the index is out of range
-     *         ({@code index < 0 || index >= size()})
+     *         (index < 0 || index >= size())
      */
     function remove(int $index): object;
 
@@ -377,8 +377,8 @@ interface IList extends ICollection
     /**
      * Returns the index of the first occurrence of the specified element
      * in this list, or -1 if this list does not contain the element.
-     * More formally, returns the lowest index {@code i} such that
-     * {@code Objects.equals(o, get(i))},
+     * More formally, returns the lowest index i such that
+     * Objects.equals(o, get(i)),
      * or -1 if there is no such index.
      *
      * @param o element to search for
@@ -396,8 +396,8 @@ interface IList extends ICollection
     /**
      * Returns the index of the last occurrence of the specified element
      * in this list, or -1 if this list does not contain the element.
-     * More formally, returns the highest index {@code i} such that
-     * {@code Objects.equals(o, get(i))},
+     * More formally, returns the highest index i such that
+     * Objects.equals(o, get(i)),
      * or -1 if there is no such index.
      *
      * @param o element to search for
@@ -428,7 +428,7 @@ interface IList extends ICollection
      * @return a list iterator over the elements in this list (in proper
      *         sequence), starting at the specified position in the list
      * @throws IndexOutOfBoundsException if the index is out of range
-     *         ({@code index < 0 || index > size()})
+     *         (index < 0 || index > size())
      */
     function listIterator(?int $index = null): ListIterator;
 
@@ -436,8 +436,8 @@ interface IList extends ICollection
 
     /**
      * Returns a view of the portion of this list between the specified
-     * {@code fromIndex}, inclusive, and {@code toIndex}, exclusive.  (If
-     * {@code fromIndex} and {@code toIndex} are equal, the returned list is
+     * fromIndex, inclusive, and toIndex, exclusive.  (If
+     * fromIndex and toIndex are equal, the returned list is
      * empty.)  The returned list is backed by this list, so non-structural
      * changes in the returned list are reflected in this list, and vice-versa.
      * The returned list supports all the optional list operations supported
@@ -451,9 +451,9 @@ interface IList extends ICollection
      * <pre>{@code
      *      list.subList(from, to).clear();
      * }</pre>
-     * Similar idioms may be constructed for {@code indexOf} and
-     * {@code lastIndexOf}, and all the algorithms in the
-     * {@code Collections} class can be applied to a subList.<p>
+     * Similar idioms may be constructed for indexOf and
+     * lastIndexOf, and all the algorithms in the
+     * Collections class can be applied to a subList.<p>
      *
      * The semantics of the list returned by this method become undefined if
      * the backing list (i.e., this list) is <i>structurally modified</i> in
@@ -473,7 +473,7 @@ interface IList extends ICollection
     /**
      * Creates a {@link Spliterator} over the elements in this list.
      *
-     * <p>The {@code Spliterator} reports {@link Spliterator#SIZED} and
+     * <p>The Spliterator reports {@link Spliterator#SIZED} and
      * {@link Spliterator#ORDERED}.  Implementations should document the
      * reporting of additional characteristic values.
      *
@@ -485,22 +485,22 @@ interface IList extends ICollection
      * <li>If the list is an instance of {@link RandomAccess} then the default
      *     implementation creates a spliterator that traverses elements by
      *     invoking the method {@link List#get}.  If such invocation results or
-     *     would result in an {@code IndexOutOfBoundsException} then the
+     *     would result in an IndexOutOfBoundsException then the
      *     spliterator will <em>fail-fast</em> and throw a
-     *     {@code ConcurrentModificationException}.
+     *     ConcurrentModificationException.
      *     If the list is also an instance of {@link AbstractList} then the
      *     spliterator will use the list's {@link AbstractList#modCount modCount}
      *     field to provide additional <em>fail-fast</em> behavior.
      * <li>Otherwise, the default implementation creates a spliterator from the
-     *     list's {@code Iterator}.  The spliterator inherits the
+     *     list's Iterator.  The spliterator inherits the
      *     <em>fail-fast</em> of the list's iterator.
      * </ul>
      *
      * @implNote
-     * The created {@code Spliterator} additionally reports
+     * The created Spliterator additionally reports
      * {@link Spliterator#SUBSIZED}.
      *
-     * @return a {@code Spliterator} over the elements in this list
+     * @return a Spliterator over the elements in this list
      * @since 1.8
      */
     function spliterator(): Spliterator;

@@ -28,13 +28,13 @@ use jhp\util\Optional;
  *                      .sum();
  * }</pre>
  *
- * In this example, {@code widgets} is a {@code ICollection<Widget>}.  We create
- * a stream of {@code Widget} objects via {@link ICollection#stream ICollection.stream()},
+ * In this example, widgets is a ICollection<Widget>.  We create
+ * a stream of Widget objects via {@link ICollection#stream ICollection.stream()},
  * filter it to produce a stream containing only the red widgets, and then
- * transform it into a stream of {@code int} values representing the weight of
+ * transform it into a stream of int values representing the weight of
  * each red widget. Then this stream is summed to produce a total weight.
  *
- * <p>In addition to {@code Stream}, which is a stream of object references,
+ * <p>In addition to Stream, which is a stream of object references,
  * there are primitive specializations for {@link IntStream}, {@link LongStream},
  * and {@link DoubleStream}, all of which are referred to as "streams" and
  * conform to the characteristics and restrictions described here.
@@ -58,7 +58,7 @@ use jhp\util\Optional;
  * it would not affect the result of the computation.  This means that
  * side-effects of behavioral parameters may not always be executed and should
  * not be relied upon, unless otherwise specified (such as by the terminal
- * operations {@code forEach} and {@code forEachOrdered}). (For a specific
+ * operations forEach and forEachOrdered). (For a specific
  * example of such an optimization, see the API note documented on the
  * {@link #count} operation.  For more detail, see the
  * <a href="package-summary.html#SideEffects">side-effects</a> section of the
@@ -81,8 +81,8 @@ use jhp\util\Optional;
  * source while it is being queried.
  *
  * <p>Most stream operations accept parameters that describe user-specified
- * behavior, such as the lambda expression {@code w -> w.getWeight()} passed to
- * {@code mapToInt} in the example above.  To preserve correct behavior,
+ * behavior, such as the lambda expression w -> w.getWeight() passed to
+ * mapToInt in the example above.  To preserve correct behavior,
  * these <em>behavioral parameters</em>:
  * <ul>
  * <li>must be <a href="package-summary.html#NonInterference">non-interfering</a>
@@ -165,7 +165,7 @@ interface Stream extends BaseStream
     function map(GFunction $mapper): Stream;
 
     /**
-     * Returns an {@code IntStream} consisting of the results of applying the
+     * Returns an IntStream consisting of the results of applying the
      * given function to the elements of this stream.
      *
      * <p>This is an <a href="package-summary.html#StreamOps">
@@ -179,7 +179,7 @@ interface Stream extends BaseStream
     function mapToInt(ToIntFunction $mapper): IntStream;
 
     /**
-     * Returns a {@code DoubleStream} consisting of the results of applying the
+     * Returns a DoubleStream consisting of the results of applying the
      * given function to the elements of this stream.
      *
      * <p>This is an <a href="package-summary.html#StreamOps">intermediate
@@ -197,33 +197,33 @@ interface Stream extends BaseStream
      * this stream with the contents of a mapped stream produced by applying
      * the provided mapping function to each element.  Each mapped stream is
      * {@link java.util.stream.BaseStream#close() closed} after its contents
-     * have been placed into this stream.  (If a mapped stream is {@code null}
+     * have been placed into this stream.  (If a mapped stream is null
      * an empty stream is used, instead.)
      *
      * <p>This is an <a href="package-summary.html#StreamOps">intermediate
      * operation</a>.
      *
      * @apiNote
-     * The {@code flatMap()} operation has the effect of applying a one-to-many
+     * The flatMap() operation has the effect of applying a one-to-many
      * transformation to the elements of the stream, and then flattening the
      * resulting elements into a new stream.
      *
      * <p><b>Examples.</b>
      *
-     * <p>If {@code orders} is a stream of purchase orders, and each purchase
+     * <p>If orders is a stream of purchase orders, and each purchase
      * order contains a collection of line items, then the following produces a
      * stream containing all the line items in all the orders:
      * <pre>{@code
      *     orders.flatMap(order -> order.getLineItems().stream())...
      * }</pre>
      *
-     * <p>If {@code path} is the path to a file, then the following produces a
-     * stream of the {@code words} contained in that file:
+     * <p>If path is the path to a file, then the following produces a
+     * stream of the words contained in that file:
      * <pre>{@code
      *     Stream<String> lines = Files.lines(path, StandardCharsets.UTF_8);
      *     Stream<String> words = lines.flatMap(line -> Stream.of(line.split(" +")));
      * }</pre>
-     * The {@code mapper} function passed to {@code flatMap} splits a line,
+     * The mapper function passed to flatMap splits a line,
      * using a simple regular expression, into an array of words, and then
      * creates a stream of words from that array.
      *
@@ -237,12 +237,12 @@ interface Stream extends BaseStream
     function flatMap(GFunction $mapper): Stream;
 
     /**
-     * Returns an {@code IntStream} consisting of the results of replacing each
+     * Returns an IntStream consisting of the results of replacing each
      * element of this stream with the contents of a mapped stream produced by
      * applying the provided mapping function to each element.  Each mapped
      * stream is {@link java.util.stream.BaseStream#close() closed} after its
      * contents have been placed into this stream.  (If a mapped stream is
-     * {@code null} an empty stream is used, instead.)
+     * null an empty stream is used, instead.)
      *
      * <p>This is an <a href="package-summary.html#StreamOps">intermediate
      * operation</a>.
@@ -257,12 +257,12 @@ interface Stream extends BaseStream
     function flatMapToInt(GFunction $mapper): IntStream;
 
     /**
-     * Returns an {@code DoubleStream} consisting of the results of replacing
+     * Returns an DoubleStream consisting of the results of replacing
      * each element of this stream with the contents of a mapped stream produced
      * by applying the provided mapping function to each element.  Each mapped
      * stream is {@link java.util.stream.BaseStream#close() closed} after its
      * contents have placed been into this stream.  (If a mapped stream is
-     * {@code null} an empty stream is used, instead.)
+     * null an empty stream is used, instead.)
      *
      * <p>This is an <a href="package-summary.html#StreamOps">intermediate
      * operation</a>.
@@ -295,32 +295,32 @@ interface Stream extends BaseStream
      * @implSpec
      * The default implementation invokes {@link #flatMap flatMap} on this stream,
      * passing a function that behaves as follows. First, it calls the mapper function
-     * with a {@code Consumer} that accumulates replacement elements into a newly created
+     * with a Consumer that accumulates replacement elements into a newly created
      * internal buffer. When the mapper function returns, it creates a stream from the
-     * internal buffer. Finally, it returns this stream to {@code flatMap}.
+     * internal buffer. Finally, it returns this stream to flatMap.
      *
      * @apiNote
      * This method is similar to {@link #flatMap flatMap} in that it applies a one-to-many
      * transformation to the elements of the stream and flattens the result elements
-     * into a new stream. This method is preferable to {@code flatMap} in the following
+     * into a new stream. This method is preferable to flatMap in the following
      * circumstances:
      * <ul>
      * <li>When replacing each stream element with a small (possibly zero) number of
      * elements. Using this method avoids the overhead of creating a new Stream instance
-     * for every group of result elements, as required by {@code flatMap}.</li>
+     * for every group of result elements, as required by flatMap.</li>
      * <li>When it is easier to use an imperative approach for generating result
      * elements than it is to return them in the form of a Stream.</li>
      * </ul>
      *
      * <p>If a lambda expression is provided as the mapper function argument, additional type
-     * information may be necessary for proper inference of the element type {@code <R>} of
+     * information may be necessary for proper inference of the element type <R> of
      * the returned stream. This can be provided in the form of explicit type declarations for
-     * the lambda parameters or as an explicit type argument to the {@code mapMulti} call.
+     * the lambda parameters or as an explicit type argument to the mapMulti call.
      *
      * <p><b>Examples</b>
      *
-     * <p>Given a stream of {@code Number} objects, the following
-     * produces a list containing only the {@code Integer} objects:
+     * <p>Given a stream of Number objects, the following
+     * produces a list containing only the Integer objects:
      * <pre>{@code
      *     Stream<Number> numbers = ... ;
      *     List<Integer> integers = numbers.<Integer>mapMulti((number, consumer) -> {
@@ -330,8 +330,8 @@ interface Stream extends BaseStream
      *         .collect(Collectors.toList());
      * }</pre>
      *
-     * <p>If we have an {@code Iterable<Object>} and need to recursively expand its elements
-     * that are themselves of type {@code Iterable}, we can use {@code mapMulti} as follows:
+     * <p>If we have an Iterable<Object> and need to recursively expand its elements
+     * that are themselves of type Iterable, we can use mapMulti as follows:
      * <pre>{@code
      * class C {
      *     static void expandIterable(Object e, Consumer<Object> c) {
@@ -361,7 +361,7 @@ interface Stream extends BaseStream
     function mapMulti(BiConsumer $mapper): Stream;
 
     /**
-     * Returns an {@code IntStream} consisting of the results of replacing each
+     * Returns an IntStream consisting of the results of replacing each
      * element of this stream with multiple elements, specifically zero or more
      * elements.
      * Replacement is performed by applying the provided mapping function to each
@@ -378,9 +378,9 @@ interface Stream extends BaseStream
      * @implSpec
      * The default implementation invokes {@link #flatMapToInt} on this stream,
      * passing a function that behaves as follows. First, it calls the mapper function
-     * with an {@code IntConsumer} that accumulates replacement elements into a newly created
-     * internal buffer. When the mapper function returns, it creates an {@code IntStream} from
-     * the internal buffer. Finally, it returns this stream to {@code flatMapToInt}.
+     * with an IntConsumer that accumulates replacement elements into a newly created
+     * internal buffer. When the mapper function returns, it creates an IntStream from
+     * the internal buffer. Finally, it returns this stream to flatMapToInt.
      *
      * @param BiConsumer $mapper a <a href="package-summary.html#NonInterference">non-interfering</a>,
      *               <a href="package-summary.html#Statelessness">stateless</a>
@@ -392,7 +392,7 @@ interface Stream extends BaseStream
     function mapMultiToInt(BiConsumer $mapper): IntStream;
 
     /**
-     * Returns a {@code DoubleStream} consisting of the results of replacing each
+     * Returns a DoubleStream consisting of the results of replacing each
      * element of this stream with multiple elements, specifically zero or more
      * elements.
      * Replacement is performed by applying the provided mapping function to each
@@ -409,9 +409,9 @@ interface Stream extends BaseStream
      * @implSpec
      * The default implementation invokes {@link #flatMapToDouble flatMapToDouble} on this stream,
      * passing a function that behaves as follows. First, it calls the mapper function
-     * with an {@code DoubleConsumer} that accumulates replacement elements into a newly created
-     * internal buffer. When the mapper function returns, it creates a {@code DoubleStream} from
-     * the internal buffer. Finally, it returns this stream to {@code flatMapToDouble}.
+     * with an DoubleConsumer that accumulates replacement elements into a newly created
+     * internal buffer. When the mapper function returns, it creates a DoubleStream from
+     * the internal buffer. Finally, it returns this stream to flatMapToDouble.
      *
      * @param BiConsumer $mapper a <a href="package-summary.html#NonInterference">non-interfering</a>,
      *               <a href="package-summary.html#Statelessness">stateless</a>
@@ -434,15 +434,15 @@ interface Stream extends BaseStream
      * intermediate operation</a>.
      *
      * @apiNote
-     * Preserving stability for {@code distinct()} in parallel pipelines is
+     * Preserving stability for distinct() in parallel pipelines is
      * relatively expensive (requires that the operation act as a full barrier,
      * with substantial buffering overhead), and stability is often not needed.
      * Using an unordered stream source (such as {@link #generate(Supplier)})
      * or removing the ordering constraint with {@link #unordered()} may result
-     * in significantly more efficient execution for {@code distinct()} in parallel
+     * in significantly more efficient execution for distinct() in parallel
      * pipelines, if the semantics of your situation permit.  If consistency
      * with encounter order is required, and you are experiencing poor performance
-     * or memory utilization with {@code distinct()} in parallel pipelines,
+     * or memory utilization with distinct() in parallel pipelines,
      * switching to sequential execution with {@link #sequential()} may improve
      * performance.
      *
@@ -452,7 +452,7 @@ interface Stream extends BaseStream
 
     /**
      * Returns a stream consisting of the elements of this stream, sorted
-     * according to the provided {@code Comparator}.
+     * according to the provided Comparator.
      *
      * <p>For ordered streams, the sort is stable.  For unordered streams, no
      * stability guarantees are made.
@@ -462,7 +462,7 @@ interface Stream extends BaseStream
      *
      * @param ?Comparator $comparator a <a href="package-summary.html#NonInterference">non-interfering</a>,
      *                   <a href="package-summary.html#Statelessness">stateless</a>
-     *                   {@code Comparator} to be used to compare stream elements
+     *                   Comparator to be used to compare stream elements
      * @return Stream the new stream
      */
     function sorted(?Comparator $comparator = null): Stream;
@@ -493,7 +493,7 @@ interface Stream extends BaseStream
      *
      * <p>In cases where the stream implementation is able to optimize away the
      * production of some or all the elements (such as with short-circuiting
-     * operations like {@code findFirst}, or in the example described in
+     * operations like findFirst, or in the example described in
      * {@link #count}), the action will not be invoked for those elements.
      *
      * @param Consumer $action a <a href="package-summary.html#NonInterference">
@@ -505,23 +505,23 @@ interface Stream extends BaseStream
 
     /**
      * Returns a stream consisting of the elements of this stream, truncated
-     * to be no longer than {@code maxSize} in length.
+     * to be no longer than maxSize in length.
      *
      * <p>This is a <a href="package-summary.html#StreamOps">short-circuiting
      * stateful intermediate operation</a>.
      *
      * @apiNote
-     * While {@code limit()} is generally a cheap operation on sequential
+     * While limit() is generally a cheap operation on sequential
      * stream pipelines, it can be quite expensive on ordered parallel pipelines,
-     * especially for large values of {@code maxSize}, since {@code limit(n)}
+     * especially for large values of maxSize, since limit(n)
      * is constrained to return not just any <em>n</em> elements, but the
      * <em>first n</em> elements in the encounter order.  Using an unordered
      * stream source (such as {@link #generate(Supplier)}) or removing the
      * ordering constraint with {@link #unordered()} may result in significant
-     * speedups of {@code limit()} in parallel pipelines, if the semantics of
+     * speedups of limit() in parallel pipelines, if the semantics of
      * your situation permit.  If consistency with encounter order is required,
      * and you are experiencing poor performance or memory utilization with
-     * {@code limit()} in parallel pipelines, switching to sequential execution
+     * limit() in parallel pipelines, switching to sequential execution
      * with {@link #sequential()} may improve performance.
      *
      * @param int $maxSize the number of elements the stream should be limited to
@@ -531,25 +531,25 @@ interface Stream extends BaseStream
 
     /**
      * Returns a stream consisting of the remaining elements of this stream
-     * after discarding the first {@code n} elements of the stream.
-     * If this stream contains fewer than {@code n} elements then an
+     * after discarding the first n elements of the stream.
+     * If this stream contains fewer than n elements then an
      * empty stream will be returned.
      *
      * <p>This is a <a href="package-summary.html#StreamOps">stateful
      * intermediate operation</a>.
      *
      * @apiNote
-     * While {@code skip()} is generally a cheap operation on sequential
+     * While skip() is generally a cheap operation on sequential
      * stream pipelines, it can be quite expensive on ordered parallel pipelines,
-     * especially for large values of {@code n}, since {@code skip(n)}
+     * especially for large values of n, since skip(n)
      * is constrained to skip not just any <em>n</em> elements, but the
      * <em>first n</em> elements in the encounter order.  Using an unordered
      * stream source (such as {@link #generate(Supplier)}) or removing the
      * ordering constraint with {@link #unordered()} may result in significant
-     * speedups of {@code skip()} in parallel pipelines, if the semantics of
+     * speedups of skip() in parallel pipelines, if the semantics of
      * your situation permit.  If consistency with encounter order is required,
      * and you are experiencing poor performance or memory utilization with
-     * {@code skip()} in parallel pipelines, switching to sequential execution
+     * skip() in parallel pipelines, switching to sequential execution
      * with {@link #sequential()} may improve performance.
      *
      * @param int $n the number of leading elements to skip
@@ -594,16 +594,16 @@ interface Stream extends BaseStream
      * handlers for both the returned and this stream are invoked.
      *
      * @apiNote
-     * While {@code takeWhile()} is generally a cheap operation on sequential
+     * While takeWhile() is generally a cheap operation on sequential
      * stream pipelines, it can be quite expensive on ordered parallel
      * pipelines, since the operation is constrained to return not just any
      * valid prefix, but the longest prefix of elements in the encounter order.
      * Using an unordered stream source (such as {@link #generate(Supplier)}) or
      * removing the ordering constraint with {@link #unordered()} may result in
-     * significant speedups of {@code takeWhile()} in parallel pipelines, if the
+     * significant speedups of takeWhile() in parallel pipelines, if the
      * semantics of your situation permit.  If consistency with encounter order
      * is required, and you are experiencing poor performance or memory
-     * utilization with {@code takeWhile()} in parallel pipelines, switching to
+     * utilization with takeWhile() in parallel pipelines, switching to
      * sequential execution with {@link #sequential()} may improve performance.
      *
      * @param Predicate $predicate a <a href="package-summary.html#NonInterference">non-interfering</a>,
@@ -653,16 +653,16 @@ interface Stream extends BaseStream
      * handlers for both the returned and this stream are invoked.
      *
      * @apiNote
-     * While {@code dropWhile()} is generally a cheap operation on sequential
+     * While dropWhile() is generally a cheap operation on sequential
      * stream pipelines, it can be quite expensive on ordered parallel
      * pipelines, since the operation is constrained to return not just any
      * valid prefix, but the longest prefix of elements in the encounter order.
      * Using an unordered stream source (such as {@link #generate(Supplier)}) or
      * removing the ordering constraint with {@link #unordered()} may result in
-     * significant speedups of {@code dropWhile()} in parallel pipelines, if the
+     * significant speedups of dropWhile() in parallel pipelines, if the
      * semantics of your situation permit.  If consistency with encounter order
      * is required, and you are experiencing poor performance or memory
-     * utilization with {@code dropWhile()} in parallel pipelines, switching to
+     * utilization with dropWhile() in parallel pipelines, switching to
      * sequential execution with {@link #sequential()} may improve performance.
      *
      * @param Predicate $predicate a <a href="package-summary.html#NonInterference">non-interfering</a>,
@@ -714,7 +714,7 @@ interface Stream extends BaseStream
 
     /**
      * Returns an array containing the elements of this stream, using the
-     * provided {@code generator} function to allocate the returned array, as
+     * provided generator function to allocate the returned array, as
      * well as any additional arrays that might be required for a partitioned
      * execution or for resizing.
      *
@@ -750,11 +750,11 @@ interface Stream extends BaseStream
      *
      * but is not constrained to execute sequentially.
      *
-     * <p>The {@code identity} value must be an identity for the combiner
-     * function.  This means that for all {@code u}, {@code combiner(identity, u)}
-     * is equal to {@code u}.  Additionally, the {@code combiner} function
-     * must be compatible with the {@code accumulator} function; for all
-     * {@code u} and {@code t}, the following must hold:
+     * <p>The identity value must be an identity for the combiner
+     * function.  This means that for all u, combiner(identity, u)
+     * is equal to u.  Additionally, the combiner function
+     * must be compatible with the accumulator function; for all
+     * u and t, the following must hold:
      * <pre>{@code
      *     combiner.apply(u, accumulator.apply(identity, t)) == accumulator.apply(u, t)
      * }</pre>
@@ -763,8 +763,8 @@ interface Stream extends BaseStream
      * operation</a>.
      *
      * @apiNote Many reductions using this form can be represented more simply
-     * by an explicit combination of {@code map} and {@code reduce} operations.
-     * The {@code accumulator} function acts as a fused mapper and accumulator,
+     * by an explicit combination of map and reduce operations.
+     * The accumulator function acts as a fused mapper and accumulator,
      * which can sometimes be more efficient than separate mapping and reduction,
      * such as when knowing the previously reduced value allows you to avoid
      * some computation.
@@ -786,13 +786,13 @@ interface Stream extends BaseStream
     /**
      * Performs a <a href="package-summary.html#MutableReduction">mutable
      * reduction</a> operation on the elements of this stream using a
-     * {@code Collector}.  A {@code Collector}
+     * Collector.  A Collector
      * encapsulates the functions used as arguments to
      * {@link #collect(Supplier, BiConsumer, BiConsumer)}, allowing for reuse of
      * collection strategies and composition of collect operations such as
      * multiple-level grouping or partitioning.
      *
-     * <p>If the stream is parallel, and the {@code Collector}
+     * <p>If the stream is parallel, and the Collector
      * is {@link Collector.Characteristics#CONCURRENT concurrent}, and
      * either the stream is unordered or the collector is
      * {@link Collector.Characteristics#UNORDERED unordered},
@@ -805,7 +805,7 @@ interface Stream extends BaseStream
      * <p>When executed in parallel, multiple intermediate results may be
      * instantiated, populated, and merged so as to maintain isolation of
      * mutable data structures.  Therefore, even when executed in parallel
-     * with non-thread-safe data structures (such as {@code ArrayList}), no
+     * with non-thread-safe data structures (such as ArrayList), no
      * additional synchronization is needed for a parallel reduction.
      *
      * @apiNote
@@ -814,21 +814,21 @@ interface Stream extends BaseStream
      *     List<String> asList = stringStream.collect(Collectors.toList());
      * }</pre>
      *
-     * <p>The following will classify {@code Person} objects by city:
+     * <p>The following will classify Person objects by city:
      * <pre>{@code
      *     Map<String, List<Person>> peopleByCity
      *         = personStream.collect(Collectors.groupingBy(Person::getCity));
      * }</pre>
      *
-     * <p>The following will classify {@code Person} objects by state and city,
-     * cascading two {@code Collector}s together:
+     * <p>The following will classify Person objects by state and city,
+     * cascading two Collectors together:
      * <pre>{@code
      *     Map<String, Map<String, List<Person>>> peopleByStateAndCity
      *         = personStream.collect(Collectors.groupingBy(Person::getState,
      *                                                      Collectors.groupingBy(Person::getCity)));
      * }</pre>
      *
-     * @param Collector $collector the {@code Collector} describing the reduction
+     * @param Collector $collector the Collector describing the reduction
      * @return object the result of the reduction
      * @see #collect(Supplier, BiConsumer, BiConsumer)
      * @see Collectors
@@ -836,15 +836,15 @@ interface Stream extends BaseStream
     function collect(Collector $collector): object;
 
     /**
-     * Accumulates the elements of this stream into a {@code List}. The elements in
+     * Accumulates the elements of this stream into a List. The elements in
      * the list will be in this stream's encounter order, if one exists. The returned List
      * is unmodifiable; calls to any mutator method will always cause
-     * {@code UnsupportedOperationException} to be thrown. There are no
+     * UnsupportedOperationException to be thrown. There are no
      * guarantees on the implementation type or serializability of the returned List.
      *
      * <p>The returned instance may be <a href="{@docRoot}/java.base/java/lang/doc-files/ValueBased.html">value-based</a>.
      * Callers should make no assumptions about the identity of the returned instances.
-     * Identity-sensitive operations on these instances (reference equality ({@code ==}),
+     * Identity-sensitive operations on these instances (reference equality (==),
      * identity hash code, and synchronization) are unreliable and should be avoided.
      *
      * <p>This is a <a href="package-summary.html#StreamOps">terminal operation</a>.
@@ -868,14 +868,14 @@ interface Stream extends BaseStream
 
     /**
      * Returns the minimum element of this stream according to the provided
-     * {@code Comparator}.  This is a special case of a
+     * Comparator.  This is a special case of a
      * <a href="package-summary.html#Reduction">reduction</a>.
      *
      * <p>This is a <a href="package-summary.html#StreamOps">terminal operation</a>.
      *
      * @param Comparator $comparator a <a href="package-summary.html#NonInterference">non-interfering</a>,
      *                   <a href="package-summary.html#Statelessness">stateless</a>
-     *                   {@code Comparator} to compare elements of this stream
+     *                   Comparator to compare elements of this stream
      * @return Optional an optional describing the minimum element of this stream,
      * or an empty optional if the stream is empty
      */
@@ -883,7 +883,7 @@ interface Stream extends BaseStream
 
     /**
      * Returns the maximum element of this stream according to the provided
-     * {@code Comparator}.  This is a special case of a
+     * Comparator.  This is a special case of a
      * <a href="package-summary.html#Reduction">reduction</a>.
      *
      * <p>This is a <a href="package-summary.html#StreamOps">terminal
@@ -891,9 +891,9 @@ interface Stream extends BaseStream
      *
      * @param Comparator $comparator a <a href="package-summary.html#NonInterference">non-interfering</a>,
      *                   <a href="package-summary.html#Statelessness">stateless</a>
-     *                   {@code Comparator} to compare elements of this stream
-     * @return Optional an {@code Optional} describing the maximum element of this stream,
-     * or an empty {@code Optional} if the stream is empty
+     *                   Comparator to compare elements of this stream
+     * @return Optional an Optional describing the maximum element of this stream,
+     * or an empty Optional if the stream is empty
      */
     function max(Comparator $comparator): Optional;
 
@@ -919,11 +919,11 @@ interface Stream extends BaseStream
      *     List<String> l = Arrays.asList("A", "B", "C", "D");
      *     long count = l.stream().peek(System.out::println).count();
      * }</pre>
-     * The number of elements covered by the stream source, a {@code List}, is
-     * known and the intermediate operation, {@code peek}, does not inject into
+     * The number of elements covered by the stream source, a List, is
+     * known and the intermediate operation, peek, does not inject into
      * or remove elements from the stream (as may be the case for
-     * {@code flatMap} or {@code filter} operations).  Thus the count is the
-     * size of the {@code List} and there is no need to execute the pipeline
+     * flatMap or filter operations).  Thus the count is the
+     * size of the List and there is no need to execute the pipeline
      * and, as a side-effect, print out the list elements.
      *
      * @return int the count of elements in this stream
@@ -934,7 +934,7 @@ interface Stream extends BaseStream
      * Returns whether any elements of this stream match the provided
      * predicate.  May not evaluate the predicate on all elements if not
      * necessary for determining the result.  If the stream is empty then
-     * {@code false} is returned and the predicate is not evaluated.
+     * false is returned and the predicate is not evaluated.
      *
      * <p>This is a <a href="package-summary.html#StreamOps">short-circuiting
      * terminal operation</a>.
@@ -946,15 +946,15 @@ interface Stream extends BaseStream
      * @param Predicate $predicate a <a href="package-summary.html#NonInterference">non-interfering</a>,
      *                  <a href="package-summary.html#Statelessness">stateless</a>
      *                  predicate to apply to elements of this stream
-     * @return bool {@code true} if any elements of the stream match the provided
-     * predicate, otherwise {@code false}
+     * @return bool true if any elements of the stream match the provided
+     * predicate, otherwise false
      */
     function anyMatch(Predicate $predicate): bool;
 
     /**
      * Returns whether all elements of this stream match the provided predicate.
      * May not evaluate the predicate on all elements if not necessary for
-     * determining the result.  If the stream is empty then {@code true} is
+     * determining the result.  If the stream is empty then true is
      * returned and the predicate is not evaluated.
      *
      * <p>This is a <a href="package-summary.html#StreamOps">short-circuiting
@@ -964,20 +964,20 @@ interface Stream extends BaseStream
      * This method evaluates the <em>universal quantification</em> of the
      * predicate over the elements of the stream (for all x P(x)).  If the
      * stream is empty, the quantification is said to be <em>vacuously
-     * satisfied</em> and is always {@code true} (regardless of P(x)).
+     * satisfied</em> and is always true (regardless of P(x)).
      *
      * @param Predicate $predicate a <a href="package-summary.html#NonInterference">non-interfering</a>,
      *                  <a href="package-summary.html#Statelessness">stateless</a>
      *                  predicate to apply to elements of this stream
-     * @return bool {@code true} if either all elements of the stream match the
-     * provided predicate or the stream is empty, otherwise {@code false}
+     * @return bool true if either all elements of the stream match the
+     * provided predicate or the stream is empty, otherwise false
      */
     function allMatch(Predicate $predicate): bool;
 
     /**
      * Returns whether no elements of this stream match the provided predicate.
      * May not evaluate the predicate on all elements if not necessary for
-     * determining the result.  If the stream is empty then {@code true} is
+     * determining the result.  If the stream is empty then true is
      * returned and the predicate is not evaluated.
      *
      * <p>This is a <a href="package-summary.html#StreamOps">short-circuiting
@@ -987,32 +987,32 @@ interface Stream extends BaseStream
      * This method evaluates the <em>universal quantification</em> of the
      * negated predicate over the elements of the stream (for all x ~P(x)).  If
      * the stream is empty, the quantification is said to be vacuously satisfied
-     * and is always {@code true}, regardless of P(x).
+     * and is always true, regardless of P(x).
      *
      * @param Predicate $predicate a <a href="package-summary.html#NonInterference">non-interfering</a>,
      *                  <a href="package-summary.html#Statelessness">stateless</a>
      *                  predicate to apply to elements of this stream
-     * @return bool {@code true} if either no elements of the stream match the
-     * provided predicate or the stream is empty, otherwise {@code false}
+     * @return bool true if either no elements of the stream match the
+     * provided predicate or the stream is empty, otherwise false
      */
     function noneMatch(Predicate $predicate): bool;
 
     /**
      * Returns an {@link Optional} describing the first element of this stream,
-     * or an empty {@code Optional} if the stream is empty.  If the stream has
+     * or an empty Optional if the stream is empty.  If the stream has
      * no encounter order, then any element may be returned.
      *
      * <p>This is a <a href="package-summary.html#StreamOps">short-circuiting
      * terminal operation</a>.
      *
-     * @return Optional an {@code Optional} describing the first element of this stream,
-     * or an empty {@code Optional} if the stream is empty
+     * @return Optional an Optional describing the first element of this stream,
+     * or an empty Optional if the stream is empty
      */
     function findFirst(): Optional;
 
     /**
      * Returns an {@link Optional} describing some element of the stream, or an
-     * empty {@code Optional} if the stream is empty.
+     * empty Optional if the stream is empty.
      *
      * <p>This is a <a href="package-summary.html#StreamOps">short-circuiting
      * terminal operation</a>.
@@ -1023,8 +1023,8 @@ interface Stream extends BaseStream
      * on the same source may not return the same result.  (If a stable result
      * is desired, use {@link #findFirst()} instead.)
      *
-     * @return Optional an {@code Optional} describing some element of this stream, or an
-     * empty {@code Optional} if the stream is empty
+     * @return Optional an Optional describing some element of this stream, or an
+     * empty Optional if the stream is empty
      * @see #findFirst()
      */
     function findAny(): Optional;

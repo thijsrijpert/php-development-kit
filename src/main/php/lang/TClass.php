@@ -13,7 +13,10 @@ final class TClass extends TObject
         return $this->className;
     }
 
-    public function equals(TObject $obj): bool {
+    public function equals(?TObject $obj = null): bool {
+        if ($obj == null) {
+            return false;
+        }
         return $obj instanceof TClass && $this->getName() === $obj->getName();
     }
 

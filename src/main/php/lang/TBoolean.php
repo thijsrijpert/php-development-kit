@@ -6,15 +6,15 @@ use jhp\util\function\internal\NullPointerException;
 
 /**
  * The Boolean class wraps a value of the primitive type
- * {@code boolean} in an object. An object of type
- * {@code Boolean} contains a single field whose type is
- * {@code boolean}.
+ * boolean in an object. An object of type
+ * Boolean contains a single field whose type is
+ * boolean.
  *
  * <p>In addition, this class provides many methods for
- * converting a {@code boolean} to a {@code String} and a
- * {@code String} to a {@code boolean}, as well as other
+ * converting a boolean to a String and a
+ * String to a boolean, as well as other
  * constants and methods useful when dealing with a
- * {@code boolean}.
+ * boolean.
  *
  * <p>This is a <a href="{@docRoot}/java.base/java/lang/doc-files/ValueBased.html">value-based</a>
  * class; programmers should treat instances that are
@@ -33,16 +33,16 @@ class TBoolean extends TObject
     }
 
     /**
-     * Parses the string argument as a boolean.  The {@code boolean}
-     * returned represents the value {@code true} if the string argument
-     * is not {@code null} and is equal, ignoring case, to the string
-     * {@code "true"}.
+     * Parses the string argument as a boolean.  The boolean
+     * returned represents the value true if the string argument
+     * is not null and is equal, ignoring case, to the string
+     * "true".
      * Otherwise, a false value is returned, including for a null
      * argument.<p>
-     * Example: {@code Boolean.parseBoolean("True")} returns {@code true}.<br>
-     * Example: {@code Boolean.parseBoolean("yes")} returns {@code false}.
+     * Example: Boolean.parseBoolean("True") returns true.<br>
+     * Example: Boolean.parseBoolean("yes") returns false.
      *
-     * @param      s   the {@code String} containing the boolean
+     * @param      s   the String containing the boolean
      *                 representation to be parsed
      * @return     the boolean represented by the string argument
      * @since 1.5
@@ -52,27 +52,27 @@ class TBoolean extends TObject
     }
 
     /**
-     * Returns the value of this {@code Boolean} object as a boolean
+     * Returns the value of this Boolean object as a boolean
      * primitive.
      *
-     * @return  the primitive {@code boolean} value of this object.
+     * @return  the primitive boolean value of this object.
      */
     public function booleanValue(): bool {
         return $this->value;
     }
 
     /**
-     * Returns a {@code Boolean} instance representing the specified
-     * {@code boolean} value.  If the specified {@code boolean} value
-     * is {@code true}, this method returns {@code Boolean.TRUE};
-     * if it is {@code false}, this method returns {@code Boolean.FALSE}.
-     * If a new {@code Boolean} instance is not required, this method
+     * Returns a Boolean instance representing the specified
+     * boolean value.  If the specified boolean value
+     * is true, this method returns Boolean.TRUE;
+     * if it is false, this method returns Boolean.FALSE.
+     * If a new Boolean instance is not required, this method
      * should generally be used in preference to the constructor
      * {@link #Boolean(boolean)}, as this method is likely to yield
      * significantly better space and time performance.
      *
      * @param  b a boolean value.
-     * @return a {@code Boolean} instance representing {@code b}.
+     * @return a Boolean instance representing b.
      * @since  1.4
      */
     public static function valueOf(bool|String $b): TBoolean {
@@ -83,13 +83,13 @@ class TBoolean extends TObject
     }
 
     /**
-     * Returns a {@code String} object representing the specified
-     * boolean.  If the specified boolean is {@code true}, then
-     * the string {@code "true"} will be returned, otherwise the
-     * string {@code "false"} will be returned.
+     * Returns a String object representing the specified
+     * boolean.  If the specified boolean is true, then
+     * the string "true" will be returned, otherwise the
+     * string "false" will be returned.
      *
      * @param b the boolean to be converted
-     * @return the string representation of the specified {@code boolean}
+     * @return the string representation of the specified boolean
      * @since 1.4
      */
     public static function asString(bool $b): string {
@@ -97,22 +97,22 @@ class TBoolean extends TObject
     }
 
     /**
-     * Returns a hash code for this {@code Boolean} object.
+     * Returns a hash code for this Boolean object.
      *
-     * @return  the integer {@code 1231} if this object represents
-     * {@code true}; returns the integer {@code 1237} if this
-     * object represents {@code false}.
+     * @return  the integer 1231 if this object represents
+     * true; returns the integer 1237 if this
+     * object represents false.
      */
     public function hashCode(): int {
         return TBoolean::asHashCode($this->value);
     }
 
     /**
-     * Returns a hash code for a {@code boolean} value; compatible with
-     * {@code Boolean.hashCode()}.
+     * Returns a hash code for a boolean value; compatible with
+     * Boolean.hashCode().
      *
      * @param value the value to hash
-     * @return a hash code value for a {@code boolean} value.
+     * @return a hash code value for a boolean value.
      * @since 1.8
      */
     public static function asHashCode(bool $value): int {
@@ -120,13 +120,13 @@ class TBoolean extends TObject
     }
 
     /**
-     * Returns {@code true} if and only if the argument is not
-     * {@code null} and is a {@code Boolean} object that
-     * represents the same {@code boolean} value as this object.
+     * Returns true if and only if the argument is not
+     * null and is a Boolean object that
+     * represents the same boolean value as this object.
      *
      * @param   obj   the object to compare with.
-     * @return  {@code true} if the Boolean objects represent the
-     *          same value; {@code false} otherwise.
+     * @return  true if the Boolean objects represent the
+     *          same value; false otherwise.
      */
     public function equals(Object $obj): bool {
         if ($obj instanceof TBoolean) {
@@ -136,14 +136,14 @@ class TBoolean extends TObject
     }
 
     /**
-     * Compares this {@code Boolean} instance with another.
+     * Compares this Boolean instance with another.
      *
-     * @param   b the {@code Boolean} instance to be compared
+     * @param   b the Boolean instance to be compared
      * @return  zero if this object represents the same boolean value as the
      *          argument; a positive value if this object represents true
      *          and the argument represents false; and a negative value if
      *          this object represents false and the argument represents true
-     * @throws  NullPointerException if the argument is {@code null}
+     * @throws  NullPointerException if the argument is null
      * @see     Comparable
      * @since  1.5
      */
@@ -152,17 +152,17 @@ class TBoolean extends TObject
     }
 
     /**
-     * Compares two {@code boolean} values.
+     * Compares two boolean values.
      * The value returned is identical to what would be returned by:
      * <pre>
      *    Boolean.valueOf(x).compareTo(Boolean.valueOf(y))
      * </pre>
      *
-     * @param  x the first {@code boolean} to compare
-     * @param  y the second {@code boolean} to compare
-     * @return the value {@code 0} if {@code x == y};
-     *         a value less than {@code 0} if {@code !x && y}; and
-     *         a value greater than {@code 0} if {@code x && !y}
+     * @param  x the first boolean to compare
+     * @param  y the second boolean to compare
+     * @return the value 0 if x == y;
+     *         a value less than 0 if !x && y; and
+     *         a value greater than 0 if x && !y
      * @since 1.7
      */
     public static function compare(bool $x, bool $y): int {
@@ -171,11 +171,11 @@ class TBoolean extends TObject
 
     /**
      * Returns the result of applying the logical AND operator to the
-     * specified {@code boolean} operands.
+     * specified boolean operands.
      *
      * @param a the first operand
      * @param b the second operand
-     * @return the logical AND of {@code a} and {@code b}
+     * @return the logical AND of a and b
      * @see java.util.function.BinaryOperator
      * @since 1.8
      */
@@ -185,11 +185,11 @@ class TBoolean extends TObject
 
     /**
      * Returns the result of applying the logical OR operator to the
-     * specified {@code boolean} operands.
+     * specified boolean operands.
      *
      * @param a the first operand
      * @param b the second operand
-     * @return the logical OR of {@code a} and {@code b}
+     * @return the logical OR of a and b
      * @see java.util.function.BinaryOperator
      * @since 1.8
      */
@@ -199,11 +199,11 @@ class TBoolean extends TObject
 
     /**
      * Returns the result of applying the logical XOR operator to the
-     * specified {@code boolean} operands.
+     * specified boolean operands.
      *
      * @param a the first operand
      * @param b the second operand
-     * @return  the logical XOR of {@code a} and {@code b}
+     * @return  the logical XOR of a and b
      * @see java.util.function.BinaryOperator
      * @since 1.8
      */

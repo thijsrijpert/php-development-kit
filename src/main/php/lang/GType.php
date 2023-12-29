@@ -4,6 +4,7 @@ namespace jhp\lang;
 
 enum GType
 {
+    use Enum;
     case BOOLEAN;
     case INTEGER;
     case FLOAT;

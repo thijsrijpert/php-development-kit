@@ -6,14 +6,13 @@ use jhp\io\Serializable;
 use jhp\lang\exception\UnsupportedOperationException;
 
 /**
- * The abstract class {@code Number} is the superclass of platform
+ * The abstract class Number is the superclass of platform
  * classes representing numeric values that are convertible to the
- * primitive types {@code byte}, {@code double}, {@code float}, {@code
- * int}, {@code long}, and {@code short}.
+ * primitive types byte, double, float, int, long, and short.
  *
  * The specific semantics of the conversion from the numeric value of
- * a particular {@code Number} implementation to a given primitive
- * type is defined by the {@code Number} implementation in question.
+ * a particular Number implementation to a given primitive
+ * type is defined by the Number implementation in question.
  *
  * For platform classes, the conversion is often analogous to a
  * narrowing primitive conversion or a widening primitive conversion
@@ -23,77 +22,68 @@ use jhp\lang\exception\UnsupportedOperationException;
  * lose precision, and may even return a result of a different sign
  * than the input.
  *
- * See the documentation of a given {@code Number} implementation for
+ * See the documentation of a given Number implementation for
  * conversion details.
  *
  * @author      Lee Boynton
  * @author      Arthur van Hoff
- * @jls 5.1.2 Widening Primitive Conversions
- * @jls 5.1.3 Narrowing Primitive Conversions
- * @since   JDK1.0
  */
 abstract class TNumber extends TObject implements Serializable {
+
     /**
-     * Returns the value of the specified number as an {@code int},
+     * Returns the value of the specified number as an int,
      * which may involve rounding or truncation.
      *
-     * @return  the numeric value represented by this object after conversion
-     *          to type {@code int}.
+     * @return  int the numeric value represented by this object after conversion
+     *          to type int.
      */
     public abstract function intValue(): int;
 
     /**
-     * Returns the value of the specified number as a {@code long},
+     * Returns the value of the specified number as a long,
      * which may involve rounding or truncation.
      *
-     * @return  the numeric value represented by this object after conversion
-     *          to type {@code long}.
+     * @return  int the numeric value represented by this object after conversion
+     *          to type long.
      */
     public abstract function longValue(): int;
 
     /**
-     * Returns the value of the specified number as a {@code float},
+     * Returns the value of the specified number as a float,
      * which may involve rounding.
      *
-     * @return  the numeric value represented by this object after conversion
-     *          to type {@code float}.
+     * @return  float the numeric value represented by this object after conversion
+     *          to type float.
      */
     public abstract function floatValue(): float;
 
     /**
-     * Returns the value of the specified number as a {@code double},
+     * Returns the value of the specified number as a double,
      * which may involve rounding.
      *
-     * @return  the numeric value represented by this object after conversion
-     *          to type {@code double}.
+     * @return  float the numeric value represented by this object after conversion
+     *          to type double.
      */
     public abstract function doubleValue(): float;
 
     /**
-     * Returns the value of the specified number as a {@code byte},
+     * Returns the value of the specified number as a byte,
      * which may involve rounding or truncation.
      *
-     * <p>This implementation returns the result of {@link #intValue} cast
-     * to a {@code byte}.
-     *
-     * @return  the numeric value represented by this object after conversion
-     *          to type {@code byte}.
-     * @since   JDK1.1
+     * @return  int the numeric value represented by this object after conversion
+     *          to type byte.
      */
     public function byteValue(): int {
         throw new UnsupportedOperationException();
     }
 
     /**
-     * Returns the value of the specified number as a {@code short},
+     * Returns the value of the specified number as a short,
      * which may involve rounding or truncation.
      *
-     * <p>This implementation returns the result of {@link #intValue} cast
-     * to a {@code short}.
      *
-     * @return  the numeric value represented by this object after conversion
-     *          to type {@code short}.
-     * @since   JDK1.1
+     * @return  int the numeric value represented by this object after conversion
+     *          to type short.
      */
     public function shortValue(): int {
         throw new UnsupportedOperationException();
