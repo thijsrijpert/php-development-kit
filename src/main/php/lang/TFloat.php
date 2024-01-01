@@ -641,7 +641,10 @@ class TFloat extends TNumber implements Comparable {
     * @see java.lang.Float#floatToIntBits(float)
     * @jls 15.21.1 Numerical Equality Operators == and !=
     */
-    public function equals(object $obj): bool {
+    public function equals(?IObject $obj = null): bool {
+        if ($obj === null) {
+            return false;
+        }
         return $obj instanceof TFloat && $obj->value === $this->value;
     }
 

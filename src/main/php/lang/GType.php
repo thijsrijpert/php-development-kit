@@ -2,9 +2,11 @@
 
 namespace jhp\lang;
 
-enum GType
+enum GType implements IEnum
 {
-    use Enum;
+
+    use EnumTrait;
+
     case BOOLEAN;
     case INTEGER;
     case FLOAT;

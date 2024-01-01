@@ -4,11 +4,11 @@ namespace jhp\util\collection;
 
 use ArrayIterator;
 use Iterator;
+use jhp\lang\exception\IllegalArgumentException;
 use jhp\lang\exception\IndexOutOfBoundsException;
 use jhp\lang\GType;
 use jhp\lang\TClass;
 use jhp\util\function\Consumer;
-use jhp\util\function\internal\IllegalArgumentException;
 use jhp\util\function\internal\NullPointerException;
 use jhp\util\function\Predicate;
 use jhp\util\function\UnaryOperator;

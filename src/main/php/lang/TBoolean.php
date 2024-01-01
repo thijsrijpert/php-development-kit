@@ -28,9 +28,7 @@ use jhp\util\function\internal\NullPointerException;
 class TBoolean extends TObject
 {
 
-    private function __construct(private readonly bool $value) {
-
-    }
+    private function __construct(private readonly bool $value) { }
 
     /**
      * Parses the string argument as a boolean.  The boolean

@@ -3,24 +3,15 @@
 namespace jhp\lang;
 
 use jhp\lang\exception\CloneNotSupportedException;
-use jhp\lang\exception\UnsupportedOperationException;
 
-/**
- * Class TObject is the root of the class hierarchy.
- * Every class has TObject as a superclass. All objects implement the methods of this class.
- */
-class TObject implements IObject
+interface IObject
 {
-
     /**
      * Returns the runtime class of this TObject.
      *
      * @return TClass The class object that represents the runtime class of this object.
      */
-    public function getClass(): TClass
-    {
-        return TClass::of($this);
-    }
+    public function getClass(): TClass;
 
     /**
      * Returns a hash code value for the object. This method is
@@ -54,10 +45,8 @@ class TObject implements IObject
      * @see     TObject::equals()
      * @see     System::identityHashCode()
      */
-    public function hashCode(): int
-    {
-        return System::identityHashCode($this);
-    }
+    public function hashCode(): int;
+
 
     /**
      * Indicates whether some other object is "equal to" this one.
@@ -113,14 +102,7 @@ class TObject implements IObject
      * @see     TObject::hashCode()
      * @see     HashMap
      */
-    public function equals(?TObject $obj = null): bool
-    {
-        if ($obj === null) {
-            return false;
-        }
-
-        return $this === $obj;
-    }
+    public function equals(?TObject $obj = null): bool;
 
     /**
      * Creates and returns a copy of this object.  The precise meaning
@@ -179,10 +161,8 @@ class TObject implements IObject
      *               be cloned.
      * @see java.lang.Cloneable
      */
-    public function clone(): TObject
-    {
-        throw new CloneNotSupportedException();
-    }
+    public function clone(): TObject;
+
 
     /**
      * Returns a string representation of the object.
@@ -197,7 +177,7 @@ class TObject implements IObject
      *
      * The toString method for class Object
      * returns a string consisting of the name of the class of which the
-     * object is an instance, the at-sign character '@', and
+     * object is an instance, the at-sign character `@', and
      * the unsigned hexadecimal representation of the hash code of the
      * object.
      *
@@ -207,10 +187,7 @@ class TObject implements IObject
      * @see TInteger::toHexString()
      * @see TObject::hashCode()
      */
-    public function toString(): string
-    {
-        return TClass::of($this)->getName() . "@" . TInteger::toHexString($this->hashCode());
-    }
+    public function toString(): string;
 
     /**
      * Wakes up a single thread that is waiting on this object's
@@ -244,10 +221,7 @@ class TObject implements IObject
      * @see        java.lang.Object#notifyAll()
      * @see        java.lang.Object#wait()
      */
-    public final function notify(): void
-    {
-        throw new UnsupportedOperationException();
-    }
+    public function notify(): void;
 
     /**
      * Wakes up all threads that are waiting on this object's monitor. A
@@ -271,10 +245,7 @@ class TObject implements IObject
      * @see        java.lang.Object#notify()
      * @see        java.lang.Object#wait()
      */
-    public final function notifyAll(): void
-    {
-        throw new UnsupportedOperationException();
-    }
+    public function notifyAll(): void;
 
     /**
      * Causes the current thread to wait until it is awakened, typically
@@ -288,8 +259,5 @@ class TObject implements IObject
      * @see    #notify()
      * @see    #notifyAll()
      */
-    public final function wait(int $timeout = 0, int $nanos = 0): void
-    {
-        throw new UnsupportedOperationException();
-    }
+    public function wait(int $timeout = 0, int $nanos = 0): void;
 }

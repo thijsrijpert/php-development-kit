@@ -4,23 +4,16 @@ namespace jhp\util\collection;
 
 use ArrayAccess;
 use Iterator;
-use jhp\util\a;
-use jhp\util\an;
 use jhp\util\ArrayStoreException;
-use jhp\util\c;
 use jhp\util\ClassCastException;
-use jhp\util\e;
 use jhp\util\filter;
 use jhp\util\function\Predicate;
 use jhp\util\IIterable;
 use jhp\util\IllegalArgumentException;
 use jhp\util\IllegalStateException;
 use jhp\util\NullPointerException;
-use jhp\util\o;
 use jhp\util\Spliterator;
 use jhp\util\stream\Stream;
-use jhp\util\the;
-use jhp\util\UnsupportedOperationException;
 
 /**
  * The root interface in the <i>collection hierarchy</i>.  A collection
