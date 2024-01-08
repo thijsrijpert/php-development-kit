@@ -4,15 +4,13 @@ namespace jhp\util\collection;
 
 use ArrayAccess;
 use Iterator;
-use jhp\util\ArrayStoreException;
-use jhp\util\ClassCastException;
-use jhp\util\filter;
+use jhp\lang\exception\IllegalArgumentException;
+use jhp\lang\exception\IllegalStateException;
+use jhp\lang\exception\UnsupportedOperationException;
+use jhp\lang\IIterable;
+use jhp\lang\IObject;
+use jhp\lang\TClass;
 use jhp\util\function\Predicate;
-use jhp\util\IIterable;
-use jhp\util\IllegalArgumentException;
-use jhp\util\IllegalStateException;
-use jhp\util\NullPointerException;
-use jhp\util\Spliterator;
 use jhp\util\stream\Stream;
 
 /**
@@ -234,25 +232,26 @@ use jhp\util\stream\Stream;
  * @see     AbstractCollection
  * @since 1.2
  */
-
-interface ICollection extends IIterable, ArrayAccess {
+interface ICollection extends IIterable, ArrayAccess, IObject
+{
     // Query Operations
 
     /**
-     * Returns the number of elements in this collection.  If this collection
-     * contains more than Integer.MAX_VALUE elements, returns
-     * Integer.MAX_VALUE.
+     * Returns the number of elements in this collection.
+     * The maximum size of an array is the size of an 32-bit integer in PHP, even if the 64-bit php is used
      *
-     * @return the number of elements in this collection
+     * @see https://stackoverflow.com/a/73885850
+     *
+     * @return int the number of elements in this collection
      */
-    function size(): int;
+    public function size(): int;
 
     /**
      * Returns true if this collection contains no elements.
      *
      * @return true if this collection contains no elements
      */
-    function isEmpty(): bool;
+    public function isEmpty(): bool;
 
     /**
      * Returns true if this collection contains the specified element.
@@ -260,34 +259,17 @@ interface ICollection extends IIterable, ArrayAccess {
      * contains at least one element e such that
      * Objects.equals(o, e).
      *
-     * @param o element whose presence in this collection is to be tested
-     * @return true if this collection contains the specified
-     *         element
-     * @throws ClassCastException if the type of the specified element
-     *         is incompatible with this collection
-     *         (<a href="{@docRoot}/java.base/java/util/ICollection.html#optional-restrictions">optional</a>)
-     * @throws NullPointerException if the specified element is null and this
-     *         collection does not permit null elements
-     *         (<a href="{@docRoot}/java.base/java/util/ICollection.html#optional-restrictions">optional</a>)
-     */
-    function contains(object $o): bool;
-
-    /**
-     * Returns an iterator over the elements in this collection.  There are no
-     * guarantees concerning the order in which the elements are returned
-     * (unless this collection is an instance of some class that provides a
-     * guarantee).
+     * @param IObject $o element whose presence in this collection is to be tested
      *
-     * @return Iterator Iterator over the elements in this collection
+     * @return bool true if this collection contains the specified element
+     *
+     * @throws IllegalArgumentException if the element is not of the same type as the list
      */
-    function iterator(): Iterator;
+    public function contains(IObject $o): bool;
 
     /**
      * Returns an array containing all the elements in this collection;
      * the runtime type of the returned array is that of the specified array.
-     * If the collection fits in the specified array, it is returned therein.
-     * Otherwise, a new array is allocated with the runtime type of the
-     * specified array and the size of this collection.
      *
      * <p>If this collection fits in the specified array with room to spare
      * (i.e., the array has more elements than this collection), the element
@@ -300,12 +282,12 @@ interface ICollection extends IIterable, ArrayAccess {
      * are returned by its iterator, this method must return the elements in
      * the same order.
      *
+     * @note
+     * In JHP collections should never have null elements
+     *
      * @apiNote
      * This method acts as a bridge between array-based and collection-based APIs.
      * It allows an existing array to be reused under certain circumstances.
-     * Use {@link #toArray()} to create an array whose runtime type is Object[],
-     * or use {@link #toArray(IntFunction)} to control the runtime type of
-     * the array.
      *
      * <p>Suppose x is a collection known to contain only strings.
      * The following code can be used to dump the collection into a previously
@@ -323,17 +305,13 @@ interface ICollection extends IIterable, ArrayAccess {
      * <p>Note that toArray(new Object[0]) is identical in function to
      * toArray().
      *
-     * @param <T> the component type of the array to contain the collection
-     * @param a the array into which the elements of this collection are to be
+     * @param array &$a the array into which the elements of this collection are to be
      *        stored, if it is big enough; otherwise, a new array of the same
      *        runtime type is allocated for this purpose.
-     * @return an array containing all of the elements in this collection
-     * @throws ArrayStoreException if the runtime type of any element in this
-     *         collection is not assignable to the {@linkplain Class#getComponentType
-     *         runtime component type} of the specified array
-     * @throws NullPointerException if the specified array is null
+     *
+     * @return array an array containing all the elements in this collection
      */
-    function toArray(array &$a = []): array;
+    public function toArray(array &$a = []): array;
 
     // Modification Operations
 
@@ -356,44 +334,36 @@ interface ICollection extends IIterable, ArrayAccess {
      * the invariant that a collection always contains the specified element
      * after this call returns.
      *
-     * @param e element whose presence in this collection is to be ensured
-     * @return true if this collection changed as a result of the
-     *         call
+     * @ImplNote
+     * In the JHP library we do not allow null to be added to any collection.
+     *
+     * @param IObject $a element whose presence in this collection is to be ensured
+     *
+     * @return bool true if this collection changed as a result of the call
+     *
      * @throws UnsupportedOperationException if the add operation
      *         is not supported by this collection
-     * @throws ClassCastException if the class of the specified element
-     *         prevents it from being added to this collection
-     * @throws NullPointerException if the specified element is null and this
-     *         collection does not permit null elements
      * @throws IllegalArgumentException if some property of the element
      *         prevents it from being added to this collection
      * @throws IllegalStateException if the element cannot be added at this
      *         time due to insertion restrictions
      */
-    function add(object $a): bool;
+    public function add(IObject $a): bool;
 
 
     // Bulk Operations
 
     /**
-     * Returns true if this collection contains all of the elements
-     * in the specified collection.
+     * Returns true if this collection contains all the elements in the specified collection.
      *
-     * @param  c collection to be checked for containment in this collection
-     * @return true if this collection contains all of the elements
-     *         in the specified collection
-     * @throws ClassCastException if the types of one or more elements
-     *         in the specified collection are incompatible with this
-     *         collection
-     *         (<a href="{@docRoot}/java.base/java/util/ICollection.html#optional-restrictions">optional</a>)
-     * @throws NullPointerException if the specified collection contains one
-     *         or more null elements and this collection does not permit null
-     *         elements
-     *         (<a href="{@docRoot}/java.base/java/util/ICollection.html#optional-restrictions">optional</a>),
-     *         or if the specified collection is null.
-     * @see    #contains(Object)
+     * @param ICollection $c collection to be checked for containment in this collection
+     *
+     * @return true if this collection contains all the elements in the specified collection
+     *
+     * @throws IllegalArgumentException if the element is not of the same type as the list
+     * @see    ICollection::contains()
      */
-    function containsAll(ICollection $c): bool;
+    public function containsAll(ICollection $c): bool;
 
     /**
      * Adds all the elements in the specified collection to this collection
@@ -404,6 +374,7 @@ interface ICollection extends IIterable, ArrayAccess {
      * nonempty.)
      *
      * @param c collection containing elements to be added to this collection
+     *
      * @return true if this collection changed as a result of the call
      * @throws UnsupportedOperationException if the addAll operation
      *         is not supported by this collection
@@ -419,32 +390,27 @@ interface ICollection extends IIterable, ArrayAccess {
      *         this time due to insertion restrictions
      * @see #add(Object)
      */
-    function addAll(ICollection $a): bool;
+    public function addAll(ICollection $a): bool;
 
     /**
      * Removes all of this collection's elements that are also contained in the
-     * specified collection (optional operation).  After this call returns,
+     * specified collection.  After this call returns,
      * this collection will contain no elements in common with the specified
      * collection.
      *
-     * @param c collection containing elements to be removed from this collection
-     * @return true if this collection changed as a result of the
-     *         call
+     * @param ICollection $c collection containing elements to be removed from this collection
+     *
+     * @return true if this collection changed as a result of the call
+     *
      * @throws UnsupportedOperationException if the removeAll method
      *         is not supported by this collection
-     * @throws ClassCastException if the types of one or more elements
+     * @throws IllegalArgumentException if the types of one or more elements
      *         in this collection are incompatible with the specified
      *         collection
-     *         (<a href="{@docRoot}/java.base/java/util/ICollection.html#optional-restrictions">optional</a>)
-     * @throws NullPointerException if this collection contains one or more
-     *         null elements and the specified collection does not support
-     *         null elements
-     *         (<a href="{@docRoot}/java.base/java/util/ICollection.html#optional-restrictions">optional</a>),
-     *         or if the specified collection is null
-     * @see #remove(Object)
-     * @see #contains(Object)
+     * @see ICollection::remove(Object)
+     * @see ICollection::contains(Object)
      */
-    function removeAll(ICollection $c): bool;
+    public function removeAll(ICollection $c): bool;
 
     /**
      * Removes all the elements of this collection that satisfy the given
@@ -458,17 +424,16 @@ interface ICollection extends IIterable, ArrayAccess {
      * support removal then an UnsupportedOperationException will be
      * thrown on the first matching element.
      *
-     * @param filter a predicate which returns true for elements to be
+     * @param Predicate $filter a predicate which returns true for elements to be
      *        removed
+     *
      * @return true if any elements were removed
-     * @throws NullPointerException if the specified filter is null
      * @throws UnsupportedOperationException if elements cannot be removed
      *         from this collection.  Implementations may throw this exception if a
      *         matching element cannot be removed or if, in general, removal is not
      *         supported.
-     * @since 1.8
      */
-    function removeIf(Predicate $filter): bool;
+    public function removeIf(Predicate $filter): bool;
 
     /**
      * Retains only the elements in this collection that are contained in the
@@ -476,23 +441,18 @@ interface ICollection extends IIterable, ArrayAccess {
      * this collection all of its elements that are not contained in the
      * specified collection.
      *
-     * @param c collection containing elements to be retained in this collection
+     * @param ICollection $c collection containing elements to be retained in this collection
+     *
      * @return true if this collection changed as a result of the call
      * @throws UnsupportedOperationException if the retainAll operation
      *         is not supported by this collection
-     * @throws ClassCastException if the types of one or more elements
+     * @throws IllegalArgumentException if the types of one or more elements
      *         in this collection are incompatible with the specified
      *         collection
-     *         (<a href="{@docRoot}/java.base/java/util/ICollection.html#optional-restrictions">optional</a>)
-     * @throws NullPointerException if this collection contains one or more
-     *         null elements and the specified collection does not permit null
-     *         elements
-     *         (<a href="{@docRoot}/java.base/java/util/ICollection.html#optional-restrictions">optional</a>),
-     *         or if the specified collection is null
-     * @see #remove(Object)
-     * @see #contains(Object)
+     * @see ICollection::remove(Object)
+     * @see ICollection::contains(Object)
      */
-    function retainAll(ICollection $c): bool;
+    public function retainAll(ICollection $c): bool;
 
     /**
      * Removes all the elements from this collection (optional operation).
@@ -501,60 +461,7 @@ interface ICollection extends IIterable, ArrayAccess {
      * @throws UnsupportedOperationException if the clear operation
      *         is not supported by this collection
      */
-    function clear(): void;
-
-
-    /**
-     * Creates a {@link Spliterator} over the elements in this collection.
-     *
-     * Implementations should document characteristic values reported by the
-     * spliterator.  Such characteristic values are not required to be reported
-     * if the spliterator reports {@link Spliterator#SIZED} and this collection
-     * contains no elements.
-     *
-     * <p>The default implementation should be overridden by subclasses that
-     * can return a more efficient spliterator.  In order to
-     * preserve expected laziness behavior for the {@link #stream()} and
-     * {@link #parallelStream()} methods, spliterators should either have the
-     * characteristic of IMMUTABLE or CONCURRENT, or be
-     * <em><a href="Spliterator.html#binding">late-binding</a></em>.
-     * If none of these is practical, the overriding class should describe the
-     * spliterator's documented policy of binding and structural interference,
-     * and should override the {@link #stream()} and {@link #parallelStream()}
-     * methods to create streams using a Supplier of the spliterator,
-     * as in:
-     * <pre>{@code
-     *     Stream<E> s = StreamSupport.stream(() -> spliterator(), spliteratorCharacteristics)
-     * }</pre>
-     * <p>These requirements ensure that streams produced by the
-     * {@link #stream()} and {@link #parallelStream()} methods will reflect the
-     * contents of the collection as of initiation of the terminal stream
-     * operation.
-     *
-     * @implSpec
-     * The default implementation creates a
-     * <em><a href="Spliterator.html#binding">late-binding</a></em> spliterator
-     * from the collection's Iterator.  The spliterator inherits the
-     * <em>fail-fast</em> properties of the collection's iterator.
-     * <p>
-     * The created Spliterator reports {@link Spliterator#SIZED}.
-     *
-     * @implNote
-     * The created Spliterator additionally reports
-     * {@link Spliterator#SUBSIZED}.
-     *
-     * <p>If a spliterator covers no elements then the reporting of additional
-     * characteristic values, beyond that of SIZED and SUBSIZED,
-     * does not aid clients to control, specialize or simplify computation.
-     * However, this does enable shared use of an immutable and empty
-     * spliterator instance (see {@link Spliterators#emptySpliterator()}) for
-     * empty collections, and enables clients to determine if such a spliterator
-     * covers no elements.
-     *
-     * @return a Spliterator over the elements in this collection
-     * @since 1.8
-     */
-    function spliterator(): Spliterator;
+    public function clear(): void;
 
     /**
      * Returns a sequential Stream with this collection as its source.
@@ -571,7 +478,7 @@ interface ICollection extends IIterable, ArrayAccess {
      * @return a sequential Stream over the elements in this collection
      * @since 1.8
      */
-    function stream(): Stream;
+    public function stream(): Stream;
 
     /**
      * Returns a possibly parallel Stream with this collection as its
@@ -590,5 +497,12 @@ interface ICollection extends IIterable, ArrayAccess {
      * collection
      * @since 1.8
      */
-    function parallelStream(): Stream;
+    public function parallelStream(): Stream;
+
+    /**
+     * Gets the type of the elements contained in this collection
+     *
+     * @return TClass the type of the elements in this collection
+     */
+    public function getType(): TClass;
 }

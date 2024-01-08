@@ -541,7 +541,10 @@ class TInteger extends TNumber implements Comparable {
      * @return  true if the objects are the same;
      *          false otherwise.
      */
-    public function equals(Object $obj): bool {
+    public function equals(?IObject $obj = null): bool {
+        if ($obj === null) {
+            return false;
+        }
         if ($obj instanceof TInteger) {
             return $this->value === $obj->intValue();
         }

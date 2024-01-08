@@ -1,27 +1,25 @@
 <?php
 
-namespace jhp\util;
+namespace jhp\lang;
 
 use Iterator;
-use jhp\util\function\Consumer;
 use IteratorAggregate;
+use jhp\util\function\Consumer;
+use jhp\util\Spliterator;
 
 /**
  * Implementing this interface allows an object to be the target of the enhanced
  * for statement (sometimes called the "for-each loop" statement).
- *
- * @param <T> the type of elements returned by the iterator
- *
- * @since 1.5
- * @jls 14.14.2 The enhanced for statement
  */
-interface IIterable extends IteratorAggregate {
+interface IIterable extends IteratorAggregate
+{
+
     /**
      * Returns an iterator over elements of type T.
      *
-     * @return an Iterator.
+     * @return Iterator Iterator.
      */
-    function iterator(): Iterator;
+    public function iterator(): Iterator;
 
     /**
      * Performs the given action for each element of the Iterable
@@ -31,21 +29,19 @@ interface IIterable extends IteratorAggregate {
      * caller.
      * <p>
      * The behavior of this method is unspecified if the action performs
-     * side-effects that modify the underlying source of elements, unless an
+     * side effects that modify the underlying source of elements, unless an
      * overriding class has specified a concurrent modification policy.
      *
      * @implSpec
      * <p>The default implementation behaves as if:
      * <pre>{@code
-     *     for (T t : this)
+     *     for (IObject t : this)
      *         action.accept(t);
      * }</pre>
      *
-     * @param action The action to be performed for each element
-     * @throws NullPointerException if the specified action is null
-     * @since 1.8
+     * @param Consumer $action The action to be performed for each element
      */
-    function forEach(Consumer $action);
+    public function forEach(Consumer $action);
 
     /**
      * Creates a {@link Spliterator} over the elements described by this
@@ -64,9 +60,8 @@ interface IIterable extends IteratorAggregate {
      * characteristics. Implementing classes can nearly always provide a
      * better implementation.
      *
-     * @return a Spliterator over the elements described by this
+     * @return Spliterator a Spliterator over the elements described by this
      * Iterable.
-     * @since 1.8
      */
-    function spliterator(): Spliterator;
+    public function spliterator(): Spliterator;
 }

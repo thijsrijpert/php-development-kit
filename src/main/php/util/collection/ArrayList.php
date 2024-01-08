@@ -4,115 +4,153 @@ namespace jhp\util\collection;
 
 use ArrayIterator;
 use Iterator;
+use jhp\lang\Comparable;
 use jhp\lang\exception\IllegalArgumentException;
 use jhp\lang\exception\IndexOutOfBoundsException;
+use jhp\lang\exception\UnsupportedOperationException;
 use jhp\lang\GType;
+use jhp\lang\IObject;
 use jhp\lang\TClass;
 use jhp\util\function\Consumer;
-use jhp\util\function\internal\NullPointerException;
 use jhp\util\function\Predicate;
 use jhp\util\function\UnaryOperator;
 use jhp\util\Spliterator;
 use jhp\util\stream\Stream;
-use Traversable;
-use TypeError;
 
-
-class ArrayList implements IList
+class ArrayList extends AbstractList implements IList
 {
 
-    public function __construct(
-        private readonly TClass $type,
-        private array           $array = []
-    ) {
-        foreach ($array as $key => $value) {
-            $this->offsetSet($key, $value);
+    private array $array;
+
+    /**
+     * Initializes the arraylist
+     *
+     * @param TClass           $type The type of the objects that should be stored in this array
+     * @param ICollection|null $list A list of items that should be stored in this array, or null if no list should be inserted
+     */
+    public function __construct(TClass $type, ?ICollection $list = null)
+    {
+        parent::__construct($type);
+        $this->array = [];
+        if ($list !== null) {
+            $this->addAll($list);
+        } else {
+            $this->array = [];
         }
     }
 
-    function size(): int
+    /**
+     * Returns the number of elements in this collection.
+     * The maximum size of an array is the size of an 32-bit integer in PHP, even if the 64-bit php is used
+     *
+     * @see https://stackoverflow.com/a/73885850
+     *
+     * @return int the number of elements in this collection
+     */
+    public function size(): int
     {
         return count($this->array);
     }
 
-    function isEmpty(): bool
-    {
-        return count($this->array) === 0;
-    }
-
-    function contains(object $o): bool
-    {
-        if (TClass::of($o)->getName() !== $this->type->getName()) {
-            return false;
-        }
-
-        return $this->indexOf($o) > 0;
-    }
-
-    function iterator(): Iterator
+    /**
+     * Returns an iterator over the elements in this list in proper sequence.
+     *
+     * @return Iterator an iterator over the elements in this list in proper sequence
+     */
+    public function iterator(): Iterator
     {
         return new ArrayIterator($this->array);
     }
 
-    function toArray(array &$a = []): array
+
+    /**
+     *  @note
+     *  Personally I would recommend against using an array by reference here and instead using the variant with a parameter
+     *  But it is part of the Java API, so I implemented it anyway.
+     *
+     * @param array &$a the array into which the elements of this collection are to be
+     *        stored, if it is big enough; otherwise, a new array of the same
+     *        runtime type is allocated for this purpose.
+     *
+     * @return array an array containing all the elements in this collection
+     */
+    public function toArray(array &$a = []): array
     {
+        if ($a === []) {
+            $a = $this->array;
+            return $a;
+        }
+
         foreach ($this->array as $key => $value) {
             $a[$key] = $value;
         }
+
+        $a[$this->size()] = null;
         return $a;
     }
 
-    function add(int|object $a, ?object $b = null): bool
+    /**
+     *
+     * @apiNote
+     * In the JHP library we do not allow null to be added to any collection.
+     *
+     * @param IObject|int  $a element whose presence in this collection is to be ensured, or the index the object should be inserted on
+     * @param IObject|null $b element whose presence in this collection is to be ensured, or null if the object is provided in $a
+     *
+     * @return bool true if this collection changed as a result of the call
+     *
+     * @throws IllegalArgumentException if some property of the element
+     *         prevents it from being added to this collection
+     * @throws IndexOutOfBoundsException if the index is out of range
+     *          (index < 0 || index > size())
+     */
+    public function add(int|IObject $a, ?IObject $b = null): bool
     {
-        if (GType::of($a) === GType::OBJECT && $b !== null) {
-            throw new IllegalArgumentException("B maybe only be set if A is an int");
+        if (GType::of($a)->isObject() && $b !== null) {
+            throw new IllegalArgumentException("B may only be set if A is an int");
+        }
+
+        if (GType::of($a)->isInteger() && $b === null) {
+            throw new IllegalArgumentException("B should be set if A is an int");
         }
 
         if ($b === null) {
             $this->checkObjectType($a);
             $this->array[$this->size()] = $a;
         } else {
+            if ($a > $this->size()) {
+                throw new IndexOutOfBoundsException("Trying to insert an index that is larger than the current size of the array");
+            }
+
+            if ($a < 0) {
+                throw new IndexOutOfBoundsException("Trying to insert an index that is negative");
+            }
             $this->checkObjectType($b);
-            array_splice( $this->array, $a - 1, 0, $b );
+            array_splice($this->array, $a, 0, [$b]);
         }
 
         return true;
     }
 
-    function containsAll(ICollection $c): bool
-    {
-        foreach ($c as $value) {
-            if (!$this->contains($value)) {
-                return false;
-            }
-        }
-        return true;
-    }
 
-    function addAll(int|ICollection $a, ?ICollection $b = null): bool
-    {
-        if (GType::of($a) === GType::OBJECT && $b !== null) {
-            throw new IllegalArgumentException("B maybe only be set if A is an int");
-        }
-
-        if ($b === null) {
-            foreach ($a as $value) {
-                $this->add($value);
-            }
-        } else {
-            foreach ($b as $value) {
-                $this->add($a, $value);
-            }
-        }
-        return true;
-    }
-
-    function removeAll(ICollection $c): bool
+    /**
+     * @param ICollection $c collection containing elements to be retained in this collection
+     *
+     * @return true if this collection changed as a result of the call
+     * @throws UnsupportedOperationException if the retainAll operation
+     *         is not supported by this collection
+     * @throws IllegalArgumentException if the types of one or more elements
+     *         in this collection are incompatible with the specified
+     *         collection
+     * @see ICollection::remove(Object)
+     * @see ICollection::contains(Object)
+     */
+    public function retainAll(ICollection $c): bool
     {
         $modified = false;
-        foreach ($c as $value) {
+        foreach ($this->array as $value) {
             $index = $this->indexOf($value);
-            if($index != -1) {
+            if (!$c->contains($value)) {
                 $this->remove($index);
                 $modified = true;
             }
@@ -120,51 +158,54 @@ class ArrayList implements IList
         return $modified;
     }
 
-    function retainAll(ICollection $c): bool
-    {
-        $modified = false;
-        foreach ($this->array as $index => $value) {
-            if(!$c->contains($value)) {
-                $this->remove($index);
-                $modified = true;
-            }
-        }
-        return $modified;
-    }
-
-    function replaceAll(UnaryOperator $operator): void
+    /**
+     * @param UnaryOperator $operator the operator to apply to each element
+     */
+    public function replaceAll(UnaryOperator $operator): void
     {
         foreach ($this->array as $key => $value) {
             $this->array[$key] = $operator->apply($value);
         }
     }
 
-    function sort(Comparator $c): void
+    /**
+     * @param ?Comparator $c the Comparator used to compare list elements.
+     *          A null value indicates that the elements'
+     *          {@linkplain Comparable natural ordering} should be used
+     *
+     * @throws UnsupportedOperationException if the list's list-iterator does
+     *         not support the set operation
+     * @throws IllegalArgumentException if the comparator is found to violate the {@link Comparator} contract
+     */
+    public function sort(?Comparator $c = null): void
     {
-        usort($this->array, $c->getClosure());
-    }
-
-    function clear(): void
-    {
-        foreach ($this->array as $key => $value) {
-            $this->remove($key);
-        }
-    }
-
-    function equals(object $o): bool
-    {
-        if(!($o instanceof ArrayList) || $o->size() !== $this->size()) {
-            return false;
+        if ($c !== null) {
+            usort($this->array, fn($a, $b) => $c->compare($a, $b));
+            return;
         }
 
-        return count(array_diff($this->array, $o->toArray())) === 0
-            && count(array_diff($o->toArray(), $this->array)) === 0;
+        usort($this->array, function ($a, $b) {
+            if (!($a instanceof Comparable) || !($b instanceof Comparable)) {
+                throw new IllegalArgumentException("No comparator has been supplied, and not all elements are comparable");
+            }
+            return $a->compareTo($b);
+        });
+    }
+
+    /**
+     */
+    public function clear(): void
+    {
+        foreach ($this->array as $ignored) {
+            // If we remove the 0 index every time eventually the entire array will be cleared
+            $this->remove(0);
+        }
     }
 
     /**
      * @throws IndexOutOfBoundsException
      */
-    function get(int $index): object
+    public function get(int $index): object
     {
         if ($index < 0 || $index >= $this->size()) {
             throw new IndexOutOfBoundsException("index is $index, while size is {$this->size()}");
@@ -176,24 +217,38 @@ class ArrayList implements IList
     /**
      * @throws IndexOutOfBoundsException
      */
-    function set(int $index, object $element): object
+    public function set(int $index, IObject $element): IObject
     {
-        $current = $this->get($index);
-        $this->array[$index] = $element;
+        $current = $this->remove($index);
+        $this->add($index, $element);
         return $current;
     }
 
-    function remove(int $index): object
+    /**
+     * @param int $index the index of the element to be removed
+     *
+     * @return IObject the element previously at the specified position
+     *
+     * @throws IndexOutOfBoundsException if the index is out of range
+     *         (index < 0 || index >= size())
+     */
+    public function remove(int $index): IObject
     {
         $value = $this->get($index);
         array_splice($this->array, $index, 1);
         return $value;
     }
 
-    function indexOf(object $o): int
+    /**
+     * @param IObject $o element to search for
+     *
+     * @return int the index of the first occurrence of the specified element in
+     *         this list, or -1 if this list does not contain the element
+     */
+    public function indexOf(IObject $o): int
     {
         foreach ($this->array as $key => $value) {
-            if ($o == $value) {
+            if ($value->equals($o)) {
                 return $key;
             }
         }
@@ -201,10 +256,16 @@ class ArrayList implements IList
         return -1;
     }
 
-    function lastIndexOf(object $o): int
+    /**
+     * @param IObject $o element to search for
+     *
+     * @return int the index of the last occurrence of the specified element in
+     *         this list, or -1 if this list does not contain the element
+     */
+    public function lastIndexOf(IObject $o): int
     {
         foreach (array_reverse($this->array) as $key => $value) {
-            if ($o == $value) {
+            if ($value->equals($o)) {
                 return $this->size() - $key - 1;
             }
         }
@@ -212,84 +273,75 @@ class ArrayList implements IList
         return -1;
     }
 
-    function listIterator(?int $index = null): ListIterator
+    public function listIterator(?int $index = null): ListIterator
     {
-        throw new NullPointerException();
+        throw new UnsupportedOperationException();
     }
 
-    function subList(int $fromIndex, int $toIndex): IList
+    public function subList(int $fromIndex, int $toIndex): IList
     {
-        throw new NullPointerException();
+        throw new UnsupportedOperationException();
     }
 
-    function spliterator(): Spliterator
+    public function spliterator(): Spliterator
     {
-        throw new NullPointerException();
+        throw new UnsupportedOperationException();
     }
 
-    function removeIf(Predicate $filter): bool
+    /**
+     * @implSpec
+     * The default implementation traverses all elements of the collection using
+     * its {@link #iterator}.  Each matching element is removed using
+     * {@link Iterator#remove()}.  If the collection's iterator does not
+     * support removal then an UnsupportedOperationException will be
+     * thrown on the first matching element.
+     *
+     * @param Predicate $filter a predicate which returns true for elements to be removed
+     *
+     * @return true if any elements were removed
+     */
+    public function removeIf(Predicate $filter): bool
     {
         $modified = false;
-        foreach($this->array as $index => $value) {
+        $index = 0;
+        foreach ($this->array as $value) {
             if ($filter->test($value)) {
                 $modified = true;
                 $this->remove($index);
+            } else {
+                $index++;
             }
         }
         return $modified;
     }
 
-    function stream(): Stream
+    public function stream(): Stream
     {
-        throw new NullPointerException();
+        throw new UnsupportedOperationException();
     }
 
-    function parallelStream(): Stream
+    public function parallelStream(): Stream
     {
-        throw new NullPointerException();
+        throw new UnsupportedOperationException();
     }
 
-    function forEach(Consumer $action): void
+    /**
+     * @param Consumer $action The action to be performed for each element
+     */
+    public function forEach(Consumer $action): void
     {
         foreach ($this->array as $value) {
             $action->accept($value);
         }
     }
 
-    public function getIterator(): Traversable
+    private function checkObjectType(object $objectToBeChecked): void
     {
-        return new ArrayIterator($this->array);
-    }
-
-    public function offsetExists(mixed $offset): bool
-    {
-        return isset($this->array[$offset]);
-    }
-
-    public function offsetGet(mixed $offset): mixed
-    {
-        return $this->array[$offset];
-    }
-
-    public function offsetSet(mixed $offset, mixed $value): void
-    {
-        if (!GType::of($value)->isObject()) {
-            throw new TypeError("Trying to add a non-object to an array list");
-        }
-        $this->checkObjectType($value);
-
-        $this->array[$offset] = $value;
-    }
-
-    public function offsetUnset(mixed $offset): void
-    {
-        unset($this->array[$offset]);
-    }
-
-    private function checkObjectType(object $objectToBeAdded): void {
-        if (!TClass::of($objectToBeAdded)->equals($this->type)) {
-            throw new TypeError("Trying to add an object of type: " . TClass::of($objectToBeAdded)->getName() .
-                "to array list of type: " . $this->type->getName());
+        if (!$this->type->isInstance($objectToBeChecked)) {
+            throw new IllegalArgumentException(
+                "Trying to preform an operation with an object of type: " . TClass::of($objectToBeChecked)->getName() .
+                " for an array list of type: " . $this->type->getName()
+            );
         }
     }
 }

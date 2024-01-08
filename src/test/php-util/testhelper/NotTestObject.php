@@ -2,7 +2,9 @@
 
 namespace jhp\testhelper;
 
-class NotTestObject {
+use jhp\lang\TObject;
+
+class NotTestObject extends TObject {
     private string $value = "DefaultValue";
     private bool $setterInvoked = false;
 

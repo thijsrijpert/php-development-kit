@@ -1,8 +1,14 @@
 <?php
+/**
+ * @noinspection PhpMissingDocCommentInspection
+ * @noinspection PhpEnforceDocCommentInspection
+ */
 
 namespace jhp\testhelper;
 
-class TestObject {
+use jhp\lang\TObject;
+
+class TestObject extends TObject {
     private string $value = "DefaultValue";
     private bool $setterInvoked = false;
 
@@ -21,6 +27,12 @@ class TestObject {
     public function isSetterInvoked(): bool
     {
         return $this->setterInvoked;
+    }
+
+    public function equals(?TObject $obj = null): bool
+    {
+        return $obj instanceof TestObject &&
+            $this->value === $obj->getValue();
     }
 
 
