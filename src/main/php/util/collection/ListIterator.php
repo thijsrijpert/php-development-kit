@@ -2,7 +2,7 @@
 
 namespace jhp\util\collection;
 
-class ListIterator
+interface ListIterator
 {
 
 }

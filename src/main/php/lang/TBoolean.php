@@ -2,6 +2,8 @@
 
 namespace jhp\lang;
 
+use jhp\io\Serializable;
+use jhp\lang\exception\IllegalArgumentException;
 use jhp\util\function\internal\NullPointerException;
 
 /**
@@ -25,9 +27,13 @@ use jhp\util\function\internal\NullPointerException;
  * @author  Arthur van Hoff
  * @since   1.0
  */
-class TBoolean extends TObject
+class TBoolean extends TObject implements Serializable, Comparable
 {
 
+    /**
+     * Create a new boolean wrapper object
+     * @param bool $value the value being wrapped
+     */
     private function __construct(private readonly bool $value) { }
 
     /**
@@ -40,12 +46,12 @@ class TBoolean extends TObject
      * Example: Boolean.parseBoolean("True") returns true.<br>
      * Example: Boolean.parseBoolean("yes") returns false.
      *
-     * @param      s   the String containing the boolean
+     * @param      string $s   the String containing the boolean
      *                 representation to be parsed
-     * @return     the boolean represented by the string argument
+     * @return     bool the boolean represented by the string argument
      * @since 1.5
      */
-    public static function parseBoolean(String $s): bool {
+    public static function parseBoolean(string $s): bool {
         return strtolower($s) === "true";
     }
 
@@ -53,7 +59,7 @@ class TBoolean extends TObject
      * Returns the value of this Boolean object as a boolean
      * primitive.
      *
-     * @return  the primitive boolean value of this object.
+     * @return  bool the primitive boolean value of this object.
      */
     public function booleanValue(): bool {
         return $this->value;
@@ -69,15 +75,19 @@ class TBoolean extends TObject
      * {@link #Boolean(boolean)}, as this method is likely to yield
      * significantly better space and time performance.
      *
-     * @param  b a boolean value.
-     * @return a Boolean instance representing b.
+     * @param  bool|string $b a boolean value.
+     * @return TBoolean a Boolean instance representing b.
      * @since  1.4
      */
-    public static function valueOf(bool|String $b): TBoolean {
-        if ($b instanceof String) {
+    public static function valueOf(bool|string $b): TBoolean {
+        if (GType::of($b)->isString()) {
             $b = self::parseBoolean($b);
         }
         return $b ? new TBoolean(true) : new TBoolean(false);
+    }
+
+    public function toString(): string {
+        return TBoolean::asString($this->value);
     }
 
     /**
@@ -86,8 +96,8 @@ class TBoolean extends TObject
      * the string "true" will be returned, otherwise the
      * string "false" will be returned.
      *
-     * @param b the boolean to be converted
-     * @return the string representation of the specified boolean
+     * @param bool $b the boolean to be converted
+     * @return string the string representation of the specified boolean
      * @since 1.4
      */
     public static function asString(bool $b): string {
@@ -97,7 +107,7 @@ class TBoolean extends TObject
     /**
      * Returns a hash code for this Boolean object.
      *
-     * @return  the integer 1231 if this object represents
+     * @return int the integer 1231 if this object represents
      * true; returns the integer 1237 if this
      * object represents false.
      */
@@ -109,8 +119,8 @@ class TBoolean extends TObject
      * Returns a hash code for a boolean value; compatible with
      * Boolean.hashCode().
      *
-     * @param value the value to hash
-     * @return a hash code value for a boolean value.
+     * @param bool $value the value to hash
+     * @return int a hash code value for a boolean value.
      * @since 1.8
      */
     public static function asHashCode(bool $value): int {
@@ -122,11 +132,14 @@ class TBoolean extends TObject
      * null and is a Boolean object that
      * represents the same boolean value as this object.
      *
-     * @param   obj   the object to compare with.
-     * @return  true if the Boolean objects represent the
+     * @param   ?IObject $obj   the object to compare with.
+     * @return  bool true if the Boolean objects represent the
      *          same value; false otherwise.
      */
-    public function equals(Object $obj): bool {
+    public function equals(?IObject $obj = null): bool {
+        if ($obj === null) {
+            return false;
+        }
         if ($obj instanceof TBoolean) {
             return $this->value == ($obj->booleanValue());
         }
@@ -136,17 +149,18 @@ class TBoolean extends TObject
     /**
      * Compares this Boolean instance with another.
      *
-     * @param   b the Boolean instance to be compared
-     * @return  zero if this object represents the same boolean value as the
+     * @param   TBoolean $o the Boolean instance to be compared
+     * @return  int zero if this object represents the same boolean value as the
      *          argument; a positive value if this object represents true
      *          and the argument represents false; and a negative value if
      *          this object represents false and the argument represents true
-     * @throws  NullPointerException if the argument is null
      * @see     Comparable
-     * @since  1.5
      */
-    public function compareTo(TBoolean $b): int {
-        return TBoolean::compare($this->value, $b->value);
+    public function compareTo(IObject $o): int {
+        if (!($o instanceof TBoolean)) {
+            throw new IllegalArgumentException("Cannot compare TBoolean with: " . TClass::of($o)->getName());
+        }
+        return TBoolean::compare($this->value, $o->value);
     }
 
     /**
@@ -156,9 +170,9 @@ class TBoolean extends TObject
      *    Boolean.valueOf(x).compareTo(Boolean.valueOf(y))
      * </pre>
      *
-     * @param  x the first boolean to compare
-     * @param  y the second boolean to compare
-     * @return the value 0 if x == y;
+     * @param  bool $x the first boolean to compare
+     * @param  bool $y the second boolean to compare
+     * @return int the value 0 if x == y;
      *         a value less than 0 if !x && y; and
      *         a value greater than 0 if x && !y
      * @since 1.7
@@ -171,11 +185,9 @@ class TBoolean extends TObject
      * Returns the result of applying the logical AND operator to the
      * specified boolean operands.
      *
-     * @param a the first operand
-     * @param b the second operand
-     * @return the logical AND of a and b
-     * @see java.util.function.BinaryOperator
-     * @since 1.8
+     * @param bool $a the first operand
+     * @param bool $b the second operand
+     * @return bool the logical AND of a and b
      */
     public static function logicalAnd(bool $a, bool $b): bool {
         return $a && $b;
@@ -185,11 +197,9 @@ class TBoolean extends TObject
      * Returns the result of applying the logical OR operator to the
      * specified boolean operands.
      *
-     * @param a the first operand
-     * @param b the second operand
-     * @return the logical OR of a and b
-     * @see java.util.function.BinaryOperator
-     * @since 1.8
+     * @param bool $a the first operand
+     * @param bool $b the second operand
+     * @return bool the logical OR of a and b
      */
     public static function logicalOr(bool $a, bool $b): bool {
         return $a || $b;
@@ -199,25 +209,11 @@ class TBoolean extends TObject
      * Returns the result of applying the logical XOR operator to the
      * specified boolean operands.
      *
-     * @param a the first operand
-     * @param b the second operand
-     * @return  the logical XOR of a and b
-     * @see java.util.function.BinaryOperator
-     * @since 1.8
+     * @param bool $a the first operand
+     * @param bool $b the second operand
+     * @return bool the logical XOR of a and b
      */
     public static function logicalXor(bool $a, bool $b): bool {
         return $a ^ $b;
     }
-
-    /**
-     * Returns an {@link Optional} containing the nominal descriptor for this
-     * instance.
-     *
-     * @return an {@link Optional} describing the {@linkplain Boolean} instance
-     * @since 15
-     */
-    public function describeConstable(): Optional {
-        throw new NullPointerException();
-    }
-
 }

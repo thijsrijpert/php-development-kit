@@ -93,7 +93,7 @@ trait EnumTrait
      * @return  true if the specified object is equal to this
      *          enum constant.
      */
-    public final function equals(?IObject $other = null): bool
+    final public function equals(?IObject $other = null): bool
     {
         if ($other === null) {
             return false;

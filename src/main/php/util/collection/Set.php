@@ -2,7 +2,7 @@
 
 namespace jhp\util\collection;
 
-class Set
+interface Set
 {
 
 }
