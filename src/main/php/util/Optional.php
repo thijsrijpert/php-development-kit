@@ -2,10 +2,15 @@
 
 namespace jhp\util;
 
-use Exception;use jhp\util\function\Consumer;use jhp\util\function\GFunction;use jhp\util\function\internal\NullPointerException;use jhp\util\function\Predicate;use jhp\util\function\Runnable;use jhp\util\function\Supplier;use jhp\util\stream\Stream;
+use Exception;
+use jhp\lang\IObject;
+use jhp\util\function\Consumer;use jhp\util\function\GFunction;use jhp\util\function\internal\NullPointerException;use jhp\util\function\Predicate;use jhp\util\function\Runnable;use jhp\util\function\Supplier;use jhp\util\stream\Stream;
 class Optional
 {
-   private function __construct(private readonly ?object $value = null) {}
+    /**
+     * @param IObject|null $value the value that should be stored in this optional
+     */
+    private function __construct(private readonly ?IObject $value = null) {}
 
 
     /**
@@ -18,7 +23,7 @@ class Optional
      * Optional.empty().  There is no guarantee that it is a singleton.
      * Instead, use {@link #isEmpty()} or {@link #isPresent()}.
      *
-     * @return an empty Optional
+     * @return Optional an empty Optional
      */
     public static function empty(): Optional {
        return new Optional();
@@ -28,11 +33,11 @@ class Optional
      * Returns an Optional describing the given non-null
      * value.
      *
-     * @param value the value to describe, which must be non-null
-     * @param <T> the type of the value
-     * @return an Optional with the value present
+     * @param IObject $value the object to store
+     *
+     * @return Optional Optional with the value present
      */
-    public static function of(object $value): Optional {
+    public static function of(IObject $value): Optional {
         return new Optional($value);
     }
 
@@ -40,12 +45,12 @@ class Optional
      * Returns an Optional describing the given value, if
      * non-null, otherwise returns an empty Optional.
      *
-     * @param value the possibly-null value to describe
-     * @param <T> the type of the value
-     * @return an Optional with a present value if the specified value
+     * @param IObject|null $value The value to set, null if no value is supplied
+     *
+     * @return Optional Optional with a present value if the specified value
      *         is non-null, otherwise an empty Optional
      */
-    public static function ofNullable(?object $value): Optional {
+    public static function ofNullable(?IObject $value = null): Optional {
         return new Optional($value);
     }
 
@@ -56,10 +61,10 @@ class Optional
      * @apiNote
      * The preferred alternative to this method is {@link #orElseThrow()}.
      *
-     * @return the non-null value described by this Optional
+     * @return IObject the non-null value described by this Optional
      * @throws NoSuchElementException if no value is present
      */
-    public function get(): object {
+    public function get(): IObject {
         if ($this->value == null) {
             throw new NoSuchElementException("No value present");
         }
@@ -69,7 +74,7 @@ class Optional
     /**
      * If a value is present, returns true, otherwise false.
      *
-     * @return true if a value is present, otherwise false
+     * @return bool true if a value is present, otherwise false
      */
     public function isPresent(): bool {
         return $this->value != null;
@@ -79,8 +84,7 @@ class Optional
      * If a value is  not present, returns true, otherwise
      * false.
      *
-     * @return  true if a value is not present, otherwise false
-     * @since   11
+     * @return bool true if a value is not present, otherwise false
      */
     public function isEmpty(): bool {
         return $this->value == null;
@@ -90,7 +94,7 @@ class Optional
      * If a value is present, performs the given action with the value,
      * otherwise does nothing.
      *
-     * @param action the action to be performed, if a value is present
+     * @param Consumer $action the action to execute with the value
      */
     public function ifPresent(Consumer $action): void {
         if ($this->value != null) {
@@ -102,13 +106,9 @@ class Optional
      * If a value is present, performs the given action with the value,
      * otherwise performs the given empty-based action.
      *
-     * @param action the action to be performed, if a value is present
-     * @param emptyAction the empty-based action to be performed, if no value is
+     * @param Consumer $action the action to be performed, if a value is present
+     * @param Runnable $emptyAction the empty-based action to be performed, if no value is
      *        present
-     * @throws NullPointerException if a value is present and the given action
-     *         is null, or no value is present and the given empty-based
-     *         action is null.
-     * @since 9
      */
     public function ifPresentOrElse(Consumer $action, Runnable $emptyAction): void {
         if ($this->value != null) {
@@ -123,11 +123,11 @@ class Optional
      * returns an Optional describing the value, otherwise returns an
      * empty Optional.
      *
-     * @param predicate the predicate to apply to a value, if present
-     * @return an Optional describing the value of this
+     * @param Predicate $predicate
+     *
+     * @return Optional Optional describing the value of this
      *         Optional, if a value is present and the value matches the
      *         given predicate, otherwise an empty Optional
-     * @throws NullPointerException if the predicate is null
      */
     public function filter(Predicate $predicate): Optional {
         if (!$this->isPresent()) {
@@ -163,7 +163,7 @@ class Optional
      * map returns an Optional<Path> for the desired
      * URI if one exists.
      *
-     * @param mapper the mapping function to apply to a value, if present
+     * @param GFunction $mapper the mapping function to apply to a value, if present
      * @param <U> The type of the value returned from the mapping function
      * @return an Optional describing the result of applying a mapping
      *         function to the value of this Optional, if a value is

@@ -15,6 +15,6 @@ class TypeErrorHelper
         $message = preg_replace("/\((.*?)\)/", "", $message);
         $message = str_replace("@anonymous", "()", $message);
         $message = preg_replace('/\s+/', ' ', $message);
-        return new TypeError($message, $e);
+        return new TypeError($message, 0, $e);
     }
 }
