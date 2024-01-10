@@ -13,6 +13,7 @@ The PHP Developement Kit conforms to the following standards:
 
 ## Usage
 All classes that interact with this library should extend TObject or implement IObject
+
 All enums that interact with this library should implement IObject and use the EnumTrait, which makes it compatible with IObject
 
 ### Object Example (TBoolean, Shortend)
