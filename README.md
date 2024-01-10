@@ -130,3 +130,7 @@ All enums that interact with this library should implement IObject and use the E
 All code should be unit tested before release, the goal is to have 100% test coverage.
 
 Testing is enforced by the pipeline
+
+## Licensing
+Please read these files: "LICENSE", "ADDITIONAL_LICENSE_INFO", "ASSEMBLY_EXCEPTION".
+
