@@ -1,11 +1,13 @@
 <?php
-
+/*
+ * Copyright (c) 2024 Thijs Rijpert
+ */
 namespace jhp\util\function\internal;
 
 use Closure;
 use jhp\lang\exception\IllegalArgumentException;
+use jhp\lang\internal\GType;
 use jhp\lang\TClass;
-use jhp\lang\GType;
 use ReflectionException;
 use ReflectionFunction;
 use TypeError;

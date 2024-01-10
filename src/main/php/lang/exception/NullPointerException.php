@@ -3,7 +3,7 @@
  * Copyright (c) 2024 Thijs Rijpert
  */
 /*
- * Copyright (c) 2010, 2013, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1994, 2020, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -26,35 +26,11 @@
  * or visit www.oracle.com if you need additional information or have any
  * questions.
  */
-namespace jhp\util\function;
+namespace jhp\lang\exception;
 
-use Closure;
-use jhp\util\function\internal\ClosureValidationHelper;
-use jhp\util\function\internal\TypeErrorHelper;
-use TypeError;
+use RuntimeException;
 
-abstract class Consumer {
+class NullPointerException extends RuntimeException
+{
 
-    protected const CLOSURE_PARAMETER_COUNT = 1;
-
-    protected function __construct(
-        protected readonly ClosureValidationHelper $closureHelper
-    ){ }
-
-    abstract function accept(object $value): void;
-
-    public static function of(Closure $closure): Consumer {
-        $closureHelper = new ClosureValidationHelper($closure);
-        $closureHelper->assertParameterCount(Consumer::CLOSURE_PARAMETER_COUNT);
-
-        return new class($closureHelper) extends Consumer {
-            function accept($value): void {
-                try {
-                    $this->closureHelper->getClosure()->call($this, $value);
-                } catch (TypeError $e) {
-                    throw TypeErrorHelper::convertToFunctionalTypeError($e);
-                }
-            }
-        };
-    }
 }

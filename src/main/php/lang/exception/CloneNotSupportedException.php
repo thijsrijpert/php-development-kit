@@ -1,5 +1,8 @@
 <?php
 /*
+ * Copyright (c) 2024 Thijs Rijpert
+ */
+/*
  * Copyright (c) 1995, 2020, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *

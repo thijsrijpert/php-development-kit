@@ -1,6 +1,12 @@
 <?php
+/*
+ * Copyright (c) 2024 Thijs Rijpert
+ */
 
-namespace jhp\lang;
+namespace jhp\lang\internal;
+
+use jhp\lang\EnumTrait;
+use jhp\lang\IEnum;
 
 enum GType implements IEnum
 {

@@ -1,5 +1,7 @@
 <?php
-
+/*
+ * Copyright (c) 2024 Thijs Rijpert
+ */
 namespace jhp\testhelper;
 
 use ArrayIterator;

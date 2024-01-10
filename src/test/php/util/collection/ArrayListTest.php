@@ -1,4 +1,7 @@
 <?php
+/*
+ * Copyright (c) 2024 Thijs Rijpert
+ */
 /**
  * @noinspection PhpEnforceDocCommentInspection
  * @noinspection PhpMissingDocCommentInspection
