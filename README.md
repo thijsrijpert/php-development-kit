@@ -1,5 +1,5 @@
 # php-development-kit
-The PHP Development Kit is a project to port the core interfaces and classes of Java to PHP.
+The PHP Development Kit is a project to port the core interfaces and classes of OpenJDK to PHP.
 
 Project is a Work in Progress and should not be used in production for now.
 
