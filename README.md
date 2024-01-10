@@ -57,6 +57,7 @@ All enums that interact with this library should implement IObject and use the E
             }
             return $b ? new TBoolean(true) : new TBoolean(false);
         }
+        
         /**
         * Convert the internal value to a string representation
         * @return string the string representation of the internal value
