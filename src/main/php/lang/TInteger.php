@@ -23,12 +23,6 @@ use TypeError;
  * {@link TInteger::numberOfTrailingZeros()}) are
  * based on material from Henry S. Warren, Jr.'s <i>Hacker's
  * Delight</i>, (Addison Wesley, 2002).
- *
- * @author  Lee Boynton
- * @author  Arthur van Hoff
- * @author  Josh Bloch
- * @author  Joseph D. Darcy
- * @since JDK1.0
  */
 class TInteger extends TNumber implements Comparable {
 
@@ -44,11 +38,6 @@ class TInteger extends TNumber implements Comparable {
     public const MAX_VALUE = PHP_INT_MAX;
 
     /**
-     * The Class instance representing the primitive type int.
-     */
-    public const TYPE = null;
-
-    /**
      * All possible chars for representing a number as a String
      */
     private const digits = [
@@ -60,6 +49,10 @@ class TInteger extends TNumber implements Comparable {
         'u' => 30, 'v' => 31, 'w' => 32, 'x' => 33, 'y' => 34, 'z' => 35
     ];
 
+    /**
+     * Constructor for the integer wrapper class, use valueOf to create a new instance
+     * @param int $value the int value to store
+     */
     private function  __construct(private readonly int $value) { }
 
     /**
@@ -117,8 +110,8 @@ class TInteger extends TNumber implements Comparable {
 
         if ($i === 0) {
             return 0;
-        } else if ($i > 0) {
-            return base_convert((string) $i, 10, $radix);
+        } elseif ($i > 0) {
+            return base_convert((string)$i, 10, $radix);
         }
 
         $i = $i * -1;
@@ -145,11 +138,9 @@ class TInteger extends TNumber implements Comparable {
      * <p>The behavior of radixes and the characters used as digits
      * are the same as {@link #toString(int, int) toString}.
      *
-     * @param   i       an integer to be converted to an unsigned string.
-     * @param   radix   the radix to use in the string representation.
-     * @return  an unsigned string representation of the argument in the specified radix.
-     * @see     #toString(int, int)
-     * @since 1.8
+     * @param   int $i       an integer to be converted to an unsigned string.
+     * @param   int $radix   the radix to use in the string representation.
+     * @return  string an unsigned string representation of the argument in the specified radix.
      */
     public static function toUnsignedString(int $i, int $radix): string {
         throw new UnsupportedOperationException();
@@ -157,12 +148,12 @@ class TInteger extends TNumber implements Comparable {
 
     /**
      * Returns a string representation of the integer argument as an
-     * unsigned integer in base&nbsp;16.
+     * unsigned integer in base 16.
      *
      * <p>The unsigned integer value is the argument plus 2<sup>32</sup>
      * if the argument is negative; otherwise, it is equal to the
      * argument.  This value is converted to a string of ASCII digits
-     * in hexadecimal (base&nbsp;16) with no extra leading
+     * in hexadecimal (base 16) with no extra leading
      * 0s.
      *
      * <p>The value of the argument can be recovered from the returned
@@ -190,8 +181,8 @@ class TInteger extends TNumber implements Comparable {
      *  Integer.toHexString(n).toUpperCase()
      * </blockquote>
      *
-     * @param   i   an integer to be converted to a string.
-     * @return  the string representation of the unsigned integer value
+     * @param   int $i   an integer to be converted to a string.
+     * @return  string the string representation of the unsigned integer value
      *          represented by the argument in hexadecimal (base&nbsp;16).
      * @see #parseUnsignedInt(String, int)
      * @see #toUnsignedString(int, int)
@@ -203,12 +194,12 @@ class TInteger extends TNumber implements Comparable {
 
     /**
      * Returns a string representation of the integer argument as an
-     * unsigned integer in base&nbsp;8.
+     * unsigned integer in base 8.
      *
      * <p>The unsigned integer value is the argument plus 2<sup>32</sup>
      * if the argument is negative; otherwise, it is equal to the
      * argument.  This value is converted to a string of ASCII digits
-     * in octal (base&nbsp;8) with no extra leading 0s.
+     * in octal (base 8) with no extra leading 0s.
      *
      * <p>The value of the argument can be recovered from the returned
      * string s by calling {@link
@@ -228,8 +219,8 @@ class TInteger extends TNumber implements Comparable {
      * These are the characters '\u005Cu0030' through
      * '\u005Cu0037'.
      *
-     * @param   i   an integer to be converted to a string.
-     * @return  the string representation of the unsigned integer value
+     * @param   int $i   an integer to be converted to a string.
+     * @return  string the string representation of the unsigned integer value
      *          represented by the argument in octal (base&nbsp;8).
      * @see #parseUnsignedInt(String, int)
      * @see #toUnsignedString(int, int)
@@ -241,12 +232,12 @@ class TInteger extends TNumber implements Comparable {
 
     /**
      * Returns a string representation of the integer argument as an
-     * unsigned integer in base&nbsp;2.
+     * unsigned integer in base 2.
      *
      * <p>The unsigned integer value is the argument plus 2<sup>32</sup>
      * if the argument is negative; otherwise it is equal to the
      * argument.  This value is converted to a string of ASCII digits
-     * in binary (base&nbsp;2) with no extra leading 0s.
+     * in binary (base 2) with no extra leading 0s.
      *
      * <p>The value of the argument can be recovered from the returned
      * string s by calling {@link
@@ -260,8 +251,8 @@ class TInteger extends TNumber implements Comparable {
      * characters '0' ('\u005Cu0030') and {@code
      * '1'} ('\u005Cu0031') are used as binary digits.
      *
-     * @param   i   an integer to be converted to a string.
-     * @return  the string representation of the unsigned integer value
+     * @param   int $i   an integer to be converted to a string.
+     * @return  string the string representation of the unsigned integer value
      *          represented by the argument in binary (base&nbsp;2).
      * @see #parseUnsignedInt(String, int)
      * @see #toUnsignedString(int, int)
@@ -303,6 +294,8 @@ class TInteger extends TNumber implements Comparable {
      * int.
      * </ul>
      *
+     * Using values larger than Integer.MAX_VALUE results in unstable values, these should not be supplied
+     *
      * <p>Examples:
      * <blockquote><pre>
      * parseInt("0", 10) returns 0
@@ -313,18 +306,18 @@ class TInteger extends TNumber implements Comparable {
      * parseInt("1100110", 2) returns 102
      * parseInt("2147483647", 10) returns 2147483647
      * parseInt("-2147483648", 10) returns -2147483648
-     * parseInt("2147483648", 10) throws a NumberFormatException
+     * parseInt("2147483648", 10) is unstable, uses floatmath becomes inaccorate
      * parseInt("99", 8) throws a NumberFormatException
      * parseInt("Kona", 10) throws a NumberFormatException
      * parseInt("Kona", 27) returns 411787
      * </pre></blockquote>
      *
-     * @param      s   the String containing the integer
+     * @param      string $s   the String containing the integer
      *                  representation to be parsed
-     * @param      radix   the radix to be used while parsing s.
-     * @return     the integer represented by the string argument in the
+     * @param      int $radix   the radix to be used while parsing s.
+     * @return     int the integer represented by the string argument in the
      *             specified radix.
-     * @exception  NumberFormatException if the String
+     * @throws  NumberFormatException if the String
      *              does not contain a parsable int.
      */
     public static function parseInt(string $s, int $radix = 10): int {
@@ -350,7 +343,7 @@ class TInteger extends TNumber implements Comparable {
         }
 
         for ($i = 0; $i < strlen($s); $i++) {
-            if (self::digits[$i] >= $radix) {
+            if (self::digits[$s[$i]] >= $radix) {
                 throw NumberFormatException::forInputString($s);
             }
         }
@@ -393,16 +386,16 @@ class TInteger extends TNumber implements Comparable {
      * </ul>
      *
      *
-     * @param      s   the String containing the unsigned integer
+     * @param      string $s   the String containing the unsigned integer
      *                  representation to be parsed
-     * @param      radix   the radix to be used while parsing s.
-     * @return     the integer represented by the string argument in the
+     * @param      int $radix   the radix to be used while parsing s.
+     * @return     int the integer represented by the string argument in the
      *             specified radix.
      * @throws     NumberFormatException if the String
      *             does not contain a parsable int.
      * @since 1.8
      */
-    public static function parseUnsignedInt(String $s, int $radix): int {
+    public static function parseUnsignedInt(string $s, int $radix): int {
         throw new UnsupportedOperationException();
     }
 
@@ -423,15 +416,20 @@ class TInteger extends TNumber implements Comparable {
      *  new Integer(Integer.parseInt(s, radix))
      * </blockquote>
      *
-     * @param      s   the string to be parsed.
-     * @param      radix the radix to be used in interpreting s
-     * @return     an Integer object holding the value
+     * @param string|int $value
+     * @param int        $radix the radix to be used in interpreting s
+     *
+     * @return TInteger Integer object holding the value
      *             represented by the string argument in the specified
      *             radix.
      * @exception NumberFormatException if the String
      *            does not contain a parsable int.
      */
     public static function valueOf(string|int $value, int $radix = 10): TInteger {
+        if (GType::of($value)->isInteger() && $radix !== 10) {
+            throw new NumberFormatException("Cannot have another radix then 10 on an already parsed int");
+        }
+
         if (GType::of($value)->isString()) {
             $value = TInteger::parseInt($value, $radix);
         }
@@ -442,7 +440,6 @@ class TInteger extends TNumber implements Comparable {
     /**
      * Returns the value of this Integer as a byte
      * after a narrowing primitive conversion.
-     * @jls 5.1.3 Narrowing Primitive Conversions
      */
     public function byteValue(): int {
         throw new UnsupportedOperationException();
@@ -451,7 +448,6 @@ class TInteger extends TNumber implements Comparable {
     /**
      * Returns the value of this Integer as a short
      * after a narrowing primitive conversion.
-     * @jls 5.1.3 Narrowing Primitive Conversions
      */
     public function shortValue(): int {
         throw new UnsupportedOperationException();
@@ -468,8 +464,6 @@ class TInteger extends TNumber implements Comparable {
     /**
      * Returns the value of this Integer as a long
      * after a widening primitive conversion.
-     * @jls 5.1.2 Widening Primitive Conversions
-     * @see Integer#toUnsignedLong(int)
      */
     public function longValue(): int {
         throw new UnsupportedOperationException();
@@ -487,7 +481,6 @@ class TInteger extends TNumber implements Comparable {
     /**
      * Returns the value of this Integer as a double
      * after a widening primitive conversion.
-     * @jls 5.1.2 Widening Primitive Conversions
      */
     public function doubleValue(): float {
         throw new UnsupportedOperationException();
@@ -497,11 +490,11 @@ class TInteger extends TNumber implements Comparable {
      * Returns a String object representing this
      * Integer's value. The value is converted to signed
      * decimal representation and returned as a string, exactly as if
-     * the integer value were given as an argument to the {@link
-     * java.lang.Integer#toString(int)} method.
+     * the integer value were given as an argument to the
+     * Integer::toString() method.
      *
-     * @return  a string representation of the value of this object in
-     *          base&nbsp;10.
+     * @return  string a string representation of the value of this object in
+     *          base 10.
      */
     public function toString(): string {
         return TInteger::asString($this->value);
@@ -510,7 +503,7 @@ class TInteger extends TNumber implements Comparable {
     /**
      * Returns a hash code for this Integer.
      *
-     * @return  a hash code value for this object, equal to the
+     * @return int hash code value for this object, equal to the
      *          primitive int value represented by this
      *          Integer object.
      */
@@ -519,13 +512,13 @@ class TInteger extends TNumber implements Comparable {
     }
 
     /**
-     * Returns a hash code for a int value; compatible with
+     * Returns a hash code for an int value; compatible with
      * Integer.hashCode().
      *
-     * @param value the value to hash
-     * @since 1.8
+     * @param int $value
      *
-     * @return a hash code value for a int value.
+     * @return int hash code value for a int value.
+     *
      */
     public static function asHashCode(int $value): int {
         return $value;
@@ -537,7 +530,8 @@ class TInteger extends TNumber implements Comparable {
      * null and is an Integer object that
      * contains the same int value as this object.
      *
-     * @param   obj   the object to compare with.
+     * @param IObject|null $obj the object to compare with.
+     *
      * @return  true if the objects are the same;
      *          false otherwise.
      */
@@ -585,11 +579,10 @@ class TInteger extends TNumber implements Comparable {
      * to avoid the unnecessary allocation of an Integer
      * object when the default value is not needed.
      *
-     * @param   nm   property name.
-     * @param   val   default value.
-     * @return  the Integer value of the property.
-     * @throws  SecurityException for the same reasons as
-     *          {@link System#getProperty(String) System.getProperty}
+     * @param string            $nm
+     * @param int|TInteger|null $val
+     *
+     * @return TInteger Integer value of the property.
      * @see     java.lang.System#getProperty(java.lang.String)
      * @see     java.lang.System#getProperty(java.lang.String, java.lang.String)
      */
@@ -632,8 +625,9 @@ class TInteger extends TNumber implements Comparable {
      * String} is the minus sign.  No whitespace characters are
      * permitted in the String.
      *
-     * @param     nm the String to decode.
-     * @return    an Integer object holding the int
+     * @param string $nm
+     *
+     * @return TInteger Integer object holding the int
      *             value represented by nm
      * @exception NumberFormatException  if the String does not
      *            contain a parsable integer.
@@ -773,7 +767,13 @@ class TInteger extends TNumber implements Comparable {
      * @since 1.8
      */
     public static function divideUnsigned(int $dividend, int $divisor): int {
-        throw new UnsupportedOperationException();
+        /* See Hacker's Delight (2nd ed), section 9.3 */
+        if ($divisor >= 0) {
+            $q = (($dividend >> 1) * -1) / $divisor << 1;
+            $r = $dividend - $q * $divisor;
+            return $q + ((($r | ~($r - $divisor)) >> (TInteger::SIZE - 1)) * -1);
+        }
+        return (($dividend & ~($dividend - $divisor)) >> (TInteger::SIZE - 1))  * -1;
     }
 
     /**

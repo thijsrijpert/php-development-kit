@@ -2,6 +2,7 @@
 namespace jhp\lang;
 
 use jhp\io\Serializable;
+use jhp\lang\exception\UnsupportedOperationException;
 
 /**
  * The Character class wraps a value of the primitive
@@ -144,6 +145,6 @@ class TCharacter extends TObject implements Serializable, Comparable
 
     public function compareTo(object $o): int
     {
-        // TODO: Implement compareTo() method.
+        throw new UnsupportedOperationException();
     }
 }
