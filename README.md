@@ -132,5 +132,5 @@ All code should be unit tested before release, the goal is to have 100% test cov
 Testing is enforced by the pipeline
 
 ## Licenses 
-Please read these files: "LICENSE", "ADDITIONAL_LICENSE_INFO", "ASSEMBLY_EXCEPTION".
+Please read these files: "LICENSE", "ADDITIONAL_LICENSE_INFO".
 
