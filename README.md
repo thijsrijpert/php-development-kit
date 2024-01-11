@@ -132,5 +132,7 @@ All code should be unit tested before release, the goal is to have 100% test cov
 Testing is enforced by the pipeline
 
 ## Licenses 
-Please read these files: "LICENSE", "ADDITIONAL_LICENSE_INFO".
+This repository uses GPLv2 with class path exception for more information see
+- LICENSE
+- ADDITIONAL_LICENSE_INFO
 
