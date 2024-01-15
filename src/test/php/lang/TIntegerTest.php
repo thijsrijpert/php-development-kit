@@ -261,5 +261,4 @@ class TIntegerTest extends TestCase
             $input .= "1";
         }
     }
-
 }
