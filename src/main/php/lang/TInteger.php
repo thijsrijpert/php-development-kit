@@ -904,7 +904,7 @@ class TInteger extends TNumber implements Comparable {
      * <li>ceil(log<sub>2</sub>(x)) = 32 - numberOfLeadingZeros(x - 1)
      * </ul>
      *
-     * @param $i the value whose number of leading zeros is to be computed
+     * @param int $i the value whose number of leading zeros is to be computed
      * @return int the number of zero bits preceding the highest-order
      *     ("leftmost") one-bit in the two's complement binary representation
      *     of the specified int value, or 32 if the value
@@ -937,13 +937,25 @@ class TInteger extends TNumber implements Comparable {
             $n += 2;
             $x <<= 2;
         }
-        $n-= TInteger::unsignedRightShift($x, 31);
+        $n -= TInteger::unsignedRightShift($x, 31);
         return $n;
     }
 
+    /**
+     * Implementation of Java's '>>>' operator / logical shift operator
+     * @param int $value The value to shift
+     * @param int $steps the amount of steps to take to the right
+     *
+     * @return int The shifted value
+     */
     private static function unsignedRightShift(int $value, int $steps): int {
-        if ($steps < 0 || $steps > TInteger::SIZE) {
+        if ($steps < 0) {
             throw new IllegalArgumentException("Can only shift right");
+        }
+
+        $steps %= TInteger::SIZE;
+        if ($steps === 0) {
+            return $value;
         }
 
         $mask = 1 << TInteger::SIZE - 2;
@@ -959,19 +971,33 @@ class TInteger extends TNumber implements Comparable {
     /**
      * Returns the number of zero bits following the lowest-order ("rightmost")
      * one-bit in the two's complement binary representation of the specified
-     * int value.  Returns 32 if the specified value has no
+     * int value.  Returns 32 or 64 if the specified value has no
      * one-bits in its two's complement representation, in other words if it is
      * equal to zero.
      *
-     * @param i the value whose number of trailing zeros is to be computed
-     * @return the number of zero bits following the lowest-order ("rightmost")
+     * @param int $i the value whose number of trailing zeros is to be computed
+     * @return int the number of zero bits following the lowest-order ("rightmost")
      *     one-bit in the two's complement binary representation of the
      *     specified int value, or 32 if the value is equal
      *     to zero.
-     * @since 1.5
      */
     public static function numberOfTrailingZeros(int $i): int {
-        throw new UnsupportedOperationException();
+        // HD, Figure 5-14
+        if ($i == 0) {
+            return self::SIZE;
+        }
+
+        $n = TInteger::SIZE - 1;
+
+        for($step = TInteger::SIZE; $step >= 2; $step = $step / 2) {
+            $y = $i << $step;
+            if ($y != 0) {
+                $n = $n - $step;
+                $i = $y;
+            }
+        }
+
+        return $n - TInteger::unsignedRightShift($x << 1, TInteger::SIZE - 1);
     }
 
     /**
@@ -982,7 +1008,6 @@ class TInteger extends TNumber implements Comparable {
      * @param i the value whose bits are to be counted
      * @return the number of one-bits in the two's complement binary
      *     representation of the specified int value.
-     * @since 1.5
      */
     public static function bitCount(int $i): int {
         throw new UnsupportedOperationException();

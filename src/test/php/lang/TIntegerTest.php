@@ -227,7 +227,29 @@ class TIntegerTest extends TestCase
         $this->assertEquals(0, TInteger::numberOfLeadingZeros(TInteger::MIN_VALUE));
     }
 
-    public function testNumberOfLeadingZerosValueInIntRange() {
-        $this->assertEquals(33, TInteger::numberOfLeadingZeros(1610612736));
+    public function testNumberOfLeadingZerosAllCases() {
+        $input = "1";
+        for($i = 63; $i > 0; $i--) {
+            $parameter = (int) base_convert($input, 2, 10);
+            $this->assertEquals($i, TInteger::numberOfLeadingZeros($parameter));
+            $input .= "0";
+        }
+    }
+
+    public function testNumberOfTrailingZerosLargestPossibleValue() {
+        $this->assertEquals(0, TInteger::numberOfTrailingZeros(TInteger::MAX_VALUE));
+    }
+
+    public function testNumberOfTrailingZerosSmallestPossibleValue() {
+        $this->assertEquals(63, TInteger::numberOfTrailingZeros(TInteger::MIN_VALUE));
+    }
+
+    public function testNumberOfTrailingZerosAllCases() {
+        $input = "1";
+        for($i = 0; $i < 63; $i++) {
+            $parameter = (int) base_convert($input, 2, 10);
+            $this->assertEquals($i, TInteger::numberOfTrailingZeros($parameter));
+            $input .= "0";
+        }
     }
 }
