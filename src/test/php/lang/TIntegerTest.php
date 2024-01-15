@@ -214,4 +214,20 @@ class TIntegerTest extends TestCase
     public function testEqualsNull() {
         $this->assertFalse(TInteger::valueOf(12345)->equals());
     }
+
+    public function testNumberOfLeadingZerosZero() {
+        $this->assertEquals(64, TInteger::numberOfLeadingZeros(0));
+    }
+
+    public function testNumberOfLeadingZerosLargestPossibleValue() {
+        $this->assertEquals(1, TInteger::numberOfLeadingZeros(TInteger::MAX_VALUE));
+    }
+
+    public function testNumberOfLeadingZerosSmallestPossibleValue() {
+        $this->assertEquals(0, TInteger::numberOfLeadingZeros(TInteger::MIN_VALUE));
+    }
+
+    public function testNumberOfLeadingZerosValueInIntRange() {
+        $this->assertEquals(33, TInteger::numberOfLeadingZeros(1610612736));
+    }
 }

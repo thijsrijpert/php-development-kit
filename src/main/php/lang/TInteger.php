@@ -30,6 +30,7 @@
 
 namespace jhp\lang;
 
+use jhp\lang\exception\IllegalArgumentException;
 use jhp\lang\exception\NumberFormatException;
 use jhp\lang\exception\UnsupportedOperationException;
 use jhp\lang\internal\GType;
@@ -216,11 +217,25 @@ class TInteger extends TNumber implements Comparable {
      *          represented by the argument in hexadecimal (base&nbsp;16).
      * @see #parseUnsignedInt(String, int)
      * @see #toUnsignedString(int, int)
-     * @since   JDK1.0.2
      */
     public static function toHexString(int $i): string {
         throw new UnsupportedOperationException();
     }
+
+    /**
+     * Convert the integer to an unsigned number.
+     */
+//    private static function toUnsignedString0(int $val, int $shift) {
+//        // assert shift > 0 && shift <=5 : "Illegal shift value";
+//        int mag = Integer.SIZE - Integer.numberOfLeadingZeros(val);
+//        int chars = Math.max(((mag + (shift - 1)) / shift), 1);
+//        char[] buf = new char[chars];
+//
+//        formatUnsignedInt(val, shift, buf, 0, chars);
+//
+//        // Use special constructor which takes over "buf".
+//        return new String(buf, true);
+//    }
 
     /**
      * Returns a string representation of the integer argument as an
@@ -889,15 +904,56 @@ class TInteger extends TNumber implements Comparable {
      * <li>ceil(log<sub>2</sub>(x)) = 32 - numberOfLeadingZeros(x - 1)
      * </ul>
      *
-     * @param i the value whose number of leading zeros is to be computed
-     * @return the number of zero bits preceding the highest-order
+     * @param $i the value whose number of leading zeros is to be computed
+     * @return int the number of zero bits preceding the highest-order
      *     ("leftmost") one-bit in the two's complement binary representation
      *     of the specified int value, or 32 if the value
      *     is equal to zero.
-     * @since 1.5
      */
     public static function numberOfLeadingZeros(int $i): int {
-        throw new UnsupportedOperationException();
+        // HD, Figure 5-6
+        if ($i == 0) {
+            return TInteger::SIZE;
+        }
+        $n = 1;
+        $x = TInteger::unsignedRightShift($i, 32);
+        if ($x === 0) {
+            $n += 32;
+            $x = $i;
+        }
+        if (TInteger::unsignedRightShift($x, 16) === 0) {
+            $n += 16;
+            $x <<= 16;
+        }
+        if (TInteger::unsignedRightShift($x, 24) === 0) {
+            $n += 8;
+            $x <<= 8;
+        }
+        if (TInteger::unsignedRightShift($x, 28) === 0) {
+            $n += 4;
+            $x <<= 4;
+        }
+        if (TInteger::unsignedRightShift($x, 30) === 0) {
+            $n += 2;
+            $x <<= 2;
+        }
+        $n-= TInteger::unsignedRightShift($x, 31);
+        return $n;
+    }
+
+    private static function unsignedRightShift(int $value, int $steps): int {
+        if ($steps < 0 || $steps > TInteger::SIZE) {
+            throw new IllegalArgumentException("Can only shift right");
+        }
+
+        $mask = 1 << TInteger::SIZE - 2;
+        if($value < 0)
+        {
+            $value &= TInteger::MAX_VALUE;
+            $mask = $mask >> ($steps - 1);
+            return ($value >> $steps) | $mask;
+        }
+        return $value >> $steps;
     }
 
     /**
