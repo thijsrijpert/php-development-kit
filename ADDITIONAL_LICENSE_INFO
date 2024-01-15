@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License version
 2 along with this work; if not, write to the Free Software Foundation,
 Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
-This program is derived from work covered by the following copyright and permission notices:
+This program is derived from interfaces and documentation covered by the following copyright and permission notices,
 
     openjdk is (c) Oracle and/or its affiliates
 
@@ -28,7 +28,7 @@ This program is derived from work covered by the following copyright and permiss
     openjdk is licenced under GPLv2 with classpath exception,
     files without classpath exception are not included in this project
 
-and
+and the entire project is licenced under
 
     PHP Development Kit
 
