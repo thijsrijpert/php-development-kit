@@ -252,4 +252,14 @@ class TIntegerTest extends TestCase
             $input .= "0";
         }
     }
+
+    public function testBitcountAllCases() {
+        $input = "1";
+        for($i = 1; $i <= 63; $i++) {
+            $parameter = (int) base_convert($input, 2, 10);
+            $this->assertEquals($i, TInteger::bitCount($parameter));
+            $input .= "1";
+        }
+    }
+
 }

@@ -982,13 +982,12 @@ class TInteger extends TNumber implements Comparable {
      *     to zero.
      */
     public static function numberOfTrailingZeros(int $i): int {
-        // HD, Figure 5-14
+        // Based on: HD, Figure 5-14
         if ($i == 0) {
             return self::SIZE;
         }
 
         $n = TInteger::SIZE - 1;
-
         for($step = TInteger::SIZE; $step >= 2; $step = $step / 2) {
             $y = $i << $step;
             if ($y != 0) {
@@ -997,7 +996,7 @@ class TInteger extends TNumber implements Comparable {
             }
         }
 
-        return $n - TInteger::unsignedRightShift($x << 1, TInteger::SIZE - 1);
+        return $n - TInteger::unsignedRightShift($i << 1, TInteger::SIZE - 1);
     }
 
     /**
@@ -1005,12 +1004,19 @@ class TInteger extends TNumber implements Comparable {
      * representation of the specified int value.  This function is
      * sometimes referred to as the <i>population count</i>.
      *
-     * @param i the value whose bits are to be counted
-     * @return the number of one-bits in the two's complement binary
+     * @param int $i the value whose bits are to be counted
+     * @return int the number of one-bits in the two's complement binary
      *     representation of the specified int value.
      */
     public static function bitCount(int $i): int {
-        throw new UnsupportedOperationException();
+        // Based on: HD, Figure 5-14
+        $i -= TInteger::unsignedRightShift($i, 1) & 0x5555555555555555;
+        $i = ($i & 0x3333333333333333) + (TInteger::unsignedRightShift($i, 2) & 0x3333333333333333);
+        $i = ($i + TInteger::unsignedRightShift($i, 4)) & 0x0f0f0f0f0f0f0f0f;
+        $i += TInteger::unsignedRightShift($i, 8);
+        $i += TInteger::unsignedRightShift($i, 16);
+        $i += TInteger::unsignedRightShift($i, 32);
+        return $i & 0x7f;
     }
 
     /**
