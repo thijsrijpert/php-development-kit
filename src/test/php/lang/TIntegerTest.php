@@ -254,11 +254,107 @@ class TIntegerTest extends TestCase
     }
 
     public function testBitcountAllCases() {
-        $input = "1";
-        for($i = 1; $i <= 63; $i++) {
+        $input = "";
+        for($i = 0; $i <= 63; $i++) {
             $parameter = (int) base_convert($input, 2, 10);
             $this->assertEquals($i, TInteger::bitCount($parameter));
             $input .= "1";
         }
+    }
+
+    public function testBitcountAllCasesHalf() {
+        $input = "0";
+        for($i = 1; $i <= 63; $i++) {
+            $parameter = (int) base_convert($input, 2, 10);
+            $this->assertEquals(intdiv($i, 2), TInteger::bitCount($parameter));
+            if ($i % 2 === 0) {
+                $input .= "0";
+            } else {
+                $input .= "1";
+            }
+        }
+    }
+
+    public function testBitcountMinusOne() {
+        $parameter = -1;
+        $this->assertEquals(64, TInteger::bitCount($parameter));
+    }
+
+    public function testRotateLeft() {
+        $parameter = 0x7800_0000_0000_00F0;
+        $result = TInteger::rotateLeft($parameter, 5);
+        $this->assertEquals(0x0000_0000_0000_1E0F, $result);
+    }
+
+    public function testRotateLeftModulo() {
+        $parameter = 0x7800_0000_0000_00F0;
+        $result = TInteger::rotateLeft($parameter, 69);
+        $this->assertEquals(0x0000_0000_0000_1E0F, $result);
+    }
+
+    public function testRotateRight() {
+        $parameter = 0x0000_0000_0000_1E0F;
+        $result = TInteger::rotateRight($parameter, 5);
+        $this->assertEquals(0x7800_0000_0000_00F0, $result);
+    }
+
+    public function testSignumLowestValue() {
+        $this->assertEquals(-1, TInteger::signum(TInteger::MIN_VALUE));
+    }
+
+    public function testSignumMinusOne() {
+        $parameter = -1;
+        $this->assertEquals(-1, TInteger::signum(-1));
+    }
+
+    public function testSignumZero() {
+        $this->assertEquals(0, TInteger::signum(0));
+    }
+
+    public function testSignumOne() {
+        $this->assertEquals(1, TInteger::signum(1));
+    }
+
+    public function testSignumHighestValue() {
+        $this->assertEquals(1, TInteger::signum(TInteger::MAX_VALUE));
+    }
+
+    public function testReverse() {
+        $input = 0x0F00_0F00_0F00_F000;
+        $result = TInteger::reverse($input);
+        $this->assertEquals(0x000F_00F0_00F0_00F0, $result);
+    }
+
+    public function testReverseReversed() {
+        $input = 0x000F_00F0_00F0_00F0;
+        $result = TInteger::reverse($input);
+        $this->assertEquals(0x0F00_0F00_0F00_F000, $result);
+    }
+
+    public function testReverseBytes() {
+        $input = 0x7820_2849_4444_0670;
+        $result = TInteger::reverseBytes($input);
+        $this->assertEquals(0x7006_4444_4928_2078, $result);
+    }
+
+    public function testReverseBytesReversed() {
+        $input = 0x7006_4444_4928_2078;
+        $result = TInteger::reverseBytes($input);
+        $this->assertEquals(0x7820_2849_4444_0670, $result);
+    }
+
+    public function testSum() {
+        $result = TInteger::sum(1, 1);
+        $this->assertEquals(2, $result);
+    }
+
+    public function testSumOverflowPositive() {
+        $result = TInteger::sum(0x7FFFFFFFFFFFFFFB, 64);
+        $this->assertEquals(-9223372036854775749, $result);
+    }
+
+    public function testSumOverflowNegative() {
+        $result = TInteger::sum(-9_187_343_239_835_811_840, -2_305_843_009_213_693_952);
+        $this->assertEquals(6953557824660045824, $result);
     }
 }

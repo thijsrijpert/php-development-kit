@@ -30,7 +30,6 @@
 
 namespace jhp\lang;
 
-use jhp\lang\exception\IllegalArgumentException;
 use jhp\lang\exception\NumberFormatException;
 use jhp\lang\exception\UnsupportedOperationException;
 use jhp\lang\internal\GType;
@@ -838,7 +837,7 @@ class TInteger extends TNumber implements Comparable {
     }
 
 
-                    // Bit twiddling
+    // Bit twiddling
 
     /**
      * The number of bits used to represent an int value in two's
@@ -855,6 +854,75 @@ class TInteger extends TNumber implements Comparable {
      * @since 1.8
      */
     public const BYTES = PHP_INT_SIZE;
+
+    /**
+     * Implementation of Java's '>>>' operator / logical shift operator
+     * @param int $value The value to shift
+     * @param int $steps the amount of steps to take to the right
+     *
+     * @return int The shifted value
+     */
+    private static function unsignedRightShift(int $value, int $steps): int {
+        $steps = $steps & (TInteger::SIZE - 1);
+        if ($steps === 0) {
+            return $value;
+        }
+
+        $mask = 1 << TInteger::SIZE - 2;
+        if($value < 0)
+        {
+            $value &= TInteger::MAX_VALUE;
+            $mask = $mask >> ($steps - 1);
+            return ($value >> $steps) | $mask;
+        }
+        return $value >> $steps;
+    }
+
+    /**
+     * Implementation of Java's '<<' operator / left shift operator, with full support for modulo
+     * @param int $value The value to shift
+     * @param int $steps the amount of steps to take to the right
+     *
+     * @return int The shifted value
+     */
+    private static function leftShift(int $value, int $steps): int {
+        $steps = $steps & (TInteger::SIZE - 1);
+        if ($steps === 0) {
+            return $value;
+        }
+
+        return $value << $steps;
+    }
+
+    /**
+     * Implementation of Java's '<<' operator / left shift operator, with full support for modulo
+     * @param int $value The value to shift
+     * @param int $steps the amount of steps to take to the right
+     *
+     * @return int The shifted value
+     */
+    private static function rightShift(int $value, int $steps): int {
+        $steps = $steps & (TInteger::SIZE - 1);
+        if ($steps === 0) {
+            return $value;
+        }
+
+        return $value >> $steps;
+    }
+
+    /**
+     * Implementation of Java's '-' operator / negate operator
+     * Makes value negative if it is positive, stays negative when negative
+     * @param int $value The value to negate
+     *
+     * @return int The negated value
+     */
+    private static function negate(int $value): int {
+        if ($value > 0) {
+            return -$value;
+        }
+        return $value;
+    }
 
     /**
      * Returns an int value with at most a single one-bit, in the
@@ -942,33 +1010,6 @@ class TInteger extends TNumber implements Comparable {
     }
 
     /**
-     * Implementation of Java's '>>>' operator / logical shift operator
-     * @param int $value The value to shift
-     * @param int $steps the amount of steps to take to the right
-     *
-     * @return int The shifted value
-     */
-    private static function unsignedRightShift(int $value, int $steps): int {
-        if ($steps < 0) {
-            throw new IllegalArgumentException("Can only shift right");
-        }
-
-        $steps %= TInteger::SIZE;
-        if ($steps === 0) {
-            return $value;
-        }
-
-        $mask = 1 << TInteger::SIZE - 2;
-        if($value < 0)
-        {
-            $value &= TInteger::MAX_VALUE;
-            $mask = $mask >> ($steps - 1);
-            return ($value >> $steps) | $mask;
-        }
-        return $value >> $steps;
-    }
-
-    /**
      * Returns the number of zero bits following the lowest-order ("rightmost")
      * one-bit in the two's complement binary representation of the specified
      * int value.  Returns 32 or 64 if the specified value has no
@@ -1026,21 +1067,21 @@ class TInteger extends TNumber implements Comparable {
      * high-order, side reenter on the right, or low-order.)
      *
      * <p>Note that left rotation with a negative distance is equivalent to
-     * right rotation: {@code rotateLeft(val, -distance) == rotateRight(val,
-     * distance)}.  Note also that rotation by any multiple of 32 is a
+     * right rotation:
+     * rotateLeft(val, -distance) == rotateRight(val, distance).
+     * Note also that rotation by any multiple of 32 is a
      * no-op, so all but the last five bits of the rotation distance can be
-     * ignored, even if the distance is negative: {@code rotateLeft(val,
-     * distance) == rotateLeft(val, distance & 0x1F)}.
+     * ignored, even if the distance is negative:
+     * rotateLeft(val, distance) == rotateLeft(val, distance & 0x1F).
      *
-     * @param i the value whose bits are to be rotated left
-     * @param distance the number of bit positions to rotate left
-     * @return the value obtained by rotating the two's complement binary
+     * @param int $i the value whose bits are to be rotated left
+     * @param int $distance the number of bit positions to rotate left
+     * @return int the value obtained by rotating the two's complement binary
      *     representation of the specified int value left by the
      *     specified number of bits.
-     * @since 1.5
      */
     public static function rotateLeft(int $i, int $distance): int {
-        throw new UnsupportedOperationException();
+        return TInteger::leftShift($i, $distance) | TInteger::unsignedRightShift($i, TInteger::negate($distance));
     }
 
     /**
@@ -1050,21 +1091,21 @@ class TInteger extends TNumber implements Comparable {
      * low-order, side reenter on the left, or high-order.)
      *
      * <p>Note that right rotation with a negative distance is equivalent to
-     * left rotation: {@code rotateRight(val, -distance) == rotateLeft(val,
-     * distance)}.  Note also that rotation by any multiple of 32 is a
+     * left rotation:
+     * rotateRight(val, -distance) == rotateLeft(val, distance).
+     * Note also that rotation by any multiple of 32 is a
      * no-op, so all but the last five bits of the rotation distance can be
-     * ignored, even if the distance is negative: {@code rotateRight(val,
-     * distance) == rotateRight(val, distance & 0x1F)}.
+     * ignored, even if the distance is negative:
+     * rotateRight(val, distance) == rotateRight(val, distance & 0x1F).
      *
-     * @param i the value whose bits are to be rotated right
-     * @param distance the number of bit positions to rotate right
-     * @return the value obtained by rotating the two's complement binary
+     * @param int $i the value whose bits are to be rotated right
+     * @param int $distance the number of bit positions to rotate right
+     * @return int the value obtained by rotating the two's complement binary
      *     representation of the specified int value right by the
      *     specified number of bits.
-     * @since 1.5
      */
     public static function rotateRight(int $i, int $distance): int {
-        throw new UnsupportedOperationException();
+        return TInteger::unsignedRightShift($i,  $distance) | TInteger::leftShift($i, TInteger::negate($distance));
     }
 
     /**
@@ -1072,13 +1113,18 @@ class TInteger extends TNumber implements Comparable {
      * two's complement binary representation of the specified int
      * value.
      *
-     * @param i the value to be reversed
-     * @return the value obtained by reversing order of the bits in the
+     * @param int $i the value to be reversed
+     * @return int the value obtained by reversing order of the bits in the
      *     specified int value.
-     * @since 1.5
      */
     public static function reverse(int $i): int {
-        throw new UnsupportedOperationException();
+        // Based on: HD, Figure 7-1
+        $i = ($i & 0x5555555555555555) << 1 | TInteger::unsignedRightShift($i, 1) & 0x5555555555555555;
+        $i = ($i & 0x3333333333333333) << 2 | TInteger::unsignedRightShift($i, 2) & 0x3333333333333333;
+        $i = ($i & 0x0f0f0f0f0f0f0f0f) << 4 | TInteger::unsignedRightShift($i, 4) & 0x0f0f0f0f0f0f0f0f;
+        $i = ($i & 0x00ff00ff00ff00ff) << 8 | TInteger::unsignedRightShift($i, 8) & 0x00ff00ff00ff00ff;
+        return ($i << 48) | (($i & 0xffff0000) << 16) |
+            (TInteger::unsignedRightShift($i, 16) & 0xffff0000) | TInteger::unsignedRightShift($i, 48);
     }
 
     /**
@@ -1086,38 +1132,43 @@ class TInteger extends TNumber implements Comparable {
      * return value is -1 if the specified value is negative; 0 if the
      * specified value is zero; and 1 if the specified value is positive.)
      *
-     * @param i the value whose signum is to be computed
-     * @return the signum function of the specified int value.
-     * @since 1.5
+     * @param int $i the value whose signum is to be computed
+     * @return int the signum function of the specified int value.
      */
     public static function signum(int $i): int {
-        throw new UnsupportedOperationException();
+        // Based on: HD, Section 2-7
+        return ($i >> (TInteger::SIZE - 1)) | TInteger::unsignedRightShift(TInteger::negate($i), (TInteger::SIZE - 1));
     }
 
     /**
      * Returns the value obtained by reversing the order of the bytes in the
      * two's complement representation of the specified int value.
      *
-     * @param i the value whose bytes are to be reversed
-     * @return the value obtained by reversing the bytes in the specified
+     * @param int $i the value whose bytes are to be reversed
+     * @return int the value obtained by reversing the bytes in the specified
      *     int value.
-     * @since 1.5
      */
     public static function reverseBytes(int $i): int {
-        throw new UnsupportedOperationException();
+        $i = ($i & 0x00ff00ff00ff00ff) << 8 | TInteger::unsignedRightShift($i, 8) & 0x00ff00ff00ff00ff;
+        return ($i << 48) | (($i & 0xffff0000) << 16) |
+            (TInteger::unsignedRightShift($i, 16) & 0xffff0000) | TInteger::unsignedRightShift($i, 48);
     }
 
     /**
-     * Adds two integers together as per the + operator.
+     * Adds two integers together as per the + operator, behaves like Java, with negative overflow.
      *
-     * @param a the first operand
-     * @param b the second operand
-     * @return the sum of a and b
-     * @see java.util.function.BinaryOperator
-     * @since 1.8
+     * @param int $a the first operand
+     * @param int $b the second operand
+     * @return int the sum of a and b
      */
     public static function sum(int $a, int $b): int {
-        return $a + $b;
+        $result = $a + $b;
+        if (!GType::of($result)->isFloat()) {
+            return $result;
+        } elseif ($result > 0) {
+            return TInteger::MIN_VALUE + ($b - (TInteger::MAX_VALUE - $a + 1));
+        }
+        return TInteger::MAX_VALUE + ($b - (TInteger::MIN_VALUE - $a - 1));
     }
 
     /**

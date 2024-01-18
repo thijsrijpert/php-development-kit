@@ -129,7 +129,9 @@ All enums that interact with this library should implement IObject and use the E
 
 All code should be unit tested before release, the goal is to have 100% test coverage.
 
-Testing is enforced by the pipeline
+Testing is enforced by the pipeline.
+
+Tests should be written assuming execution on a 64-bit machine.
 
 ## License
 This repository uses GPLv2 with class path exception, for more information see:
