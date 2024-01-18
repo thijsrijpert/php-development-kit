@@ -857,6 +857,9 @@ class TInteger extends TNumber implements Comparable {
 
     /**
      * Implementation of Java's '>>>' operator / logical shift operator
+     *
+     *  Note: should work for both 32-bit and 64-bit integers
+     *
      * @param int $value The value to shift
      * @param int $steps the amount of steps to take to the right
      *
@@ -880,6 +883,9 @@ class TInteger extends TNumber implements Comparable {
 
     /**
      * Implementation of Java's '<<' operator / left shift operator, with full support for modulo
+     *
+     *  Note: should work for both 32-bit and 64-bit integers
+     *
      * @param int $value The value to shift
      * @param int $steps the amount of steps to take to the right
      *
@@ -896,6 +902,9 @@ class TInteger extends TNumber implements Comparable {
 
     /**
      * Implementation of Java's '<<' operator / left shift operator, with full support for modulo
+     *
+     *  Note: should work for both 32-bit and 64-bit integers
+     *
      * @param int $value The value to shift
      * @param int $steps the amount of steps to take to the right
      *
@@ -912,16 +921,19 @@ class TInteger extends TNumber implements Comparable {
 
     /**
      * Implementation of Java's '-' operator / negate operator
-     * Makes value negative if it is positive, stays negative when negative
+     * Handles a special case for when the minimum value is used
+     *
+     *  Note: should work for both 32-bit and 64-bit integers
+     *
      * @param int $value The value to negate
      *
      * @return int The negated value
      */
     private static function negate(int $value): int {
-        if ($value > 0) {
-            return -$value;
+        if ($value === TInteger::MIN_VALUE) {
+            return $value;
         }
-        return $value;
+        return -$value;
     }
 
     /**
@@ -931,14 +943,20 @@ class TInteger extends TNumber implements Comparable {
      * one-bits in its two's complement binary representation, that is, if it
      * is equal to zero.
      *
-     * @param i the value whose highest one bit is to be computed
-     * @return an int value with a single one-bit, in the position
+     * @param int $i the value whose highest one bit is to be computed
+     * @return int an int value with a single one-bit, in the position
      *     of the highest-order one-bit in the specified value, or zero if
      *     the specified value is itself equal to zero.
-     * @since 1.5
      */
-    public static function highestOneBit(int $i) {
-        throw new UnsupportedOperationException();
+    public static function highestOneBit(int $i): int {
+        // Based on: HD, Figure 3-1
+        $i |= ($i >>  1);
+        $i |= ($i >>  2);
+        $i |= ($i >>  4);
+        $i |= ($i >>  8);
+        $i |= ($i >> 16);
+        $i |= ($i >> 32);
+        return $i - TInteger::unsignedRightShift($i, 1);
     }
 
     /**
@@ -948,14 +966,14 @@ class TInteger extends TNumber implements Comparable {
      * one-bits in its two's complement binary representation, that is, if it
      * is equal to zero.
      *
-     * @param i the value whose lowest one bit is to be computed
-     * @return an int value with a single one-bit, in the position
+     * @param int $i the value whose lowest one bit is to be computed
+     * @return int an int value with a single one-bit, in the position
      *     of the lowest-order one-bit in the specified value, or zero if
      *     the specified value is itself equal to zero.
-     * @since 1.5
      */
     public static function lowestOneBit(int $i): int {
-        throw new UnsupportedOperationException();
+        // Based on: HD, Section 2-1
+        return $i & TInteger::negate($i);
     }
 
     /**
@@ -1016,7 +1034,10 @@ class TInteger extends TNumber implements Comparable {
      * one-bits in its two's complement representation, in other words if it is
      * equal to zero.
      *
+     *  Note: should work for both 32-bit and 64-bit integers
+     *
      * @param int $i the value whose number of trailing zeros is to be computed
+     *
      * @return int the number of zero bits following the lowest-order ("rightmost")
      *     one-bit in the two's complement binary representation of the
      *     specified int value, or 32 if the value is equal
@@ -1074,8 +1095,11 @@ class TInteger extends TNumber implements Comparable {
      * ignored, even if the distance is negative:
      * rotateLeft(val, distance) == rotateLeft(val, distance & 0x1F).
      *
+     *  Note: should work for both 32-bit and 64-bit integers
+     *
      * @param int $i the value whose bits are to be rotated left
      * @param int $distance the number of bit positions to rotate left
+     *
      * @return int the value obtained by rotating the two's complement binary
      *     representation of the specified int value left by the
      *     specified number of bits.
@@ -1098,8 +1122,11 @@ class TInteger extends TNumber implements Comparable {
      * ignored, even if the distance is negative:
      * rotateRight(val, distance) == rotateRight(val, distance & 0x1F).
      *
+     *  Note: should work for both 32-bit and 64-bit integers
+     *
      * @param int $i the value whose bits are to be rotated right
      * @param int $distance the number of bit positions to rotate right
+     *
      * @return int the value obtained by rotating the two's complement binary
      *     representation of the specified int value right by the
      *     specified number of bits.
@@ -1123,8 +1150,10 @@ class TInteger extends TNumber implements Comparable {
         $i = ($i & 0x3333333333333333) << 2 | TInteger::unsignedRightShift($i, 2) & 0x3333333333333333;
         $i = ($i & 0x0f0f0f0f0f0f0f0f) << 4 | TInteger::unsignedRightShift($i, 4) & 0x0f0f0f0f0f0f0f0f;
         $i = ($i & 0x00ff00ff00ff00ff) << 8 | TInteger::unsignedRightShift($i, 8) & 0x00ff00ff00ff00ff;
-        return ($i << 48) | (($i & 0xffff0000) << 16) |
-            (TInteger::unsignedRightShift($i, 16) & 0xffff0000) | TInteger::unsignedRightShift($i, 48);
+        return ($i               << 48) |
+              (($i & 0xffff0000) << 16) |
+              (TInteger::unsignedRightShift($i, 16) & 0xffff0000) |
+               TInteger::unsignedRightShift($i, 48);
     }
 
     /**
@@ -1132,7 +1161,10 @@ class TInteger extends TNumber implements Comparable {
      * return value is -1 if the specified value is negative; 0 if the
      * specified value is zero; and 1 if the specified value is positive.)
      *
+     *  Note: should work for both 32-bit and 64-bit integers
+     *
      * @param int $i the value whose signum is to be computed
+     *
      * @return int the signum function of the specified int value.
      */
     public static function signum(int $i): int {
@@ -1149,16 +1181,22 @@ class TInteger extends TNumber implements Comparable {
      *     int value.
      */
     public static function reverseBytes(int $i): int {
-        $i = ($i & 0x00ff00ff00ff00ff) << 8 | TInteger::unsignedRightShift($i, 8) & 0x00ff00ff00ff00ff;
-        return ($i << 48) | (($i & 0xffff0000) << 16) |
-            (TInteger::unsignedRightShift($i, 16) & 0xffff0000) | TInteger::unsignedRightShift($i, 48);
+        $i =    ($i & 0x00ff00ff00ff00ff) << 8    |
+                TInteger::unsignedRightShift($i, 8)  & 0x00ff00ff00ff00ff;
+        return (($i                       << 48)) |
+               (($i & 0xffff0000)         << 16)  |
+               (TInteger::unsignedRightShift($i, 16) & 0xffff0000) |
+                TInteger::unsignedRightShift($i, 48);
     }
 
     /**
      * Adds two integers together as per the + operator, behaves like Java, with negative overflow.
      *
+     *  Note: should work for both 32-bit and 64-bit integers
+     *
      * @param int $a the first operand
      * @param int $b the second operand
+     *
      * @return int the sum of a and b
      */
     public static function sum(int $a, int $b): int {
@@ -1175,11 +1213,12 @@ class TInteger extends TNumber implements Comparable {
      * Returns the greater of two int values
      * as if by calling {@link Math#max(int, int) Math.max}.
      *
-     * @param a the first operand
-     * @param b the second operand
-     * @return the greater of a and b
-     * @see java.util.function.BinaryOperator
-     * @since 1.8
+     * Note: should work for both 32-bit and 64-bit integers
+     *
+     * @param int $a the first operand
+     * @param int $b the second operand
+     *
+     * @return int the greatest of a and b
      */
     public static function max(int $a, int $b): int {
         return max($a, $b);
@@ -1189,11 +1228,11 @@ class TInteger extends TNumber implements Comparable {
      * Returns the smaller of two int values
      * as if by calling {@link Math#min(int, int) Math.min}.
      *
-     * @param a the first operand
-     * @param b the second operand
-     * @return the smaller of a and b
-     * @see java.util.function.BinaryOperator
-     * @since 1.8
+     * Note: should work for both 32-bit and 64-bit integers
+     *
+     * @param int $a the first operand
+     * @param int $b the second operand
+     * @return int the smallest of a and b
      */
     public static function min(int $a, int $b): int {
         return min($a, $b);

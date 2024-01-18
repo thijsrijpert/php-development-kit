@@ -350,11 +350,81 @@ class TIntegerTest extends TestCase
 
     public function testSumOverflowPositive() {
         $result = TInteger::sum(0x7FFFFFFFFFFFFFFB, 64);
-        $this->assertEquals(-9223372036854775749, $result);
+        $this->assertEquals(-9_223_372_036_854_775_749, $result);
     }
 
     public function testSumOverflowNegative() {
         $result = TInteger::sum(-9_187_343_239_835_811_840, -2_305_843_009_213_693_952);
-        $this->assertEquals(6953557824660045824, $result);
+        $this->assertEquals(6_953_557_824_660_045_824, $result);
+    }
+
+    public function testMax() {
+        $result = TInteger::max(1, 2);
+        $this->assertEquals(2, $result);
+    }
+
+    public function testMaxNegative() {
+        $result = TInteger::max(-1, -2);
+        $this->assertEquals(-1, $result);
+    }
+
+    public function testMaxNegativeAndPositive() {
+        $result = TInteger::max(-1, 1);
+        $this->assertEquals(1, $result);
+    }
+
+    public function testMin() {
+        $result = TInteger::min(1, 2);
+        $this->assertEquals(1, $result);
+    }
+
+    public function testMinNegative() {
+        $result = TInteger::min(-1, -2);
+        $this->assertEquals(-2, $result);
+    }
+
+    public function testMinNegativeAndPositive() {
+        $result = TInteger::min(-1, 1);
+        $this->assertEquals(-1, $result);
+    }
+
+    public function testLowestOneBitPositive() {
+        $result = TInteger::lowestOneBit(3_485_794_835_784);
+        $this->assertEquals(8, $result);
+    }
+
+    public function testLowestOneBitPositiveMaxValue() {
+        $result = TInteger::lowestOneBit(TInteger::MAX_VALUE);
+        $this->assertEquals(1, $result);
+    }
+
+    public function testLowestOneBitNegative() {
+        $result = TInteger::lowestOneBit(-9_223_368_551_069_384_704);
+        $this->assertEquals(16_777_216, $result);
+    }
+
+    public function testLowestOneBitNegativeMinValue() {
+        $result = TInteger::lowestOneBit(TInteger::MIN_VALUE);
+        $this->assertEquals(TInteger::MIN_VALUE, $result);
+    }
+
+    public function testHighestOneBitPositive() {
+        $result = TInteger::highestOneBit(3_485_794_835_784);
+        $this->assertEquals(2_199_023_255_552, $result);
+    }
+
+    public function testHighestOneBitPositiveMaxValue() {
+        $result = TInteger::highestOneBit(TInteger::MAX_VALUE);
+        $this->assertEquals(TInteger::MAX_VALUE, $result);
+    }
+
+    public function testHighestOneBitNegative() {
+        $result = TInteger::highestOneBit(-9_223_368_551_069_384_704);
+        $this->assertEquals(TInteger::MIN_VALUE, $result);
+    }
+
+    public function testHighestOneBitNegativeMinValue() {
+        $result = TInteger::highestOneBit(TInteger::MIN_VALUE);
+        $this->assertEquals(TInteger::MIN_VALUE, $result);
     }
 }
