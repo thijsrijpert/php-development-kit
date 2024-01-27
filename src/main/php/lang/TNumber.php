@@ -67,15 +67,6 @@ abstract class TNumber extends TObject implements Serializable {
     public abstract function intValue(): int;
 
     /**
-     * Returns the value of the specified number as a long,
-     * which may involve rounding or truncation.
-     *
-     * @return  int the numeric value represented by this object after conversion
-     *          to type long.
-     */
-    public abstract function longValue(): int;
-
-    /**
      * Returns the value of the specified number as a float,
      * which may involve rounding.
      *
@@ -83,36 +74,4 @@ abstract class TNumber extends TObject implements Serializable {
      *          to type float.
      */
     public abstract function floatValue(): float;
-
-    /**
-     * Returns the value of the specified number as a double,
-     * which may involve rounding.
-     *
-     * @return  float the numeric value represented by this object after conversion
-     *          to type double.
-     */
-    public abstract function doubleValue(): float;
-
-    /**
-     * Returns the value of the specified number as a byte,
-     * which may involve rounding or truncation.
-     *
-     * @return  int the numeric value represented by this object after conversion
-     *          to type byte.
-     */
-    public function byteValue(): int {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Returns the value of the specified number as a short,
-     * which may involve rounding or truncation.
-     *
-     *
-     * @return  int the numeric value represented by this object after conversion
-     *          to type short.
-     */
-    public function shortValue(): int {
-        throw new UnsupportedOperationException();
-    }
 }

@@ -1,12 +1,11 @@
 {
-  "name": "axili/axili-one-api",
-  "description": "Port of the Java Stream API to PHP",
+  "name": "thijsrijpert/php-development-kit",
+  "description": "Port of the JDK to PHP",
   "minimum-stability": "stable",
-  "license": "GPL-2.0-or-later",
   "authors": [
     {
       "name": "Thijs Rijpert",
-      "email": "email@example.com"
+      "email": "dev@rijpert.com"
     }
   ],
   "autoload": {

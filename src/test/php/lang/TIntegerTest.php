@@ -4,9 +4,12 @@
  */
 namespace jhp\lang;
 
+use jhp\lang\exception\IllegalArgumentException;
 use jhp\lang\exception\NumberFormatException;
 use jhp\testhelper\TestObject;
 use PHPUnit\Framework\TestCase;
+
+use function PHPUnit\Framework\assertEquals;
 
 class TIntegerTest extends TestCase
 {
@@ -16,6 +19,10 @@ class TIntegerTest extends TestCase
 
     public function testAsStringDecimalNegative() {
         $this->assertEquals("-12345", TInteger::asString(-12345));
+    }
+
+    public function testAsStringDecimalMinusOne() {
+        $this->assertEquals("-1", TInteger::asString(-1));
     }
 
     public function testAsStringTooLargeRadixPositive() {
@@ -54,9 +61,14 @@ class TIntegerTest extends TestCase
         $this->assertEquals("11000000111001", TInteger::asString(12345, 2));
     }
 
+    public function testAsStringBinaryMinus1() {
+        $this->assertEquals("-1", TInteger::asString(-1, 2));
+    }
+
     public function testAsStringBinaryNegative() {
         $this->assertEquals("-11000000111001", TInteger::asString(-12345, 2));
     }
+
 
     public function testToStringDecimalPositive() {
         $this->assertEquals("12345", TInteger::valueOf(12345)->toString());
@@ -286,6 +298,18 @@ class TIntegerTest extends TestCase
         $this->assertEquals(0x0000_0000_0000_1E0F, $result);
     }
 
+    public function testRotateLeftNegative() {
+        $parameter = 0x7800_0000_0000_00F0;
+        $result = TInteger::rotateLeft($parameter, -59);
+        $this->assertEquals(0x0000_0000_0000_1E0F, $result);
+    }
+
+    public function testRotateLeftModuleNegative() {
+        $parameter = 0x7800_0000_0000_00F0;
+        $result = TInteger::rotateLeft($parameter, -123);
+        $this->assertEquals(0x0000_0000_0000_1E0F, $result);
+    }
+
     public function testRotateLeftModulo() {
         $parameter = 0x7800_0000_0000_00F0;
         $result = TInteger::rotateLeft($parameter, 69);
@@ -295,6 +319,24 @@ class TIntegerTest extends TestCase
     public function testRotateRight() {
         $parameter = 0x0000_0000_0000_1E0F;
         $result = TInteger::rotateRight($parameter, 5);
+        $this->assertEquals(0x7800_0000_0000_00F0, $result);
+    }
+
+    public function testRotateRightModulo() {
+        $parameter = 0x0000_0000_0000_1E0F;
+        $result = TInteger::rotateRight($parameter, 69);
+        $this->assertEquals(0x7800_0000_0000_00F0, $result);
+    }
+
+    public function testRotateRightNegative() {
+        $parameter = 0x0000_0000_0000_1E0F;
+        $result = TInteger::rotateRight($parameter, -59);
+        $this->assertEquals(0x7800_0000_0000_00F0, $result);
+    }
+
+    public function testRotateRightModuloNegative() {
+        $parameter = 0x0000_0000_0000_1E0F;
+        $result = TInteger::rotateRight($parameter, -123);
         $this->assertEquals(0x7800_0000_0000_00F0, $result);
     }
 
@@ -415,7 +457,7 @@ class TIntegerTest extends TestCase
 
     public function testHighestOneBitPositiveMaxValue() {
         $result = TInteger::highestOneBit(TInteger::MAX_VALUE);
-        $this->assertEquals(TInteger::MAX_VALUE, $result);
+        $this->assertEquals(0x4000_0000_0000_0000, $result);
     }
 
     public function testHighestOneBitNegative() {
@@ -426,5 +468,411 @@ class TIntegerTest extends TestCase
     public function testHighestOneBitNegativeMinValue() {
         $result = TInteger::highestOneBit(TInteger::MIN_VALUE);
         $this->assertEquals(TInteger::MIN_VALUE, $result);
+    }
+
+    public function testToHexString() {
+        $result = TInteger::toHexString(0x32bba86a5be);
+        $this->assertEquals("32bba86a5be", $result);
+    }
+
+    public function testToHexStringMaxValue() {
+        $result = TInteger::toHexString(TInteger::MAX_VALUE);
+        $this->assertEquals("7fffffffffffffff", $result);
+    }
+
+    public function testToHexStringMinValue() {
+        $result = TInteger::toHexString(TInteger::MIN_VALUE);
+        $this->assertEquals("8000000000000000", $result);
+    }
+
+    public function testToHexStringZero() {
+        $result = TInteger::toHexString(0);
+        $this->assertEquals("0", $result);
+    }
+
+    public function testToHexStringSixteen() {
+        $result = TInteger::toHexString(15);
+        $this->assertEquals("f", $result);
+    }
+
+    public function testToOctalString() {
+        $result = TInteger::toOctalString(0o62567241522676);
+        $this->assertEquals("62567241522676", $result);
+    }
+
+    public function testOctalToStringMaxValue() {
+        $result = TInteger::toOctalString(TInteger::MAX_VALUE);
+        $this->assertEquals("777777777777777777777", $result);
+    }
+
+    public function testToOctalStringMinValue() {
+        $result = TInteger::toOctalString(TInteger::MIN_VALUE);
+        $this->assertEquals("1000000000000000000000", $result);
+    }
+
+    public function testToOctalStringZero() {
+        $result = TInteger::toOctalString(0);
+        $this->assertEquals("0", $result);
+    }
+
+    public function testToOctalStringSixteen() {
+        $result = TInteger::toOctalString(15);
+        $this->assertEquals("17", $result);
+    }
+
+    public function testToBinaryString() {
+        $result = TInteger::toBinaryString(0b00110010101110111010100001101010010110111110);
+        $this->assertEquals("110010101110111010100001101010010110111110", $result);
+    }
+
+    public function testToBinaryStringMaxValue() {
+        $result = TInteger::toBinaryString(TInteger::MAX_VALUE);
+        $this->assertEquals("111111111111111111111111111111111111111111111111111111111111111", $result);
+    }
+
+    public function testToBinaryStringMinValue() {
+        $result = TInteger::toBinaryString(TInteger::MIN_VALUE);
+        $this->assertEquals("1000000000000000000000000000000000000000000000000000000000000000", $result);
+    }
+
+    public function testToBinaryStringZero() {
+        $result = TInteger::toBinaryString(0);
+        $this->assertEquals("0", $result);
+    }
+
+    public function testToBinaryStringSixteen() {
+        $result = TInteger::toBinaryString(15);
+        $this->assertEquals("1111", $result);
+    }
+
+    public function testToUnsignedStringZero() {
+        $result = TInteger::toUnsignedString(0, 16);
+        $this->assertEquals("0", $result);
+    }
+
+    public function testToUnsignedStringRadix16() {
+        $result = TInteger::toUnsignedString(0x32bba86a5be, 16);
+        $this->assertEquals("32bba86a5be", $result);
+    }
+
+    public function testToUnsignedStringRadix16MaxValue() {
+        $result = TInteger::toUnsignedString(TInteger::MAX_VALUE, 16);
+        $this->assertEquals("7fffffffffffffff", $result);
+    }
+
+    public function testToUnsignedStringRadix16MinValue() {
+        $result = TInteger::toUnsignedString(TInteger::MIN_VALUE, 16);
+        $this->assertEquals("8000000000000000", $result);
+    }
+
+    public function testToUnsignedStringRadix16Fifteen() {
+        $result = TInteger::toUnsignedString(15, 16);
+        $this->assertEquals("f", $result);
+    }
+
+    public function testToUnsignedStringRadix8() {
+        $result = TInteger::toUnsignedString(0o62567241522676, 8);
+        $this->assertEquals("62567241522676", $result);
+    }
+
+    public function testToUnsignedStringRadix8MaxValue() {
+        $result = TInteger::toUnsignedString(TInteger::MAX_VALUE, 8);
+        $this->assertEquals("777777777777777777777", $result);
+    }
+
+    public function testToUnsignedStringRadix8MinValue() {
+        $result = TInteger::toUnsignedString(TInteger::MIN_VALUE, 8);
+        $this->assertEquals("1000000000000000000000", $result);
+    }
+
+    public function testToUnsignedStringRadix8Fifteen() {
+        $result = TInteger::toUnsignedString(15, 8);
+        $this->assertEquals("17", $result);
+    }
+
+    public function testToUnsignedStringRadix2() {
+        $result = TInteger::toUnsignedString(0b00110010101110111010100001101010010110111110, 2);
+        $this->assertEquals("110010101110111010100001101010010110111110", $result);
+    }
+
+    public function testToUnsignedStringRadix2MaxValue() {
+        $result = TInteger::toUnsignedString(TInteger::MAX_VALUE, 2);
+        $this->assertEquals("111111111111111111111111111111111111111111111111111111111111111", $result);
+    }
+
+    public function testToUnsignedStringRadix2MinValue() {
+        $result = TInteger::toUnsignedString(TInteger::MIN_VALUE, 2);
+        $this->assertEquals("1000000000000000000000000000000000000000000000000000000000000000", $result);
+    }
+
+    public function testToUnsignedStringRadix2Fifteen() {
+        $result = TInteger::toUnsignedString(15, 2);
+        $this->assertEquals("1111", $result);
+    }
+
+    public function testToUnsignedStringRadix4() {
+        $result = TInteger::toUnsignedString(484574746547454, 4);
+        $this->assertEquals("1232023133121220221103332", $result);
+    }
+
+    public function testToUnsignedStringRadix4MaxValue() {
+        $result = TInteger::toUnsignedString(TInteger::MAX_VALUE, 4);
+        $this->assertEquals("13333333333333333333333333333333", $result);
+    }
+
+    public function testToUnsignedStringRadix4MinValue() {
+        $result = TInteger::toUnsignedString(TInteger::MIN_VALUE, 4);
+        $this->assertEquals("20000000000000000000000000000000", $result);
+    }
+
+    public function testToUnsignedStringRadix4Fifteen() {
+        $result = TInteger::toUnsignedString(15, 4);
+        $this->assertEquals("33", $result);
+    }
+
+    public function testToUnsignedStringRadix32() {
+        $result = TInteger::toUnsignedString(484574746547454, 32);
+        $this->assertEquals("domvcq557u", $result);
+    }
+
+    public function testToUnsignedStringRadix32MaxValue() {
+        $result = TInteger::toUnsignedString(TInteger::MAX_VALUE, 32);
+        $this->assertEquals("7vvvvvvvvvvvv", $result);
+    }
+
+    public function testToUnsignedStringRadix32MinValue() {
+        $result = TInteger::toUnsignedString(TInteger::MIN_VALUE, 32);
+        $this->assertEquals("8000000000000", $result);
+    }
+
+    public function testToUnsignedStringRadix32Fifteen() {
+        $result = TInteger::toUnsignedString(15, 32);
+        $this->assertEquals("f", $result);
+    }
+
+    public function testToUnsignedStringRadix32Minus1() {
+        $result = TInteger::toUnsignedString(-1, 32);
+        $this->assertEquals("fvvvvvvvvvvvv", $result);
+    }
+
+    public function testToUnsignedStringRadix2Minus1() {
+        $result = TInteger::toUnsignedString(-1, 2);
+        $this->assertEquals("1111111111111111111111111111111111111111111111111111111111111111", $result);
+    }
+
+    public function testToUnsignedStringRadix4Minus1() {
+        $result = TInteger::toUnsignedString(-1, 4);
+        $this->assertEquals("33333333333333333333333333333333", $result);
+    }
+
+    public function testToUnsignedStringRadix8Minus1() {
+        $result = TInteger::toUnsignedString(-1, 8);
+        $this->assertEquals("1777777777777777777777", $result);
+    }
+
+    public function testToUnsignedStringRadix16Minus1() {
+        $result = TInteger::toUnsignedString(-1, 16);
+        $this->assertEquals("ffffffffffffffff", $result);
+    }
+
+    public function testFloatValue() {
+        $value = TInteger::valueOf(-1)->floatValue();
+        $this->assertTrue(-1.0 === $value);
+    }
+
+    public function testAsHashcodePositive() {
+        $this->assertEquals(1, TInteger::asHashCode(1));
+    }
+
+    public function testAsHashcodeNegative() {
+        $this->assertEquals(-1, TInteger::asHashCode(-1));
+    }
+
+    public function testDecodePositive() {
+        $this->assertEquals(12345, TInteger::decode("12345")->intValue());
+    }
+
+    public function testDecodePositiveSigned() {
+        $this->assertEquals(12345, TInteger::decode("+12345")->intValue());
+    }
+
+    public function testDecodeNegative() {
+        $this->assertEquals(-12345, TInteger::decode("-12345")->intValue());
+    }
+
+    public function testDecodeBinaryRadix() {
+        $this->expectException(NumberFormatException::class);
+        TInteger::decode("0b11111");
+    }
+
+    public function testDecodeInvalidSignPosition() {
+        $this->expectException(NumberFormatException::class);
+        TInteger::decode("0x-11111");
+    }
+
+    public function testDecodePositiveRadix16() {
+        $this->assertEquals(74565, TInteger::decode("0x12345")->intValue());
+    }
+
+    public function testDecodePositiveWithSignRadix16() {
+        $this->assertEquals(74565, TInteger::decode("+0x12345")->intValue());
+    }
+
+    public function testDecodeNegativeRadix16() {
+        $this->assertEquals(-74565, TInteger::decode("-0x12345")->intValue());
+    }
+
+    public function testDecodePositiveRadix16WithLetters() {
+        $this->assertEquals(7967, TInteger::decode("0x1f1f")->intValue());
+    }
+
+    public function testDecodePositiveRadix16WithLettersCapitalLetters() {
+        $this->assertEquals(7967, TInteger::decode("0x1F1F")->intValue());
+    }
+
+    public function testDecodePositiveWithSignRadix16WithLetters() {
+        $this->assertEquals(7967, TInteger::decode("+0x1f1f")->intValue());
+    }
+
+    public function testDecodeNegativeRadix16WithLetters() {
+        $this->assertEquals(-7967, TInteger::decode("-0x1f1f")->intValue());
+    }
+
+    public function testDecodePositiveRadix16Hashtag() {
+        $this->assertEquals(74565, TInteger::decode("#12345")->intValue());
+    }
+
+    public function testDecodePositiveWithSignRadix16Hashtag() {
+        $this->assertEquals(74565, TInteger::decode("+#12345")->intValue());
+    }
+
+    public function testDecodeNegativeRadix16Hashtag() {
+        $this->assertEquals(-74565, TInteger::decode("-#12345")->intValue());
+    }
+
+    public function testDecodePositiveRadix16WithLettersHashtag() {
+        $this->assertEquals(7967, TInteger::decode("#1f1f")->intValue());
+    }
+
+    public function testDecodePositiveWithSignRadix16WithLettersHashtag() {
+        $this->assertEquals(7967, TInteger::decode("+#1f1f")->intValue());
+    }
+
+    public function testDecodeNegativeRadix16WithLettersHashtag() {
+        $this->assertEquals(-7967, TInteger::decode("-#1f1f")->intValue());
+    }
+
+    public function testDecodePositiveRadix16Capital() {
+        $this->assertEquals(74565, TInteger::decode("0X12345")->intValue());
+    }
+
+    public function testDecodePositiveWithSignRadix16Capital() {
+        $this->assertEquals(74565, TInteger::decode("+0X12345")->intValue());
+    }
+
+    public function testDecodeNegativeRadix16Capital() {
+        $this->assertEquals(-74565, TInteger::decode("-0X12345")->intValue());
+    }
+
+    public function testDecodePositiveRadix16WithLettersCapital() {
+        $this->assertEquals(7967, TInteger::decode("0X1f1f")->intValue());
+    }
+
+    public function testDecodePositiveWithSignRadix16WithLettersCapital() {
+        $this->assertEquals(7967, TInteger::decode("+0X1f1f")->intValue());
+    }
+
+    public function testDecodeNegativeRadix16WithLettersCapital() {
+        $this->assertEquals(-7967, TInteger::decode("-0X1f1f")->intValue());
+    }
+
+    public function testDecodePositiveRadix8() {
+        $this->assertEquals(4731428, TInteger::decode("022031044")->intValue());
+    }
+
+    public function testDecodePositiveRadix8PositiveSign() {
+        $this->assertEquals(4731428, TInteger::decode("+022031044")->intValue());
+    }
+
+    public function testDecodePositiveRadix8NegativeSign() {
+        $this->assertEquals(-4731428, TInteger::decode("-022031044")->intValue());
+    }
+
+    public function testDecodeLargestPossibleValue() {
+        $this->assertEquals(9223372036854775807, TInteger::decode("9223372036854775807")->intValue());
+    }
+
+    public function testDecodeInvalidNumber()
+    {
+        $this->expectException(NumberFormatException::class);
+        TInteger::decode("FF");
+    }
+
+    public function testCompareToSmaller() {
+        $input = TInteger::valueOf(TInteger::MAX_VALUE);
+        $result = TInteger::valueOf(TInteger::MIN_VALUE)->compareTo($input);
+        $this->assertEquals(-1, $result);
+    }
+
+    public function testCompareToBigger() {
+        $input = TInteger::valueOf(TInteger::MIN_VALUE);
+        $result = TInteger::valueOf(TInteger::MAX_VALUE)->compareTo($input);
+        $this->assertEquals(1, $result);
+    }
+
+    public function testCompareToEqual() {
+        $input = TInteger::valueOf(TInteger::MIN_VALUE);
+        $result = TInteger::valueOf(TInteger::MIN_VALUE)->compareTo($input);
+        $this->assertEquals(0, $result);
+    }
+
+    public function testCompareToInvalidInput() {
+        $this->expectException(IllegalArgumentException::class);
+        TInteger::valueOf(TInteger::MIN_VALUE)->compareTo(new TestObject());
+    }
+
+    public function testCompareSmaller() {
+        $result = TInteger::compare(TInteger::MIN_VALUE, TInteger::MAX_VALUE);
+        $this->assertEquals(-1, $result);
+    }
+
+    public function testCompareBigger() {
+        $result = TInteger::compare(TInteger::MAX_VALUE, TInteger::MIN_VALUE);
+        $this->assertEquals(1, $result);
+    }
+
+    public function testCompareEqual() {
+        $result = TInteger::compare(TInteger::MAX_VALUE, TInteger::MAX_VALUE);
+        $this->assertEquals(0, $result);
+    }
+
+    public function testCompareUnsignedNegativeBiggerThanPositive() {
+        $result = TInteger::compareUnsigned(TInteger::MIN_VALUE, TInteger::MAX_VALUE);
+        $this->assertEquals(1, $result);
+    }
+
+    public function testCompareUnsignedBothNegative() {
+        $result = TInteger::compareUnsigned(-1, -2);
+        $this->assertEquals(1, $result);
+    }
+
+    public function testCompareUnsignedBothPositive() {
+        $result = TInteger::compareUnsigned(1, 2);
+        $this->assertEquals(-1, $result);
+    }
+
+    public function testCompareUnsignedPositiveSmallerThanNegative() {
+        $result = TInteger::compareUnsigned(TInteger::MAX_VALUE, TInteger::MIN_VALUE);
+        $this->assertEquals(-1, $result);
+    }
+
+    public function testCompareUnsignedNegativeBiggerThanPositiveToo() {
+        $result = TInteger::compareUnsigned(-1, 2);
+        $this->assertEquals(1, $result);
+    }
+
+    public function testCompareUnsignedEqual() {
+        $result = TInteger::compareUnsigned(TInteger::MAX_VALUE, TInteger::MAX_VALUE);
+        $this->assertEquals(0, $result);
     }
 }

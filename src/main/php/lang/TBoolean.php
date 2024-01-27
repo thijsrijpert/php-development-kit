@@ -184,10 +184,11 @@ class TBoolean extends TObject implements Serializable, Comparable
      * @see     Comparable
      */
     public function compareTo(IObject $o): int {
-        if (!($o instanceof TBoolean)) {
-            throw new IllegalArgumentException("Cannot compare TBoolean with: " . TClass::of($o)->getName());
+        if ($o instanceof TBoolean) {
+            return TBoolean::compare($this->value, $o->value);
         }
-        return TBoolean::compare($this->value, $o->value);
+
+        throw new IllegalArgumentException("Cannot compare TBoolean with: " . TClass::of($o)->getName());
     }
 
     /**
@@ -202,7 +203,6 @@ class TBoolean extends TObject implements Serializable, Comparable
      * @return int the value 0 if x == y;
      *         a value less than 0 if !x && y; and
      *         a value greater than 0 if x && !y
-     * @since 1.7
      */
     public static function compare(bool $x, bool $y): int {
         return ($x == $y) ? 0 : ($x ? 1 : -1);

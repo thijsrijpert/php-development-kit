@@ -31,6 +31,7 @@ namespace jhp\lang;
 
 use jhp\lang\exception\CloneNotSupportedException;
 use jhp\lang\exception\UnsupportedOperationException;
+use parallel\Runtime;
 
 /**
  * Class TObject is the root of the class hierarchy.
@@ -266,12 +267,10 @@ class TObject implements IObject
      * <p>
      * Only one thread at a time can own an object's monitor.
      *
-     * @throws  IllegalMonitorStateException  if the current thread is not
-     *               the owner of this object's monitor.
      * @see        java.lang.Object#notifyAll()
      * @see        java.lang.Object#wait()
      */
-    public final function notify(): void
+    final public function notify(): void
     {
         throw new UnsupportedOperationException();
     }
@@ -293,12 +292,10 @@ class TObject implements IObject
      * description of the ways in which a thread can become the owner of
      * a monitor.
      *
-     * @throws  IllegalMonitorStateException  if the current thread is not
-     *               the owner of this object's monitor.
      * @see        java.lang.Object#notify()
      * @see        java.lang.Object#wait()
      */
-    public final function notifyAll(): void
+    final public function notifyAll(): void
     {
         throw new UnsupportedOperationException();
     }
@@ -315,8 +312,9 @@ class TObject implements IObject
      * @see    #notify()
      * @see    #notifyAll()
      */
-    public final function wait(int $timeout = 0, int $nanos = 0): void
+    final public function wait(int $timeout = 0, int $nanos = 0): void
     {
+        $runtime = new Runtime();
         throw new UnsupportedOperationException();
     }
 }
