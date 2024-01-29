@@ -25,32 +25,14 @@
 
 namespace jhp\lang;
 
+use Error;
 use jhp\lang\exception\CloneNotSupportedException;
 use jhp\lang\exception\IllegalArgumentException;
 use jhp\lang\exception\NullPointerException;
 use jhp\lang\exception\UnsupportedOperationException;
 
 /**
- * This is the common base class of all Java language enumeration classes.
- *
- * Enumeration classes are all serializable and receive special handling
- * by the serialization mechanism. The serialized representation used
- * for enum constants cannot be customized. Declarations of methods
- * and fields that would otherwise interact with serialization are
- * ignored, including serialVersionUID; see the <cite>Java
- * Object Serialization Specification</cite> for details.
- *
- * <p> Note that when using an enumeration type as the type of set
- * or as the type of the keys in a map, specialized and efficient
- * {@linkplain java.util.EnumSet set} and {@linkplain
- * java.util.EnumMap map} implementations are available.
- *
- * @param <E> The type of the enum subclass
- *
- * @serial exclude
- * @see     Class#getEnumConstants()
- * @see     java.util.EnumSet
- * @see     java.util.EnumMap
+ * This is the common base class of all JHP enumeration classes.
  */
 trait EnumTrait
 {
@@ -65,7 +47,7 @@ trait EnumTrait
      * use in specialized situations where correctness depends on getting the
      * exact name, which will not vary from release to release.
      *
-     * @return the name of this enum constant
+     * @return string the name of this enum constant
      */
     final public function name(): string
     {
@@ -81,7 +63,7 @@ trait EnumTrait
      * designed for use by sophisticated enum-based data structures, such
      * as {@link java.util.EnumSet} and {@link java.util.EnumMap}.
      *
-     * @return the ordinal of this enumeration constant
+     * @return int the ordinal of this enumeration constant
      */
     final public function ordinal(): int
     {
@@ -100,7 +82,7 @@ trait EnumTrait
      * isn't necessary or desirable.  An enum class should override this
      * method when a more "programmer-friendly" string form exists.
      *
-     * @return the name of this enum constant
+     * @return string the name of this enum constant
      */
     public function toString(): string
     {
@@ -139,7 +121,7 @@ trait EnumTrait
      *
      * @return a hash code for this enum constant.
      */
-    public final function hashCode(): int
+    final public function hashCode(): int
     {
         return System::identityHashCode($this);
     }
@@ -167,28 +149,22 @@ trait EnumTrait
      * same enum type.  The natural order implemented by this
      * method is the order in which the constants are declared.
      */
-    public final function compareTo(IObject $obj): int
+    final public function compareTo(IObject $obj): int
     {
         if ($obj instanceof IEnum && $this->getClass()->equals($obj->getClass())) {
             return $this->ordinal() - $obj->ordinal();
         }
 
-        throw new IllegalArgumentException();
+        throw new IllegalArgumentException("Compare is done on object of different type");
     }
 
     /**
-     * Returns the Class object corresponding to this enum constant's
-     * enum type.  Two enum constants e1 and  e2 are of the
-     * same enum type if and only if
-     *   e1.getDeclaringClass() == e2.getDeclaringClass().
-     * (The value returned by this method may differ from the one returned
-     * by the {@link Object#getClass} method for enum constants with
-     * constant-specific class bodies.)
+     * The same as getClass()
      *
-     * @return the Class object corresponding to this enum constant's
+     * @return TClass the Class object corresponding to this enum constant's
      *     enum type
      */
-    public final function getDeclaringClass(): TClass
+    final public function getDeclaringClass(): TClass
     {
         return $this->getClass();
     }
@@ -197,37 +173,28 @@ trait EnumTrait
      * Returns the enum constant of the specified enum class with the
      * specified name.  The name must match exactly an identifier used
      * to declare an enum constant in this class.  (Extraneous whitespace
-     * characters are not permitted.)
+     * characters are not permitted.
      *
-     * <p>Note that for a particular enum class {@code T}, the
-     * implicitly declared {@code public static T valueOf(String)}
-     * method on that enum may be used instead of this method to map
-     * from a name to the corresponding enum constant.  All the
-     * constants of an enum class can be obtained by calling the
-     * implicit {@code public static T[] values()} method of that
-     * class.
+     * @param TClass $enumClass the {@code Class} object of the enum class from which to return a constant
+     * @param string $name the name of the constant to return
      *
-     * @param <T> The enum class whose constant is to be returned
-     * @param enumClass the {@code Class} object of the enum class from which
-     *      to return a constant
-     * @param name the name of the constant to return
-     *
-     * @return the enum constant of the specified enum class with the
-     *      specified name
+     * @return IEnum the enum constant of the specified enum class with the specified name
      *
      * @throws IllegalArgumentException if the specified enum class has
      *         no constant with the specified name, or the specified
      *         class object does not represent an enum class
-     * @throws NullPointerException if {@code enumClass} or {@code name}
-     *         is null
-     * @since 1.5
      */
     public static function valueOf(TClass $enumClass, string $name): IEnum
     {
-        $result = $enumClass->enumConstantDirectory()->get($name);
+        $enumClassName = $enumClass->getName();
+        try {
+            $result = constant( "$enumClassName::$name");
+        } catch (Error) {
+            throw new IllegalArgumentException("No enum constant " . $enumClass->getName() . "." . $name);
+        }
 
         if ($result === null) {
-            throw new IllegalArgumentException("No enum constant " . $enumClass->getCanonicalName() . "." . $name);
+            throw new IllegalArgumentException("No enum constant " . $enumClass->getName() . "." . $name);
         }
 
         return $result;
@@ -239,7 +206,7 @@ trait EnumTrait
      * @param int $timeout Timeout in milliseconds
      * @param int $nanos Timeout in nanoseconds (Not really used)
      */
-    public final function wait(int $timeout = 0, int $nanos = 0): void
+    final public function wait(int $timeout = 0, int $nanos = 0): void
     {
         if ($timeout < 0) {
             throw new IllegalArgumentException("timeout value is negative");
