@@ -37,7 +37,7 @@ use jhp\util\collection\IList;
 final class TClass extends TObject
 {
 
-    public function __construct(private readonly string $className) { }
+    private function __construct(private readonly string $className) { }
 
     public function getInterfaces(): IList {
         $list = new ArrayList(TClass::from(TClass::class));
@@ -51,7 +51,7 @@ final class TClass extends TObject
         return $this->className;
     }
 
-    public function isInstance(Object $obj): bool {
+    public function isInstance(object $obj): bool {
         return is_a($obj, $this->getName());
     }
 

@@ -32,6 +32,8 @@ namespace jhp\lang;
 class System extends TObject
 {
 
+    private function __construct() {}
+
     public static function identityHashCode(IObject $object): int {
         return spl_object_id($object);
     }

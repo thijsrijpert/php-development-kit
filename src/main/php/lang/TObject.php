@@ -30,8 +30,7 @@
 namespace jhp\lang;
 
 use jhp\lang\exception\CloneNotSupportedException;
-use jhp\lang\exception\UnsupportedOperationException;
-use parallel\Runtime;
+use jhp\lang\exception\IllegalArgumentException;
 
 /**
  * Class TObject is the root of the class hierarchy.
@@ -151,6 +150,11 @@ class TObject implements IObject
     }
 
     /**
+     * Warning, using clone is no longer considered a "Best Practice"
+     * Use static factory methods instead.
+     *
+     * See: {@link http://www.javapractices.com/topic/TopicAction.do?Id=71 www.javapractices.com
+     *
      * Creates and returns a copy of this object.  The precise meaning
      * of "copy" may depend on the class of the object. The general
      * intent is that, for any object x, the expression:
@@ -241,80 +245,25 @@ class TObject implements IObject
     }
 
     /**
-     * Wakes up a single thread that is waiting on this object's
-     * monitor. If any threads are waiting on this object, one of them
-     * is chosen to be awakened. The choice is arbitrary and occurs at
-     * the discretion of the implementation. A thread waits on an object's
-     * monitor by calling one of the wait methods.
-     * <p>
-     * The awakened thread will not be able to proceed until the current
-     * thread relinquishes the lock on this object. The awakened thread will
-     * compete in the usual manner with any other threads that might be
-     * actively competing to synchronize on this object; for example, the
-     * awakened thread enjoys no reliable privilege or disadvantage in being
-     * the next thread to lock this object.
-     * <p>
-     * This method should only be called by a thread that is the owner
-     * of this object's monitor. A thread becomes the owner of the
-     * object's monitor in one of three ways:
-     * <ul>
-     * <li>By executing a synchronized instance method of that object.
-     * <li>By executing the body of a synchronized statement
-     *     that synchronizes on the object.
-     * <li>For objects of type Class, by executing a
-     *     synchronized static method of that class.
-     * </ul>
-     * <p>
-     * Only one thread at a time can own an object's monitor.
+     * Causes the current thread to be paused for the supplied timeout
      *
-     * @see        java.lang.Object#notifyAll()
-     * @see        java.lang.Object#wait()
-     */
-    final public function notify(): void
-    {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Wakes up all threads that are waiting on this object's monitor. A
-     * thread waits on an object's monitor by calling one of the
-     * wait methods.
-     * <p>
-     * The awakened threads will not be able to proceed until the current
-     * thread relinquishes the lock on this object. The awakened threads
-     * will compete in the usual manner with any other threads that might
-     * be actively competing to synchronize on this object; for example,
-     * the awakened threads enjoy no reliable privilege or disadvantage in
-     * being the next thread to lock this object.
-     * <p>
-     * This method should only be called by a thread that is the owner
-     * of this object's monitor. See the notify method for a
-     * description of the ways in which a thread can become the owner of
-     * a monitor.
-     *
-     * @see        java.lang.Object#notify()
-     * @see        java.lang.Object#wait()
-     */
-    final public function notifyAll(): void
-    {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Causes the current thread to wait until it is awakened, typically
-     * by being <em>notified</em> or <em>interrupted</em>.
-     *
-     * @throws IllegalMonitorStateException if the current thread is not
-     *         the owner of the object's monitor
-     * @throws InterruptedException if any thread interrupted the current thread before or
-     *         while the current thread was waiting. The <em>interrupted status</em> of the
-     *         current thread is cleared when this exception is thrown.
-     * @see    #notify()
-     * @see    #notifyAll()
+     * @param int $timeout Timeout in milliseconds
+     * @param int $nanos Timeout in nanoseconds (Not really used)
      */
     final public function wait(int $timeout = 0, int $nanos = 0): void
     {
-        $runtime = new Runtime();
-        throw new UnsupportedOperationException();
+        if ($timeout < 0) {
+            throw new IllegalArgumentException("timeout value is negative");
+        }
+
+        if ($nanos < 0 || $nanos > 999999) {
+            throw new IllegalArgumentException("nanosecond timeout value out of range");
+        }
+
+        if ($nanos > 0 && $timeout < TInteger::MAX_VALUE) {
+            $timeout++;
+        }
+
+        usleep($timeout * 1000);
     }
 }

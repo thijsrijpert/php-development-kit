@@ -37,23 +37,8 @@ use jhp\lang\exception\UnsupportedOperationException;
  * classes representing numeric values that are convertible to the
  * primitive types byte, double, float, int, long, and short.
  *
- * The specific semantics of the conversion from the numeric value of
- * a particular Number implementation to a given primitive
- * type is defined by the Number implementation in question.
- *
- * For platform classes, the conversion is often analogous to a
- * narrowing primitive conversion or a widening primitive conversion
- * as defining in <cite>The Java&trade; Language Specification</cite>
- * for converting between primitive types.  Therefore, conversions may
- * lose information about the overall magnitude of a numeric value, may
- * lose precision, and may even return a result of a different sign
- * than the input.
- *
  * See the documentation of a given Number implementation for
  * conversion details.
- *
- * @author      Lee Boynton
- * @author      Arthur van Hoff
  */
 abstract class TNumber extends TObject implements Serializable {
 
