@@ -33,7 +33,7 @@ use jhp\lang\TClass;
 use jhp\lang\TObject;
 use Traversable;
 
-abstract class AbstractList extends TObject implements IList
+abstract class AbstractList extends TIterable implements IList
 {
     protected readonly TClass $type;
 
@@ -178,7 +178,7 @@ abstract class AbstractList extends TObject implements IList
      * that equal objects must have equal hash codes.
      *
      * @see     TObject::hashCode()
-     * @see     HashMap
+     * @see     THashMap
      */
     public function equals(?IObject $obj = null): bool
     {
@@ -255,13 +255,5 @@ abstract class AbstractList extends TObject implements IList
         }
 
         $this->remove($offset);
-    }
-
-    /**
-     * @return Traversable An instance of an object implementing <b>Iterator</b> or <b>Traversable</b>
-     */
-    public function getIterator(): Traversable
-    {
-        return $this->iterator();
     }
 }

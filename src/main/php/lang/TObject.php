@@ -48,7 +48,7 @@ class TObject implements IObject
     /**
      * Returns a hash code value for the object. This method is
      * supported for the benefit of hash tables such as those provided by
-     * {@link HashMap}.
+     * {@link THashMap}.
      * <p>
      * The general contract of hashCode is:
      * <ul>
@@ -134,7 +134,7 @@ class TObject implements IObject
      * that equal objects must have equal hash codes.
      *
      * @see     TObject::hashCode()
-     * @see     HashMap
+     * @see     THashMap
      */
     public function equals(?TObject $obj = null): bool
     {

@@ -45,7 +45,7 @@ abstract class TNumber extends TObject implements Serializable {
      * @return  int the numeric value represented by this object after conversion
      *          to type int.
      */
-    public abstract function intValue(): int;
+    abstract public function intValue(): int;
 
     /**
      * Returns the value of the specified number as a float,
@@ -54,5 +54,5 @@ abstract class TNumber extends TObject implements Serializable {
      * @return  float the numeric value represented by this object after conversion
      *          to type float.
      */
-    public abstract function floatValue(): float;
+    abstract public function floatValue(): float;
 }

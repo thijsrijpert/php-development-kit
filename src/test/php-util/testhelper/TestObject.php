@@ -49,7 +49,7 @@ class TestObject extends TObject {
 
     public function equals(?TObject $obj = null): bool
     {
-        return $obj instanceof TestObject &&
+        return $obj->getClass()->getName() === $this->getClass()->getName() &&
             $this->value === $obj->getValue();
     }
 

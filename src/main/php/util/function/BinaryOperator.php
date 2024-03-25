@@ -25,6 +25,7 @@
 namespace jhp\util\function;
 
 use Closure;
+use jhp\lang\IObject;
 use jhp\lang\TClass;
 use jhp\util\function\internal\ClosureValidationHelper;
 use jhp\util\function\internal\TypeErrorHelper;
@@ -40,7 +41,7 @@ abstract class BinaryOperator extends BiFunction {
         $helper->assertParameterCount(BiFunction::CLOSURE_PARAMETER_COUNT);
 
         return new class($helper, $returnType) extends BinaryOperator {
-            function apply($value, $value2): object {
+            function apply($value, $value2): IObject {
                 try {
                     $result =  $this->closureHelper->getClosure()->call($this, $value, $value2);
                 } catch (TypeError $e) {

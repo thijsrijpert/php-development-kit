@@ -34,6 +34,7 @@ use jhp\lang\exception\UnsupportedOperationException;
 use jhp\lang\internal\GType;
 use jhp\lang\IObject;
 use jhp\lang\TClass;
+use jhp\lang\TObject;
 use jhp\util\function\Consumer;
 use jhp\util\function\Predicate;
 use jhp\util\function\UnaryOperator;
@@ -306,11 +307,6 @@ class ArrayList extends AbstractList implements IList
         throw new UnsupportedOperationException();
     }
 
-    public function spliterator(): Spliterator
-    {
-        throw new UnsupportedOperationException();
-    }
-
     /**
      * @implSpec
      * The default implementation traverses all elements of the collection using
@@ -358,7 +354,7 @@ class ArrayList extends AbstractList implements IList
         }
     }
 
-    private function checkObjectType(object $objectToBeChecked): void
+    private function checkObjectType(IObject $objectToBeChecked): void
     {
         if (!$this->type->isInstance($objectToBeChecked)) {
             throw new IllegalArgumentException(

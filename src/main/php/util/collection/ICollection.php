@@ -33,6 +33,7 @@ use jhp\lang\exception\UnsupportedOperationException;
 use jhp\lang\IIterable;
 use jhp\lang\IObject;
 use jhp\lang\TClass;
+use jhp\util\function\Consumer;
 use jhp\util\function\Predicate;
 use jhp\util\stream\Stream;
 
@@ -128,7 +129,7 @@ use jhp\util\stream\Stream;
  * different representation of the same elements, for example, as
  * provided by {@link List#subList List.subList},
  * {@link NavigableSet#subSet NavigableSet.subSet}, or
- * {@link Map#entrySet Map.entrySet}.
+ * {@link IMap#entrySet Map.entrySet}.
  * Any changes made to the backing collection are visible in the view collection.
  * Correspondingly, any changes made to the view collection &mdash; if changes
  * are permitted &mdash; are written through to the backing collection.
@@ -242,7 +243,7 @@ use jhp\util\stream\Stream;
  * @author  Neal Gafter
  * @see     Set
  * @see     List
- * @see     Map
+ * @see     IMap
  * @see     SortedSet
  * @see     SortedMap
  * @see     HashSet
@@ -521,6 +522,28 @@ interface ICollection extends IIterable, ArrayAccess, IObject
      * @since 1.8
      */
     public function parallelStream(): Stream;
+
+    /**
+     * Performs the given action for each element of the Iterable
+     * until all elements have been processed or the action throws an
+     * exception.  Actions are performed in the order of iteration, if that
+     * order is specified.  Exceptions thrown by the action are relayed to the
+     * caller.
+     * <p>
+     * The behavior of this method is unspecified if the action performs
+     * side effects that modify the underlying source of elements, unless an
+     * overriding class has specified a concurrent modification policy.
+     *
+     * @implSpec
+     * <p>The default implementation behaves as if:
+     * <pre>{@code
+     *     for (IObject t : this)
+     *         action.accept(t);
+     * }</pre>
+     *
+     * @param Consumer $action The action to be performed for each element
+     */
+    public function forEach(Consumer $action);
 
     /**
      * Gets the type of the elements contained in this collection

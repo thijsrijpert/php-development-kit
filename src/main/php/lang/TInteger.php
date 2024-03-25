@@ -788,7 +788,7 @@ class TInteger extends TNumber implements Comparable {
      *
      * @return int The shifted value
      */
-    private static function unsignedRightShift(int $value, int $steps): int {
+    public static function unsignedRightShift(int $value, int $steps): int {
         $steps = $steps & (TInteger::SIZE - 1);
         if ($steps === 0) {
             return $value;

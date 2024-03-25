@@ -18,14 +18,46 @@
  * 2 along with this work; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-/*
- * Copyright (c) 1997, 2021, Oracle and/or its affiliates. All rights reserved.
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+/**
+ * @noinspection PhpMissingDocCommentInspection
+ * @noinspection PhpEnforceDocCommentInspection
  */
 
-namespace jhp\util\collection;
+namespace jhp\testhelper;
 
-class HashMap
-{
+use jhp\lang\TObject;
+
+class HashableTestObject extends TObject {
+    private int $value = 6;
+    private bool $setterInvoked = false;
+
+    public function getValue(): int
+    {
+        return $this->value;
+    }
+
+    public function setValue(int $value): self
+    {
+        $this->setterInvoked = true;
+        $this->value = $value;
+        return $this;
+    }
+
+    public function isSetterInvoked(): bool
+    {
+        return $this->setterInvoked;
+    }
+
+    public function equals(?TObject $obj = null): bool
+    {
+        return $obj->getClass()->getName() === $this->getClass()->getName() &&
+            $this->value === $obj->getValue();
+    }
+
+    public function hashCode(): int
+    {
+        return $this->value / 2;
+    }
+
 
 }

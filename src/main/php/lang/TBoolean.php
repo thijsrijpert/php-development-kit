@@ -100,7 +100,6 @@ class TBoolean extends TObject implements Serializable, Comparable
      *
      * @param  bool|string $b a boolean value.
      * @return TBoolean a Boolean instance representing b.
-     * @since  1.4
      */
     public static function valueOf(bool|string $b): TBoolean {
         if (GType::of($b)->isString()) {
@@ -109,6 +108,28 @@ class TBoolean extends TObject implements Serializable, Comparable
         return $b ? new TBoolean(true) : new TBoolean(false);
     }
 
+    /**
+     * @apiNote
+     * In general, the toString method returns a string that
+     * "textually represents" this object. The result should
+     * be a concise but informative representation that is easy for a
+     * person to read.
+     * It is recommended that all subclasses override this method.
+     * The string output is not necessarily stable over time or across
+     * invocations.
+     *
+     * The toString method for class Object
+     * returns a string consisting of the name of the class of which the
+     * object is an instance, the at-sign character '@', and
+     * the unsigned hexadecimal representation of the hash code of the
+     * object.
+     *
+     * @return  string a string representation of the object.
+     * @see TClass::getName()
+     * @see TObject::getClass()
+     * @see TInteger::toHexString()
+     * @see TObject::hashCode()
+     */
     public function toString(): string {
         return TBoolean::asString($this->value);
     }

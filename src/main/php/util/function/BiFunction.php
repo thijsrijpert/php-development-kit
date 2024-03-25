@@ -25,6 +25,7 @@
 namespace jhp\util\function;
 
 use Closure;
+use jhp\lang\IObject;
 use jhp\util\function\internal\ClosureValidationHelper;
 use jhp\util\function\internal\TypeErrorHelper;
 use TypeError;
@@ -38,7 +39,7 @@ abstract class BiFunction {
         protected ?string $returnType = null
     ){ }
 
-    abstract function apply(object $value, object $value2): object;
+    abstract function apply(IObject $value, IObject $value2): IObject;
 
     public static function of(Closure $closure,
                               ?string $returnType = null
@@ -48,7 +49,7 @@ abstract class BiFunction {
         $helper->assertParameterCount(BiFunction::CLOSURE_PARAMETER_COUNT);
 
         return new class($helper, $returnType) extends BiFunction {
-            function apply(object $value, object $value2): object {
+            function apply(object $value, object $value2): IObject {
                 try {
                     $result =  $this->closureHelper->getClosure()->call($this, $value, $value2);
                 } catch (TypeError $e) {
