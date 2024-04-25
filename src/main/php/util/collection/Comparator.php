@@ -26,18 +26,23 @@
 namespace jhp\util\collection;
 
 use Closure;
+use jhp\lang\IObject;
+use jhp\lang\TClass;
 use jhp\util\function\FunctionalInterface;
 use jhp\util\function\internal\ClosureValidationHelper;
+use jhp\util\function\internal\TypeErrorHelper;
+use TypeError;
 
 abstract class Comparator implements FunctionalInterface {
 
     private const CLOSURE_PARAMETER_COUNT = 2;
 
     private function __construct(
-        protected readonly Closure $closure
+        protected readonly Closure $closure,
+        protected readonly ClosureValidationHelper $closureHelper
     ){ }
 
-    abstract function compare(object $value, object $value2): int;
+    abstract function compare(IObject $value, IObject $value2): int;
 
     public function getClosure(): Closure
     {
@@ -49,9 +54,16 @@ abstract class Comparator implements FunctionalInterface {
         $helper = new ClosureValidationHelper($closure);
         $helper->assertParameterCount(Comparator::CLOSURE_PARAMETER_COUNT);
 
-        return new class($closure) extends Comparator {
+        return new class($closure, $helper) extends Comparator {
             function compare($value, $value2): int {
-                return $this->closure->call($this, $value, $value2);
+                $this->closureHelper->validateType($value, TClass::of($value2)->getName());
+                $this->closureHelper->validateType($value2, TClass::of($value)->getName());
+
+                try {
+                    return $this->closureHelper->getClosure()->call($this, $value, $value2);
+                } catch (TypeError $e) {
+                    throw TypeErrorHelper::convertToFunctionalTypeError($e);
+                }
             }
         };
     }
