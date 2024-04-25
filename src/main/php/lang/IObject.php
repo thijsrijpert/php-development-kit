@@ -30,7 +30,7 @@ use jhp\lang\exception\CloneNotSupportedException;
 interface IObject
 {
     /**
-     * Returns the runtime class of this TObject.
+     * Returns the runtime class of this IObject.
      *
      * @return TClass The class object that represents the runtime class of this object.
      */
@@ -49,11 +49,11 @@ interface IObject
      *     used in equals comparisons on the object is modified.
      *     This integer need not remain consistent from one execution of an
      *     application to another execution of the same application.
-     * <li>If two objects are equal according to the {@link TObject::equals()}
+     * <li>If two objects are equal according to the {@link IObject::equals()}
      *     method, then calling the hashCode method on each of the two objects
      *     must produce the same integer result.
      * <li>It is <em>not</em> required that if two objects are unequal
-     *     according to the {@link TObject::equals(Object)} method, then
+     *     according to the {@link IObject::equals(Object)} method, then
      *     calling the hashCode method on each of the two objects
      *     must produce distinct integer results.  However, the programmer
      *     should be aware that producing distinct integer results for
@@ -65,7 +65,7 @@ interface IObject
      * by class Object returns distinct integers for distinct objects.
      *
      * @return  int a hash code value for this object.
-     * @see     TObject::equals()
+     * @see     IObject::equals()
      * @see     System::identityHashCode()
      */
     public function hashCode(): int;
@@ -113,19 +113,19 @@ interface IObject
      * if x and y refer to the same object
      * (x === y has the value true).
      *
-     * @param   ?TObject $obj the reference object with which to compare.
+     * @param   ?IObject $obj the reference object with which to compare.
      *
      * @return  bool true if this object is the same as the obj argument; false otherwise.
      * @api
-     * It is generally necessary to override the {@link TObject::hashCode}
+     * It is generally necessary to override the {@link IObject::hashCode}
      * method whenever this method is overridden, to maintain the
      * general contract for the hashCode method, which states
      * that equal objects must have equal hash codes.
      *
-     * @see     TObject::hashCode()
+     * @see     IObject::hashCode()
      * @see     THashMap
      */
-    public function equals(?TObject $obj = null): bool;
+    public function equals(?IObject $obj = null): bool;
 
     /**
      * Creates and returns a copy of this object.  The precise meaning
@@ -171,12 +171,12 @@ interface IObject
      * contents of the fields are not themselves cloned. Thus, this method
      * performs a "shallow copy" of this object, not a "deep copy" operation.
      * <p>
-     * The class TObject does not itself implement the interface
+     * The class IObject does not itself implement the interface
      * Cloneable, so calling the clone method on an object
-     * whose class is TObject will result in throwing an
+     * whose class is IObject will result in throwing an
      * exception at runtime.
      *
-     * @return     TObject a clone of this instance.
+     * @return     IObject a clone of this instance.
      * @throws     CloneNotSupportedException  if the object's class does not
      *               support the Cloneable interface. Subclasses
      *               that override the clone method can also
@@ -184,7 +184,7 @@ interface IObject
      *               be cloned.
      * @see java.lang.Cloneable
      */
-    public function clone(): TObject;
+    public function clone(): IObject;
 
 
     /**
@@ -200,15 +200,15 @@ interface IObject
      *
      * The toString method for class Object
      * returns a string consisting of the name of the class of which the
-     * object is an instance, the at-sign character `@', and
+     * object is an instance, the at-sign character `@`, and
      * the unsigned hexadecimal representation of the hash code of the
      * object.
      *
      * @return  string a string representation of the object.
      * @see TClass::getName()
-     * @see TObject::getClass()
+     * @see IObject::getClass()
      * @see TInteger::toHexString()
-     * @see TObject::hashCode()
+     * @see IObject::hashCode()
      */
     public function toString(): string;
 

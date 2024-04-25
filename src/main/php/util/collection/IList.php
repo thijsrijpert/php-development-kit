@@ -31,10 +31,16 @@ use jhp\lang\exception\IllegalStateException;
 use jhp\lang\exception\IndexOutOfBoundsException;
 use jhp\lang\exception\UnsupportedOperationException;
 use jhp\lang\IObject;
+use jhp\lang\TClass;
 use jhp\util\function\UnaryOperator;
 
 interface IList extends ICollection
 {
+    /**
+     * @return TClass the type of the elements contained in this list
+     */
+    public function getType(): TClass;
+
     // Modification Operations
 
 

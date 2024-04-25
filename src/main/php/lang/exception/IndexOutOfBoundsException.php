@@ -25,6 +25,8 @@
 
 namespace jhp\lang\exception;
 
+use jhp\lang\IObject;
+use jhp\lang\ObjectTrait;
 use RuntimeException;
 
 /**
@@ -33,6 +35,7 @@ use RuntimeException;
  * <p>
  * Applications can subclass this class to indicate similar exceptions.
  */
-class IndexOutOfBoundsException extends RuntimeException
+class IndexOutOfBoundsException extends RuntimeException implements IObject
 {
+    use ObjectTrait;
 }

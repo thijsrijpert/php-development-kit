@@ -87,6 +87,32 @@ class TInteger extends TNumber implements Comparable {
         'o', 'p', 'q', 'r', 's', 't',
         'u', 'v', 'w', 'x', 'y', 'z'
     ];
+    /**
+     * The minimum radix available for conversion to and from strings.
+     * The constant value of this field is the smallest value permitted
+     * for the radix argument in radix-conversion methods such as the
+     * digit method, the forDigit method, and the
+     * toString method of class Integer.
+     *
+     * @see     TCharacter#digit(char, int)
+     * @see     TCharacter#forDigit(int, int)
+     * @see     Integer#toString(int, int)
+     * @see     Integer#valueOf(String)
+     */
+    public const MIN_RADIX = 2;
+    /**
+     * The maximum radix available for conversion to and from strings.
+     * The constant value of this field is the largest value permitted
+     * for the radix argument in radix-conversion methods such as the
+     * digit method, the forDigit method, and the
+     * toString method of class Integer.
+     *
+     * @see     TCharacter#digit(char, int)
+     * @see     TCharacter#forDigit(int, int)
+     * @see     Integer#toString(int, int)
+     * @see     Integer#valueOf(String)
+     */
+    public const MAX_RADIX = 36;
 
     /**
      * Constructor for the integer wrapper class, use valueOf to create a new instance
@@ -136,13 +162,13 @@ class TInteger extends TNumber implements Comparable {
      * @param   int     $radix  the radix to use in the string representation.
      *
      * @return  string representation of the argument in the specified radix.
-     * @see     TCharacter::MAX_RADIX
+     * @see     self::MAX_RADIX
      * @see     Tharacter::MIN_RADIX
      */
     public static function asString(int $i, int $radix = 10): string {
         if ($radix == 10 ||
-            $radix < TCharacter::MIN_RADIX ||
-            $radix > TCharacter::MAX_RADIX
+            $radix < self::MIN_RADIX ||
+            $radix > self::MAX_RADIX
         ) {
             return (string) $i;
         }
@@ -398,11 +424,11 @@ class TInteger extends TNumber implements Comparable {
      *              does not contain a parsable int.
      */
     public static function parseInt(string $s, int $radix = 10): int {
-        if ($radix < TCharacter::MIN_RADIX) {
+        if ($radix < self::MIN_RADIX) {
             throw new NumberFormatException("radix " . $radix . " less than Character.MIN_RADIX");
         }
 
-        if ($radix > TCharacter::MAX_RADIX) {
+        if ($radix > self::MAX_RADIX) {
             throw new NumberFormatException("radix " . $radix . " greater than Character.MAX_RADIX");
         }
 

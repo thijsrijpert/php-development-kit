@@ -26,6 +26,8 @@
 
 namespace jhp\lang\exception;
 
+use jhp\lang\IObject;
+use jhp\lang\ObjectTrait;
 use jhp\lang\TInteger;
 
 /**
@@ -35,8 +37,10 @@ use jhp\lang\TInteger;
  *
  * @see     TInteger::parseInt()
  */
-class NumberFormatException extends IllegalArgumentException
+class NumberFormatException extends IllegalArgumentException implements IObject
 {
+    use ObjectTrait;
+
     /**
      * Factory method for making a <code>NumberFormatException</code>
      * given the specified input which caused the error.

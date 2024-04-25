@@ -26,8 +26,10 @@
 namespace jhp\lang\exception;
 
 use Exception;
+use jhp\lang\IObject;
+use jhp\lang\ObjectTrait;
 
-class CloneNotSupportedException extends Exception
+class CloneNotSupportedException extends Exception implements IObject
 {
-
+    use ObjectTrait;
 }

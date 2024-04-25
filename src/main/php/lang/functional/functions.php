@@ -18,32 +18,29 @@
  * 2 along with this work; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-/*
- * Copyright (c) 1996, 2021, Oracle and/or its affiliates. All rights reserved.
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- */
-namespace jhp\lang;
+namespace jhp\lang\functional;
 
-class BigInteger extends TNumber
-{
+use jhp\lang\TClass;
+use jhp\lang\TInteger;
+use jhp\lang\TString;
 
-    public function intValue(): int
+if (!function_exists('jhp\lang\functional\s')) {
+    function s(string $string): TString
     {
-        // TODO: Implement intValue() method.
+        return TString::valueOf($string);
     }
+}
 
-    public function longValue(): int
+if (!function_exists('jhp\lang\functional\c')) {
+    function c(string $clazz): TClass
     {
-        // TODO: Implement longValue() method.
+        return TClass::from($clazz);
     }
+}
 
-    public function floatValue(): float
+if (!function_exists('jhp\lang\functional\i')) {
+    function i(int $int): TInteger
     {
-        // TODO: Implement floatValue() method.
-    }
-
-    public function doubleValue(): float
-    {
-        // TODO: Implement doubleValue() method.
+        return TInteger::valueOf($int);
     }
 }

@@ -29,14 +29,13 @@ use jhp\lang\exception\CloneNotSupportedException;
 use jhp\lang\exception\IllegalArgumentException;
 
 /**
- * Class TObject is the root of the class hierarchy.
- * Every class has TObject as a superclass. All objects implement the methods of this class.
+ * This is the common base class of all JHP object classes.
  */
-class TObject implements IObject
+trait ObjectTrait
 {
 
     /**
-     * Returns the runtime class of this TObject.
+     * Returns the runtime class of this IObject.
      *
      * @return TClass The class object that represents the runtime class of this object.
      */
@@ -194,9 +193,9 @@ class TObject implements IObject
      * contents of the fields are not themselves cloned. Thus, this method
      * performs a "shallow copy" of this object, not a "deep copy" operation.
      * <p>
-     * The class TObject does not itself implement the interface
+     * The class IObject does not itself implement the interface
      * Cloneable, so calling the clone method on an object
-     * whose class is TObject will result in throwing an
+     * whose class is IObject will result in throwing an
      * exception at runtime.
      *
      * @return     IObject a clone of this instance.
@@ -246,7 +245,7 @@ class TObject implements IObject
      * @param int $timeout Timeout in milliseconds
      * @param int $nanos Timeout in nanoseconds (Not really used)
      */
-    final public function wait(int $timeout = 0, int $nanos = 0): void
+    public function wait(int $timeout = 0, int $nanos = 0): void
     {
         if ($timeout < 0) {
             throw new IllegalArgumentException("timeout value is negative");

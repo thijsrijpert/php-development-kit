@@ -126,9 +126,9 @@ class TBoolean extends TObject implements Serializable, Comparable
      *
      * @return  string a string representation of the object.
      * @see TClass::getName()
-     * @see TObject::getClass()
+     * @see IObject::getClass()
      * @see TInteger::toHexString()
-     * @see TObject::hashCode()
+     * @see IObject::hashCode()
      */
     public function toString(): string {
         return TBoolean::asString($this->value);

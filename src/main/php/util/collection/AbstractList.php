@@ -30,8 +30,6 @@ use jhp\lang\exception\IndexOutOfBoundsException;
 use jhp\lang\internal\GType;
 use jhp\lang\IObject;
 use jhp\lang\TClass;
-use jhp\lang\TObject;
-use Traversable;
 
 abstract class AbstractList extends TIterable implements IList
 {
@@ -168,16 +166,16 @@ abstract class AbstractList extends TIterable implements IList
     }
 
     /**
-     * @param   ?TObject $obj the reference object with which to compare.
+     * @param   ?IObject $obj the reference object with which to compare.
      *
      * @return  bool true if this object is the same as the obj argument; false otherwise.
      * @api
-     * It is generally necessary to override the {@link TObject::hashCode}
+     * It is generally necessary to override the {@link IObject::hashCode}
      * method whenever this method is overridden, to maintain the
      * general contract for the hashCode method, which states
      * that equal objects must have equal hash codes.
      *
-     * @see     TObject::hashCode()
+     * @see     IObject::hashCode()
      * @see     THashMap
      */
     public function equals(?IObject $obj = null): bool

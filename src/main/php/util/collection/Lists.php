@@ -19,13 +19,31 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 /*
- * Copyright (c) 2000, 2021, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997, 2020, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  */
+namespace jhp\util\collection;
 
-namespace jhp\nio\charset;
+use jhp\lang\IObject;
+use jhp\lang\TObject;
 
-class Charset
+use function jhp\lang\functional\c;
+
+class Lists extends TObject
 {
+    private function __construct(){}
 
+    public static function ofMutable(IObject...$array): ArrayList
+    {
+        if (count($array) === 0) {
+            return new ArrayList(c(IObject::class));
+        }
+
+        $list = new ArrayList(c($array[0]::class));
+        foreach ($array as $value) {
+            $list->add($value);
+        }
+
+        return $list;
+    }
 }

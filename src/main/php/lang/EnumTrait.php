@@ -28,8 +28,6 @@ namespace jhp\lang;
 use Error;
 use jhp\lang\exception\CloneNotSupportedException;
 use jhp\lang\exception\IllegalArgumentException;
-use jhp\lang\exception\NullPointerException;
-use jhp\lang\exception\UnsupportedOperationException;
 
 /**
  * This is the common base class of all JHP enumeration classes.
@@ -93,7 +91,7 @@ trait EnumTrait
      * Returns true if the specified object is equal to this
      * enum constant.
      *
-     * @param other the object to be compared for equality with this object.
+     * @param ?IObject $other the object to be compared for equality with this object.
      *
      * @return  true if the specified object is equal to this
      *          enum constant.
@@ -119,7 +117,7 @@ trait EnumTrait
     /**
      * Returns a hash code for this enum constant.
      *
-     * @return a hash code for this enum constant.
+     * @return int a hash code for this enum constant.
      */
     final public function hashCode(): int
     {
@@ -131,10 +129,9 @@ trait EnumTrait
      * are never cloned, which is necessary to preserve their "singleton"
      * status.
      *
-     * @return (never returns)
      * @throws CloneNotSupportedException
      */
-    public function clone(): TObject
+    public function clone(): IObject
     {
         throw new CloneNotSupportedException();
     }

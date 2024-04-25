@@ -25,6 +25,8 @@
 
 namespace jhp\lang\exception;
 
+use jhp\lang\IObject;
+use jhp\lang\ObjectTrait;
 use RuntimeException;
 
 /**
@@ -33,7 +35,7 @@ use RuntimeException;
  * application is not in an appropriate state for the requested
  * operation.
  */
-class IllegalStateException extends RuntimeException
+class IllegalStateException extends RuntimeException implements IObject
 {
-
+    use ObjectTrait;
 }

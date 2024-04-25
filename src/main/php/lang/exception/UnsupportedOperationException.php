@@ -26,6 +26,8 @@
 
 namespace jhp\lang\exception;
 
+use jhp\lang\IObject;
+use jhp\lang\ObjectTrait;
 use RuntimeException;
 
 /**
@@ -33,7 +35,7 @@ use RuntimeException;
  *
  * This class is a member of the Java Collections Framework.
  */
-class UnsupportedOperationException extends RuntimeException
+class UnsupportedOperationException extends RuntimeException implements IObject
 {
-
+    use ObjectTrait;
 }

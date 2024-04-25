@@ -34,11 +34,9 @@ use jhp\lang\exception\UnsupportedOperationException;
 use jhp\lang\internal\GType;
 use jhp\lang\IObject;
 use jhp\lang\TClass;
-use jhp\lang\TObject;
 use jhp\util\function\Consumer;
 use jhp\util\function\Predicate;
 use jhp\util\function\UnaryOperator;
-use jhp\util\Spliterator;
 use jhp\util\stream\Stream;
 
 class ArrayList extends AbstractList implements IList
@@ -363,4 +361,5 @@ class ArrayList extends AbstractList implements IList
             );
         }
     }
+
 }

@@ -24,9 +24,11 @@
  */
 namespace jhp\lang\exception;
 
+use jhp\lang\IObject;
+use jhp\lang\ObjectTrait;
 use RuntimeException;
 
-class NullPointerException extends RuntimeException
+class NullPointerException extends RuntimeException implements IObject
 {
-
+    use ObjectTrait;
 }

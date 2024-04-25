@@ -25,7 +25,6 @@
 
 namespace jhp\lang;
 
-use Defuse\Crypto\Exception\IOException;
 use jhp\lang\exception\IllegalArgumentException;
 use jhp\util\collection\ArrayList;
 use jhp\util\collection\IList;
@@ -39,7 +38,7 @@ final class TClass extends TObject
     /**
      * @param string $className The name of the class
      */
-    private function __construct(private readonly string $className) { }
+    public function __construct(private readonly string $className) { }
 
     /**
      * Retrieve a list of interfaces implemented by this class
@@ -48,7 +47,7 @@ final class TClass extends TObject
     public function getInterfaces(): IList {
         $list = new ArrayList(TClass::from(TClass::class));
         foreach (class_implements($this->className) as $value) {
-            $list->add(TClass::of($value));
+            $list->add(TClass::from($value));
         }
         return $list;
     }
@@ -63,7 +62,7 @@ final class TClass extends TObject
 
     /**
      * Tests if the supplied object could be cast to this class
-     * @param object $obj The object to test
+     * @param IObject $obj The object to test
      *
      * @return bool true if the object is of this class
      */
@@ -82,9 +81,9 @@ final class TClass extends TObject
      * exactly this Class object; otherwise it returns
      * false.
      *
-     * @param     TClass $clazz the {@code Class} object to be checked
-     * @return    bool the {@code boolean} value indicating whether objects of the
-     *            type {@code cls} can be assigned to objects of this class
+     * @param     TClass $clazz the Class object to be checked
+     * @return    bool the value indicating whether objects of the
+     *            type $clazz can be assigned to objects of this class
      */
     public function isAssignableFrom(TClass $clazz): bool {
         return is_a($clazz->getName(), $this->getName(), true);
@@ -92,19 +91,19 @@ final class TClass extends TObject
 
     /**
      *
-     * @param   ?TObject $obj the reference object with which to compare.
+     * @param   ?IObject $obj the reference object with which to compare.
      *
      * @return  bool true if this object is the same as the obj argument; false otherwise.
      * @api
-     * It is generally necessary to override the {@link TObject::hashCode}
+     * It is generally necessary to override the {@link IObject::hashCode}
      * method whenever this method is overridden, to maintain the
      * general contract for the hashCode method, which states
      * that equal objects must have equal hash codes.
      *
-     * @see     TObject::hashCode()
+     * @see     IObject::hashCode()
      * @see     THashMap
      */
-    public function equals(?TObject $obj = null): bool {
+    public function equals(?IObject $obj = null): bool {
         if ($obj == null) {
             return false;
         }
@@ -118,7 +117,7 @@ final class TClass extends TObject
      * @return TClass The class instance representing the supplied type
      */
     public static function from(string $type): TClass {
-        if (!class_exists($type)) {
+        if (!class_exists($type) && !interface_exists($type)) {
             throw new IllegalArgumentException("Class " . $type . " does not exist");
         }
         return new TClass($type);

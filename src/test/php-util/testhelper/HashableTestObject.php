@@ -25,6 +25,7 @@
 
 namespace jhp\testhelper;
 
+use jhp\lang\IObject;
 use jhp\lang\TObject;
 
 class HashableTestObject extends TObject {
@@ -48,7 +49,7 @@ class HashableTestObject extends TObject {
         return $this->setterInvoked;
     }
 
-    public function equals(?TObject $obj = null): bool
+    public function equals(?IObject $obj = null): bool
     {
         return $obj->getClass()->getName() === $this->getClass()->getName() &&
             $this->value === $obj->getValue();

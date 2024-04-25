@@ -43,11 +43,11 @@ class System extends TObject
      *      used in equals comparisons on the object is modified.
      *      This integer need not remain consistent from one execution of an
      *      application to another execution of the same application.
-     *  <li>If two objects are equal according to the {@link TObject::equals()}
+     *  <li>If two objects are equal according to the {@link IObject::equals()}
      *      method, then calling the hashCode method on each of the two objects
      *      must produce the same integer result.
      *  <li>It is <em>not</em> required that if two objects are unequal
-     *      according to the {@link TObject::equals(Object)} method, then
+     *      according to the {@link IObject::equals(Object)} method, then
      *      calling the hashCode method on each of the two objects
      *      must produce distinct integer results.  However, the programmer
      *      should be aware that producing distinct integer results for
