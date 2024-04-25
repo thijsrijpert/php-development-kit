@@ -37,29 +37,23 @@ use TypeError;
 * float.
 *
 * <p>In addition, this class provides several methods for converting a
-    * float to a String and a
-    * String to a float, as well as other
-    * constants and methods useful when dealing with a
-    * float.
-    *
-    * <p>This is a <a href="{@docRoot}/java.base/java/lang/doc-files/ValueBased.html">value-based</a>
-    * class; programmers should treat instances that are
-    * {@linkplain #equals(Object) equal} as interchangeable and should not
-    * use instances for synchronization, or unpredictable behavior may
-    * occur. For example, in a future release, synchronization may fail.
-    *
-    * <h2><a id=equivalenceRelation>Floating-point Equality, Equivalence,
-        * and Comparison</a></h2>
+* float to a String and a
+* String to a float, as well as other
+* constants and methods useful when dealing with a
+* float.
+*
+* <p>This is a <a href="{@docRoot}/java.base/java/lang/doc-files/ValueBased.html">value-based</a>
+* class; programmers should treat instances that are
+* {@linkplain #equals(Object) equal} as interchangeable and should not
+* use instances for synchronization, or unpredictable behavior may
+* occur. For example, in a future release, synchronization may fail.
+*
 *
 * The class java.lang.Double has a <a
     * href="Double.html#equivalenceRelation">discussion of equality,
     * equivalence, and comparison of floating-point values</a> that is
 * equality applicable to float values.
 *
-* @author  Lee Boynton
-* @author  Arthur van Hoff
-* @author  Joseph D. Darcy
-* @since 1.0
 */
 class TFloat extends TNumber implements Comparable {
 
@@ -84,13 +78,6 @@ class TFloat extends TNumber implements Comparable {
      */
     public const NaN = NAN;
 
-    /**
-    * A constant holding the largest positive finite value of type
-    * float, (2-2<sup>-23</sup>)&middot;2<sup>127</sup>.
-    * It is equal to the hexadecimal floating-point literal
-    * 0x1.fffffeP+127f and also equal to
-    * Float.intBitsToFloat(0x7f7fffff).
-    */
     public const MAX_VALUE = PHP_FLOAT_MAX;
 
     /**
@@ -218,8 +205,8 @@ class TFloat extends TNumber implements Comparable {
     * <p>To create localized string representations of a floating-point
     * value, use subclasses of {@link java.text.NumberFormat}.
     *
-    * @param   f   the float to be converted.
-    * @return a string representation of the argument.
+    * @param  float $f   the float to be converted.
+    * @return string a string representation of the argument.
     */
     public static function asString(float $f): string {
         if ($f === TFloat::NaN) {
@@ -236,95 +223,9 @@ class TFloat extends TNumber implements Comparable {
     * Returns a hexadecimal string representation of the
     * float argument. All characters mentioned below are
     * ASCII characters.
-    *
-    * <ul>
-    * <li>If the argument is NaN, the result is the string
-        *     "NaN".
-        * <li>Otherwise, the result is a string that represents the sign and
-        * magnitude (absolute value) of the argument. If the sign is negative,
-        * the first character of the result is '-'
-        * ('\u005Cu002D'); if the sign is positive, no sign character
-        * appears in the result. As for the magnitude <i>m</i>:
-        *
-        * <ul>
-            * <li>If <i>m</i> is infinity, it is represented by the string
-                * "Infinity"; thus, positive infinity produces the
-                * result "Infinity" and negative infinity produces
-                * the result "-Infinity".
-                *
-                * <li>If <i>m</i> is zero, it is represented by the string
-                * "0x0.0p0"; thus, negative zero produces the result
-                * "-0x0.0p0" and positive zero produces the result
-                * "0x0.0p0".
-                *
-                * <li>If <i>m</i> is a float value with a
-                * normalized representation, substrings are used to represent the
-                * significand and exponent fields.  The significand is
-                * represented by the characters "0x1."
-                * followed by a lowercase hexadecimal representation of the rest
-                * of the significand as a fraction.  Trailing zeros in the
-                * hexadecimal representation are removed unless all the digits
-                * are zero, in which case a single zero is used. Next, the
-                * exponent is represented by "p" followed
-                * by a decimal string of the unbiased exponent as if produced by
-                * a call to {@link Integer#toString(int) Integer.toString} on the
-                * exponent value.
-                *
-                * <li>If <i>m</i> is a float value with a subnormal
-                * representation, the significand is represented by the
-                * characters "0x0." followed by a
-                * hexadecimal representation of the rest of the significand as a
-                * fraction.  Trailing zeros in the hexadecimal representation are
-                * removed. Next, the exponent is represented by
-                * "p-126".  Note that there must be at
-                * least one nonzero digit in a subnormal significand.
-                *
-                * </ul>
-        *
-        * </ul>
-*
-* <table class="striped">
-    * <caption>Examples</caption>
-    * <thead>
-    * <tr><th scope="col">Floating-point Value</th><th scope="col">Hexadecimal String</th>
-        * </thead>
-    * <tbody>
-    * <tr><th scope="row">1.0</th> <td>0x1.0p0</td>
-        * <tr><th scope="row">-1.0</th>        <td>-0x1.0p0</td>
-        * <tr><th scope="row">2.0</th> <td>0x1.0p1</td>
-        * <tr><th scope="row">3.0</th> <td>0x1.8p1</td>
-        * <tr><th scope="row">0.5</th> <td>0x1.0p-1</td>
-        * <tr><th scope="row">0.25</th>        <td>0x1.0p-2</td>
-        * <tr><th scope="row">Float.MAX_VALUE</th>
-        *     <td>0x1.fffffep127</td>
-        * <tr><th scope="row">Minimum Normal Value</th>
-        *     <td>0x1.0p-126</td>
-        * <tr><th scope="row">Maximum Subnormal Value</th>
-        *     <td>0x0.fffffep-126</td>
-        * <tr><th scope="row">Float.MIN_VALUE</th>
-        *     <td>0x0.000002p-126</td>
-        * </tbody>
-    * </table>
-    * @param   f   the float to be converted.
-    * @return a hex string representation of the argument.
-    * @since 1.5
-    * @author Joseph D. Darcy
-    */
+    **/
     public static function toHexString(float $f): string {
-        if (Math.abs($f) < Float.MIN_NORMAL &&  f != 0.0f ) {
-            // float subnormal
-            // Adjust exponent to create subnormal double, then
-            // replace subnormal double exponent with subnormal float
-            // exponent
-            String s = Double.toHexString(
-                Math.scalb((double)f,
-                /* -1022+126 */
-                Double.MIN_EXPONENT-
-                Float.MIN_EXPONENT));
-            return s.replaceFirst("p-1022$", "p-126");
-        } // double string will be the same as float string
-
-        return Double.toHexString(f);
+        return "0x000";
     }
 
     /**
@@ -437,8 +338,8 @@ class TFloat extends TNumber implements Comparable {
     * for {@link Double#valueOf Double.valueOf} lists a regular
     * expression which can be used to screen the input.
     *
-    * @param   s   the string to be parsed.
-    * @return  a Float object holding the value
+    * @param   string|float $s   the string to be parsed.
+    * @return  TFloat a Float object holding the value
     *          represented by the String argument.
     * @throws  NumberFormatException  if the string does not contain a
     *          parsable number.
@@ -455,25 +356,23 @@ class TFloat extends TNumber implements Comparable {
     * represented by the specified String, as performed
     * by the valueOf method of class Float.
     *
-    * @param  s the string to be parsed.
-    * @return the float value represented by the string
+    * @param  string $s the string to be parsed.
+    * @return float the float value represented by the string
     *         argument.
-    * @throws NullPointerException  if the string is null
     * @throws NumberFormatException if the string does not contain a
     *               parsable float.
     * @see    java.lang.Float#valueOf(String)
-    * @since 1.2
     */
     public static function parseFloat(string $s): float {
-        return FloatingDecimal.parseFloat(s);
+        return  0.0;
     }
 
     /**
     * Returns true if the specified number is a
     * Not-a-Number (NaN) value, false otherwise.
     *
-    * @param   v   the value to be tested.
-    * @return  true if the argument is NaN;
+    * @param   float $v   the value to be tested.
+    * @return  bool true if the argument is NaN;
     *          false otherwise.
     */
     public static function checkIsNaN(float $v): bool {
@@ -484,11 +383,11 @@ class TFloat extends TNumber implements Comparable {
     * Returns true if the specified number is infinitely
     * large in magnitude, false otherwise.
     *
-    * @param   v   the value to be tested.
+    * @param   float $v   the value to be tested.
     * @return  true if the argument is positive infinity or
     *          negative infinity; false otherwise.
     */
-    public static function checkIsInfinite(float $v) {
+    public static function checkIsInfinite(float $v): bool {
         return is_infinite($v);
     }
 
@@ -498,12 +397,12 @@ class TFloat extends TNumber implements Comparable {
     * value; returns false otherwise (for NaN and infinity
     * arguments).
     *
-    * @param f the float value to be tested
-    * @return true if the argument is a finite
+    * @param float $f the float value to be tested
+    * @return bool true if the argument is a finite
     * floating-point value, false otherwise.
     * @since 1.8
     */
-    public static function checkIsFinite(float $f) {
+    public static function checkIsFinite(float $f): bool {
         return is_finite($f);
     }
 
@@ -536,7 +435,7 @@ class TFloat extends TNumber implements Comparable {
     * is converted to a String exactly as if by the method
     * toString of one argument.
     *
-    * @return  a String representation of this object.
+    * @return string a String representation of this object.
     * @see java.lang.Float#toString(float)
     */
     public function toString(): string {
@@ -547,9 +446,8 @@ class TFloat extends TNumber implements Comparable {
     * Returns the value of this Float as a byte after
     * a narrowing primitive conversion.
     *
-    * @return  the float value represented by this object
+    * @return  int the float value represented by this object
     *          converted to type byte
-    * @jls 5.1.3 Narrowing Primitive Conversion
     */
     public function byteValue(): int {
         throw new UnsupportedOperationException();
@@ -559,7 +457,7 @@ class TFloat extends TNumber implements Comparable {
     * Returns the value of this Float as a short
     * after a narrowing primitive conversion.
     *
-    * @return  the float value represented by this object
+    * @return  int the float value represented by this object
     *          converted to type short
     * @jls 5.1.3 Narrowing Primitive Conversion
     * @since 1.1
@@ -572,7 +470,7 @@ class TFloat extends TNumber implements Comparable {
     * Returns the value of this Float as an int after
     * a narrowing primitive conversion.
     *
-    * @return  the float value represented by this object
+    * @return  int the float value represented by this object
     *          converted to type int
     * @jls 5.1.3 Narrowing Primitive Conversion
     */
@@ -584,7 +482,7 @@ class TFloat extends TNumber implements Comparable {
     * Returns value of this Float as a long after a
     * narrowing primitive conversion.
     *
-    * @return  the float value represented by this object
+    * @return  int the float value represented by this object
     *          converted to type long
     * @jls 5.1.3 Narrowing Primitive Conversion
     */
@@ -595,7 +493,7 @@ class TFloat extends TNumber implements Comparable {
     /**
     * Returns the float value of this Float object.
     *
-    * @return the float value represented by this object
+    * @return float the float value represented by this object
     */
     public function floatValue(): float {
         return $this->value;
@@ -605,9 +503,8 @@ class TFloat extends TNumber implements Comparable {
     * Returns the value of this Float as a double
     * after a widening primitive conversion.
     *
-    * @return the float value represented by this
+    * @return float the float value represented by this
     *         object converted to type double
-    * @jls 5.1.2 Widening Primitive Conversion
     */
     public function doubleValue(): float {
         throw new UnsupportedOperationException();
@@ -620,7 +517,7 @@ class TFloat extends TNumber implements Comparable {
     * float value represented by this Float
     * object.
     *
-    * @return a hash code value for this object.
+    * @return int a hash code value for this object.
     */
     public function hashCode(): int {
         throw new UnsupportedOperationException();
@@ -630,8 +527,8 @@ class TFloat extends TNumber implements Comparable {
     * Returns a hash code for a float value; compatible with
     * Float.hashCode().
     *
-    * @param value the value to hash
-    * @return a hash code value for a float value.
+    * @param float $value the value to hash
+    * @return int a hash code value for a float value.
     * @since 1.8
     */
     public static function asHashCode(float $value): int {
@@ -659,11 +556,9 @@ class TFloat extends TNumber implements Comparable {
         * href="Double.html#equivalenceRelation">this discussion</a> for
     * details of floating-point equality and equivalence.
     *
-    * @param obj the object to be compared
-    * @return  true if the objects are the same;
+    * @param ?IObject $obj the object to be compared
+    * @return bool true if the objects are the same;
     *          false otherwise.
-    * @see java.lang.Float#floatToIntBits(float)
-    * @jls 15.21.1 Numerical Equality Operators == and !=
     */
     public function equals(?IObject $obj = null): bool {
         if ($obj === null) {
@@ -672,37 +567,6 @@ class TFloat extends TNumber implements Comparable {
         return $obj instanceof TFloat && $obj->value === $this->value;
     }
 
-    /**
-    * Returns a representation of the specified floating-point value
-    * according to the IEEE 754 floating-point "single format" bit
-    * layout.
-    *
-    * <p>Bit 31 (the bit that is selected by the mask
-    * 0x80000000) represents the sign of the floating-point
-    * number.
-    * Bits 30-23 (the bits that are selected by the mask
-    * 0x7f800000) represent the exponent.
-    * Bits 22-0 (the bits that are selected by the mask
-    * 0x007fffff) represent the significand (sometimes called
-    * the mantissa) of the floating-point number.
-    *
-    * <p>If the argument is positive infinity, the result is
-    * 0x7f800000.
-    *
-    * <p>If the argument is negative infinity, the result is
-    * 0xff800000.
-    *
-    * <p>If the argument is NaN, the result is 0x7fc00000.
-    *
-    * <p>In all cases, the result is an integer that, when given to the
-    * {@link #intBitsToFloat(int)} method, will produce a floating-point
-    * value the same as the argument to floatToIntBits
-    * (except all NaN values are collapsed to a single
-    * "canonical" NaN value).
-    *
-    * @param   value   a floating-point number.
-    * @return the bits that represent the floating-point number.
-    */
     public static function floatToIntBits(float $value): int {
         if (!TFloat::checkIsNaN($value)) {
             return TFloat::floatToRawIntBits($value);
@@ -710,104 +574,10 @@ class TFloat extends TNumber implements Comparable {
         return 0x7fc00000;
     }
 
-    /**
-    * Returns a representation of the specified floating-point value
-    * according to the IEEE 754 floating-point "single format" bit
-    * layout, preserving Not-a-Number (NaN) values.
-    *
-    * <p>Bit 31 (the bit that is selected by the mask
-    * 0x80000000) represents the sign of the floating-point
-    * number.
-    * Bits 30-23 (the bits that are selected by the mask
-    * 0x7f800000) represent the exponent.
-    * Bits 22-0 (the bits that are selected by the mask
-    * 0x007fffff) represent the significand (sometimes called
-    * the mantissa) of the floating-point number.
-    *
-    * <p>If the argument is positive infinity, the result is
-    * 0x7f800000.
-    *
-    * <p>If the argument is negative infinity, the result is
-    * 0xff800000.
-    *
-    * <p>If the argument is NaN, the result is the integer representing
-    * the actual NaN value.  Unlike the floatToIntBits
-    * method, floatToRawIntBits does not collapse all the
-    * bit patterns encoding a NaN to a single "canonical"
-    * NaN value.
-    *
-    * <p>In all cases, the result is an integer that, when given to the
-    * {@link #intBitsToFloat(int)} method, will produce a
-    * floating-point value the same as the argument to
-    * floatToRawIntBits.
-    *
-    * @param   value   a floating-point number.
-    * @return the bits that represent the floating-point number.
-    * @since 1.3
-    */
     public static function floatToRawIntBits(float $value): int {
         return 0;
     }
 
-    /**
-    * Returns the float value corresponding to a given
-    * bit representation.
-    * The argument is considered to be a representation of a
-    * floating-point value according to the IEEE 754 floating-point
-    * "single format" bit layout.
-    *
-    * <p>If the argument is 0x7f800000, the result is positive
-    * infinity.
-    *
-    * <p>If the argument is 0xff800000, the result is negative
-    * infinity.
-    *
-    * <p>If the argument is any value in the range
-    * 0x7f800001 through 0x7fffffff or in
-    * the range 0xff800001 through
-    * 0xffffffff, the result is a NaN.  No IEEE 754
-    * floating-point operation provided by Java can distinguish
-    * between two NaN values of the same type with different bit
-    * patterns.  Distinct values of NaN are only distinguishable by
-    * use of the Float.floatToRawIntBits method.
-    *
-    * <p>In all other cases, let <i>s</i>, <i>e</i>, and <i>m</i> be three
-    * values that can be computed from the argument:
-    *
-    * <blockquote><pre>{@code
-    * int s = ((bits >> 31) == 0) ? 1 : -1;
-    * int e = ((bits >> 23) & 0xff);
-    * int m = (e == 0) ?
-    *                 (bits & 0x7fffff) << 1 :
-    *                 (bits & 0x7fffff) | 0x800000;
-    * }</pre></blockquote>
-    *
-    * Then the floating-point result equals the value of the mathematical
-    * expression <i>s</i>&middot;<i>m</i>&middot;2<sup><i>e</i>-150</sup>.
-    *
-    * <p>Note that this method may not be able to return a
-    * float NaN with exactly same bit pattern as the
-    * int argument.  IEEE 754 distinguishes between two
-    * kinds of NaNs, quiet NaNs and <i>signaling NaNs</i>.  The
-    * differences between the two kinds of NaN are generally not
-    * visible in Java.  Arithmetic operations on signaling NaNs turn
-    * them into quiet NaNs with a different, but often similar, bit
-    * pattern.  However, on some processors merely copying a
-    * signaling NaN also performs that conversion.  In particular,
-    * copying a signaling NaN to return it to the calling method may
-    * perform this conversion.  So intBitsToFloat may
-    * not be able to return a float with a signaling NaN
-    * bit pattern.  Consequently, for some int values,
-    * floatToRawIntBits(intBitsToFloat(start)) may
-    * <i>not</i> equal start.  Moreover, which
-    * particular bit patterns represent signaling NaNs is platform
-    * dependent; although all NaN bit patterns, quiet or signaling,
-    * must be in the NaN range identified above.
-    *
-    * @param   bits   an integer.
-    * @return  the float floating-point value with the same bit
-    *          pattern.
-    */
     public static function intBitsToFloat(int $bits): float {
         return 0.0;
     }
@@ -840,8 +610,8 @@ class TFloat extends TNumber implements Comparable {
     * ordering.
     *
     *
-    * @param   anotherFloat   the Float to be compared.
-    * @return  the value 0 if anotherFloat is
+    * @param   IObject $o the Float to be compared.
+    * @return  int the value 0 if anotherFloat is
     *          numerically equal to this Float; a value
     *          less than 0 if this Float
     *          is numerically less than anotherFloat;
@@ -852,7 +622,7 @@ class TFloat extends TNumber implements Comparable {
     * @jls 15.20.1 Numerical Comparison Operators <, <=, >, and >=
     * @since   1.2
     */
-    public function compareTo(object $o): int {
+    public function compareTo(IObject $o): int {
         if ($o instanceof TFloat) {
             return $this->value <=> $o->value;
         }
@@ -868,15 +638,14 @@ class TFloat extends TNumber implements Comparable {
     *    new Float(f1).compareTo(new Float(f2))
     * </pre>
     *
-    * @param   f1        the first float to compare.
-    * @param   f2        the second float to compare.
-    * @return  the value 0 if f1 is
+    * @param   float $f1        the first float to compare.
+    * @param   float $f2        the second float to compare.
+    * @return  int the value 0 if f1 is
     *          numerically equal to f2; a value less than
     *          0 if f1 is numerically less than
     *          f2; and a value greater than 0
     *          if f1 is numerically greater than
     *          f2.
-    * @since 1.4
     */
     public static function compare(float $f1, float $f2): int {
         return $f1 <=> $f2;
@@ -885,12 +654,9 @@ class TFloat extends TNumber implements Comparable {
     /**
     * Adds two float values together as per the + operator.
     *
-    * @param a the first operand
-    * @param b the second operand
-    * @return the sum of a and b
-    * @jls 4.2.4 Floating-Point Operations
-    * @see java.util.function.BinaryOperator
-    * @since 1.8
+    * @param float $a the first operand
+    * @param float $b the second operand
+    * @return float the sum of a and b
     */
     public static function sum(float $a, float $b): float {
         return $a + $b;
@@ -900,11 +666,9 @@ class TFloat extends TNumber implements Comparable {
     * Returns the greater of two float values
     * as if by calling {@link Math#max(float, float) Math.max}.
     *
-    * @param a the first operand
-    * @param b the second operand
-    * @return the greater of a and b
-    * @see java.util.function.BinaryOperator
-    * @since 1.8
+    * @param float $a the first operand
+    * @param float $b the second operand
+    * @return float the greatest of a and b
     */
     public static function max(float $a, float $b): float {
         return max($a, $b);
@@ -914,11 +678,9 @@ class TFloat extends TNumber implements Comparable {
     * Returns the smaller of two float values
     * as if by calling {@link Math#min(float, float) Math.min}.
     *
-    * @param a the first operand
-    * @param b the second operand
-    * @return the smaller of a and b
-    * @see java.util.function.BinaryOperator
-    * @since 1.8
+    * @param float $a the first operand
+    * @param float $b the second operand
+    * @return float the smallest of a and b
     */
     public static function min(float $a, float $b): float {
         return min($a, $b);
