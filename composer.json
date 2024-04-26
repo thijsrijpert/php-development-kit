@@ -18,6 +18,6 @@
     "phpunit/phpunit": "^10"
   },
   "require": {
-    "symfony/string": "^7.0"
+    "symfony/string": "^6.0"
   }
 }

@@ -185,7 +185,7 @@ class TEmptyMap extends TIterable implements IMap
         return false;
     }
 
-    public function offsetGet(mixed $offset): null
+    public function offsetGet(mixed $offset): mixed
     {
         return null;
     }

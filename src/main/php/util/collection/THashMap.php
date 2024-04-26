@@ -150,7 +150,7 @@ class THashMap extends TIterable implements IMap
         $this->checkObjectType($this->valueType, $value);
 
         $hashcode = $this->hash($key);
-        $bucket = $this->hashmap[$hashcode];
+        $bucket = $this->hashmap[$hashcode] ?? null;
 
         if ($bucket === null) {
             $entry = new THashMapEntry($key, $value);
