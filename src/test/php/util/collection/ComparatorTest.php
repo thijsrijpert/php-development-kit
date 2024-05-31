@@ -33,7 +33,7 @@ class ComparatorTest extends TestCase
     {
         $testObject1 = new TestObject();
         $testObject2 = new TestObject();
-        $comparator = Comparator::of(fn(TestObject $value1, TestObject $value2) => $value1->setValue("Set") <=> $value2);
+        $comparator = Comparator::of(fn(TestObject $value1, TestObject $value2) => $value1->setValue("ISet") <=> $value2);
 
         $result = $comparator->compare($testObject1, $testObject2);
 
@@ -43,7 +43,7 @@ class ComparatorTest extends TestCase
     function testComparatorInvalidParameterCount(): void
     {
         $this->expectException(IllegalArgumentException::class);
-        Comparator::of(fn(TestObject $value1) => $value1->setValue("Set"));
+        Comparator::of(fn(TestObject $value1) => $value1->setValue("ISet"));
     }
 
     function testComparatorInvalidType(): void

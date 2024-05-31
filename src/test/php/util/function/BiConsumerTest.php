@@ -32,20 +32,20 @@ class BiConsumerTest extends TestCase
     {
         $value1 = new TestObject();
         $value2 = new TestObject();
-        $consumer = BiConsumer::of(fn(TestObject $value1, TestObject $value2) => $value1->setValue("Set"));
+        $consumer = BiConsumer::of(fn(TestObject $value1, TestObject $value2) => $value1->setValue("ISet"));
 
         $consumer->accept($value1, $value2);
 
         $this->assertTrue($value1->isSetterInvoked());
         $this->assertFalse($value2->isSetterInvoked());
-        $this->assertEquals("Set", $value1->getValue());
+        $this->assertEquals("ISet", $value1->getValue());
         $this->assertEquals("DefaultValue", $value2->getValue());
     }
 
     function testBiConsumerInvalidParameterCount(): void
     {
         $this->expectException(IllegalArgumentException::class);
-        BiConsumer::of(fn(TestObject $value1) => $value1->setValue("Set"));
+        BiConsumer::of(fn(TestObject $value1) => $value1->setValue("ISet"));
     }
 
     function testBiConsumerInvalidType(): void
@@ -54,7 +54,7 @@ class BiConsumerTest extends TestCase
 
         $value1 = new TestObject();
         $value2 = new NotTestObject();
-        $consumer = BiConsumer::of(fn(TestObject $value1, TestObject $value2) => $value1->setValue("Set"));
+        $consumer = BiConsumer::of(fn(TestObject $value1, TestObject $value2) => $value1->setValue("ISet"));
 
         $consumer->accept($value1, $value2);
     }

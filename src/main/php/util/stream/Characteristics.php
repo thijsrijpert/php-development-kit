@@ -24,7 +24,7 @@
  */
 namespace jhp\util\stream;
 
-use jhp\util\collection\Set;
+use jhp\util\collection\ISet;
 
 /**
  * Characteristics indicating properties of a Collector, which can
@@ -46,7 +46,7 @@ enum Characteristics {
     /**
      * Indicates that the collection operation does not commit to preserving
      * the encounter order of input elements.  (This might be true if the
-     * result container has no intrinsic order, such as a {@link Set}.)
+     * result container has no intrinsic order, such as a {@link ISet}.)
      */
     case UNORDERED;
 

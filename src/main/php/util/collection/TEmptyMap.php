@@ -116,7 +116,7 @@ class TEmptyMap extends TIterable implements IMap
 
     }
 
-    public function keySet(): Set
+    public function keySet(): ISet
     {
         throw new UnsupportedOperationException();
     }
@@ -126,7 +126,7 @@ class TEmptyMap extends TIterable implements IMap
         throw new UnsupportedOperationException();
     }
 
-    public function entrySet(): Set
+    public function entrySet(): ISet
     {
         throw new UnsupportedOperationException();
     }

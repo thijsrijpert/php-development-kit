@@ -157,7 +157,7 @@ use jhp\util\function\GFunction;
  * @see Hashtable
  * @see SortedMap
  * @see Collection
- * @see Set
+ * @see ISet
  */
 interface IMap extends IIterable, ArrayAccess, IObject {
 
@@ -277,21 +277,21 @@ interface IMap extends IIterable, ArrayAccess, IObject {
     // Views
 
     /**
-     * Returns a {@link Set} view of the keys contained in this map.
+     * Returns a {@link ISet} view of the keys contained in this map.
      * The set is backed by the map, so changes to the map are
      * reflected in the set, and vice-versa.  If the map is modified
      * while an iteration over the set is in progress (except through
      * the iterator's own remove operation), the results of
      * the iteration are undefined.  The set supports element removal,
      * which removes the corresponding mapping from the map, via the
-     * Iterator->remove, Set->remove,
+     * Iterator->remove, ISet->remove,
      * removeAll, retainAll, and clear
      * operations.  It does not support the add or addAll
      * operations.
      *
-     * @return Set a set view of the keys contained in this map
+     * @return ISet a set view of the keys contained in this map
      */
-     public function keySet(): Set;
+     public function keySet(): ISet;
 
     /**
      * Returns a {@link Collection} view of the values contained in this map.
@@ -311,7 +311,7 @@ interface IMap extends IIterable, ArrayAccess, IObject {
     public function values(): ICollection;
 
     /**
-     * Returns a {@link Set} view of the mappings contained in this map.
+     * Returns a {@link ISet} view of the mappings contained in this map.
      * The set is backed by the map, so changes to the map are
      * reflected in the set, and vice-versa.  If the map is modified
      * while an iteration over the set is in progress (except through
@@ -320,13 +320,13 @@ interface IMap extends IIterable, ArrayAccess, IObject {
      * iterator) the results of the iteration are undefined.  The set
      * supports element removal, which removes the corresponding
      * mapping from the map, via the Iterator->remove,
-     * Set->remove, removeAll, retainAll and
+     * ISet->remove, removeAll, retainAll and
      * clear operations.  It does not support the
      * add or addAll operations.
      *
-     * @return Set a set view of the mappings contained in this map
+     * @return ISet a set view of the mappings contained in this map
      */
-    public function entrySet(): Set;
+    public function entrySet(): ISet;
 
     // Defaultable methods
 

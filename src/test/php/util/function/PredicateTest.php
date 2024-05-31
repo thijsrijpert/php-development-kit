@@ -41,7 +41,7 @@ class PredicateTest extends TestCase
     function testPredicateSuccessResultFalse(): void
     {
         $object = new TestObject();
-        $function = Predicate::of(fn(TestObject $value1) => $value1->getValue() === "Set");
+        $function = Predicate::of(fn(TestObject $value1) => $value1->getValue() === "ISet");
 
         $result = $function->test($object);
 
@@ -53,7 +53,7 @@ class PredicateTest extends TestCase
         $this->expectException(TypeError::class);
 
         $value1 = new TestObject();
-        $function = Predicate::of(fn(TestObject $value1) => (new TestObject())->setValue("Set"));
+        $function = Predicate::of(fn(TestObject $value1) => (new TestObject())->setValue("ISet"));
 
         $function->test($value1);
     }
@@ -69,7 +69,7 @@ class PredicateTest extends TestCase
         $this->expectException(TypeError::class);
 
         $value1 = new NotTestObject();
-        $consumer = Predicate::of(fn(TestObject $value1) => $value1->setValue("Set"));
+        $consumer = Predicate::of(fn(TestObject $value1) => $value1->setValue("ISet"));
 
         $consumer->test($value1);
     }

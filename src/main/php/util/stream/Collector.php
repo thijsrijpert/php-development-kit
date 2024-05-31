@@ -24,7 +24,7 @@
  */
 namespace jhp\util\stream;
 
-use jhp\util\collection\Set;
+use jhp\util\collection\ISet;
 use jhp\util\function\BiConsumer;
 use jhp\util\function\BinaryOperator;
 use jhp\util\function\GFunction;
@@ -32,11 +32,11 @@ use jhp\util\function\Supplier;
 
 abstract class Collector {
 
-    protected function __construct(protected readonly Supplier $supplier,
-                                   protected readonly BiConsumer $accumulator,
+    protected function __construct(protected readonly Supplier       $supplier,
+                                   protected readonly BiConsumer     $accumulator,
                                    protected readonly BinaryOperator $combiner,
-                                   protected readonly GFunction $finisher,
-                                   protected readonly Set $characteristics){ }
+                                   protected readonly GFunction      $finisher,
+                                   protected readonly ISet           $characteristics){ }
 
     /**
      * A function that creates and returns a new mutable result container.
@@ -76,12 +76,12 @@ abstract class Collector {
     abstract function finisher(): GFunction;
 
     /**
-     * Returns a Set of Collector.Characteristics indicating
+     * Returns a ISet of Collector.Characteristics indicating
      * the characteristics of this Collector.  This set should be immutable.
      *
-     * @return Set an immutable set of collector characteristics
+     * @return ISet an immutable set of collector characteristics
      */
-    abstract function characteristics(): Set;
+    abstract function characteristics(): ISet;
 
     public static function of(
         Supplier $supplier,
@@ -96,7 +96,7 @@ abstract class Collector {
         }
 
         // Add support for characteristics
-        return new class($supplier, $accumulator, $combiner, $finisher, new Set()) extends Collector {
+        return new class($supplier, $accumulator, $combiner, $finisher, new ISet()) extends Collector {
 
             function supplier(): Supplier
             {
@@ -118,7 +118,7 @@ abstract class Collector {
                 return $this->finisher;
             }
 
-            function characteristics(): Set
+            function characteristics(): ISet
             {
                 return $this->characteristics;
             }
