@@ -1,7 +1,7 @@
 {
   "name": "thijsrijpert/php-development-kit",
   "description": "Port of the JDK to PHP",
-  "minimum-stability": "stable",
+  "license": "GPL-2.0-only",
   "authors": [
     {
       "name": "Thijs Rijpert",

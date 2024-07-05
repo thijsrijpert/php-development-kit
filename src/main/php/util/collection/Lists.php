@@ -25,6 +25,7 @@
 namespace jhp\util\collection;
 
 use jhp\lang\IObject;
+use jhp\lang\TClass;
 use jhp\lang\TObject;
 
 use function jhp\lang\functional\c;

@@ -20,9 +20,12 @@
  */
 namespace jhp\lang\functional;
 
+use jhp\lang\IObject;
 use jhp\lang\TClass;
 use jhp\lang\TInteger;
 use jhp\lang\TString;
+use jhp\util\collection\IList;
+use jhp\util\collection\Lists;
 
 if (!function_exists('jhp\lang\functional\s')) {
     function s(string $string): TString
@@ -42,5 +45,12 @@ if (!function_exists('jhp\lang\functional\i')) {
     function i(int $int): TInteger
     {
         return TInteger::valueOf($int);
+    }
+}
+
+if (!function_exists('jhp\lang\functional\l')) {
+    function l(IObject ...$objects): IList
+    {
+        return Lists::ofMutable(...$objects);
     }
 }
