@@ -33,30 +33,30 @@ class BinaryOperatorTest extends TestCase
     {
         $value1 = new TestObject();
         $value2 = new TestObject();
-        $function = BinaryOperator::of(fn(TestObject $value1, TestObject $value2) => $value1->setValue("Set"));
+        $function = BinaryOperator::of(fn(TestObject $value1, TestObject $value2) => $value1->setValue("ISet"));
 
         $result = $function->apply($value1, $value2);
 
         $this->assertTrue($value1->isSetterInvoked());
         $this->assertFalse($value2->isSetterInvoked());
-        $this->assertEquals("Set", $value1->getValue());
+        $this->assertEquals("ISet", $value1->getValue());
         $this->assertEquals("DefaultValue", $value2->getValue());
-        $this->assertEquals("Set", $result->getValue());
+        $this->assertEquals("ISet", $result->getValue());
     }
 
     function testBinaryOperatorSuccessWithReturnType(): void
     {
         $value1 = new TestObject();
         $value2 = new TestObject();
-        $function = BinaryOperator::of(fn(TestObject $value1, TestObject $value2) => $value1->setValue("Set"), TestObject::class);
+        $function = BinaryOperator::of(fn(TestObject $value1, TestObject $value2) => $value1->setValue("ISet"), TestObject::class);
 
         $result = $function->apply($value1, $value2);
 
         $this->assertTrue($value1->isSetterInvoked());
         $this->assertFalse($value2->isSetterInvoked());
-        $this->assertEquals("Set", $value1->getValue());
+        $this->assertEquals("ISet", $value1->getValue());
         $this->assertEquals("DefaultValue", $value2->getValue());
-        $this->assertEquals("Set", $result->getValue());
+        $this->assertEquals("ISet", $result->getValue());
     }
 
     function testBinaryOperatorSuccessDifferentReturnType(): void
@@ -65,7 +65,7 @@ class BinaryOperatorTest extends TestCase
 
         $value1 = new TestObject();
         $value2 = new TestObject();
-        $function = BinaryOperator::of(fn(TestObject $value1, TestObject $value2) => (new NotTestObject())->setValue("Set"), NotTestObject::class);
+        $function = BinaryOperator::of(fn(TestObject $value1, TestObject $value2) => (new NotTestObject())->setValue("ISet"), NotTestObject::class);
 
         $function->apply($value1, $value2);
     }
@@ -77,7 +77,7 @@ class BinaryOperatorTest extends TestCase
 
         $value1 = new TestObject();
         $value2 = new NotTestObject();
-        $function = BinaryOperator::of(fn(TestObject $value1, NotTestObject $value2) => (new TestObject())->setValue("Set"), TestObject::class);
+        $function = BinaryOperator::of(fn(TestObject $value1, NotTestObject $value2) => (new TestObject())->setValue("ISet"), TestObject::class);
 
         $function->apply($value1, $value2);
     }
@@ -88,7 +88,7 @@ class BinaryOperatorTest extends TestCase
 
         $value1 = new TestObject();
         $value2 = new TestObject();
-        $function = BinaryOperator::of(fn(TestObject $value1, TestObject $value2) => (new TestObject())->setValue("Set"), NotTestObject::class);
+        $function = BinaryOperator::of(fn(TestObject $value1, TestObject $value2) => (new TestObject())->setValue("ISet"), NotTestObject::class);
 
         $function->apply($value1, $value2);
     }
@@ -96,7 +96,7 @@ class BinaryOperatorTest extends TestCase
     function testBinaryOperatorInvalidParameterCount(): void
     {
         $this->expectException(IllegalArgumentException::class);
-        BinaryOperator::of(fn(TestObject $value1) => $value1->setValue("Set"));
+        BinaryOperator::of(fn(TestObject $value1) => $value1->setValue("ISet"));
     }
 
     function testBinaryOperatorInvalidType(): void
@@ -105,7 +105,7 @@ class BinaryOperatorTest extends TestCase
 
         $value1 = new TestObject();
         $value2 = new NotTestObject();
-        $consumer = BinaryOperator::of(fn(TestObject $value1, TestObject $value2) => $value1->setValue("Set"));
+        $consumer = BinaryOperator::of(fn(TestObject $value1, TestObject $value2) => $value1->setValue("ISet"));
 
         $consumer->apply($value1, $value2);
     }

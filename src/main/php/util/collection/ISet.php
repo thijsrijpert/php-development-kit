@@ -25,7 +25,7 @@
 
 namespace jhp\util\collection;
 
-interface Set
+interface ISet
 {
 
 }

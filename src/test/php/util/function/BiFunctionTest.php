@@ -33,37 +33,37 @@ class BiFunctionTest extends TestCase
     {
         $value1 = new TestObject();
         $value2 = new TestObject();
-        $function = BiFunction::of(fn(TestObject $value1, TestObject $value2) => $value1->setValue("Set"));
+        $function = BiFunction::of(fn(TestObject $value1, TestObject $value2) => $value1->setValue("ISet"));
 
         $result = $function->apply($value1, $value2);
 
         $this->assertTrue($value1->isSetterInvoked());
         $this->assertFalse($value2->isSetterInvoked());
-        $this->assertEquals("Set", $value1->getValue());
+        $this->assertEquals("ISet", $value1->getValue());
         $this->assertEquals("DefaultValue", $value2->getValue());
-        $this->assertEquals("Set", $result->getValue());
+        $this->assertEquals("ISet", $result->getValue());
     }
 
     function testBiFunctionSuccessWithReturnType(): void
     {
         $value1 = new TestObject();
         $value2 = new TestObject();
-        $function = BiFunction::of(fn(TestObject $value1, TestObject $value2) => $value1->setValue("Set"), TestObject::class);
+        $function = BiFunction::of(fn(TestObject $value1, TestObject $value2) => $value1->setValue("ISet"), TestObject::class);
 
         $result = $function->apply($value1, $value2);
 
         $this->assertTrue($value1->isSetterInvoked());
         $this->assertFalse($value2->isSetterInvoked());
-        $this->assertEquals("Set", $value1->getValue());
+        $this->assertEquals("ISet", $value1->getValue());
         $this->assertEquals("DefaultValue", $value2->getValue());
-        $this->assertEquals("Set", $result->getValue());
+        $this->assertEquals("ISet", $result->getValue());
     }
 
     function testBiFunctionSuccessDifferentReturnType(): void
     {
         $value1 = new TestObject();
         $value2 = new TestObject();
-        $function = BiFunction::of(fn(TestObject $value1, TestObject $value2) => (new NotTestObject())->setValue("Set"), NotTestObject::class);
+        $function = BiFunction::of(fn(TestObject $value1, TestObject $value2) => (new NotTestObject())->setValue("ISet"), NotTestObject::class);
 
         $result = $function->apply($value1, $value2);
 
@@ -71,7 +71,7 @@ class BiFunctionTest extends TestCase
         $this->assertFalse($value2->isSetterInvoked());
         $this->assertEquals("DefaultValue", $value1->getValue());
         $this->assertEquals("DefaultValue", $value2->getValue());
-        $this->assertEquals("Set", $result->getValue());
+        $this->assertEquals("ISet", $result->getValue());
     }
 
     function testBiFunctionInvalidReturnType(): void
@@ -80,7 +80,7 @@ class BiFunctionTest extends TestCase
 
         $value1 = new TestObject();
         $value2 = new TestObject();
-        $function = BiFunction::of(fn(TestObject $value1, TestObject $value2) => (new TestObject())->setValue("Set"), NotTestObject::class);
+        $function = BiFunction::of(fn(TestObject $value1, TestObject $value2) => (new TestObject())->setValue("ISet"), NotTestObject::class);
 
         $function->apply($value1, $value2);
     }
@@ -88,7 +88,7 @@ class BiFunctionTest extends TestCase
     function testBiFunctionInvalidParameterCount(): void
     {
         $this->expectException(IllegalArgumentException::class);
-        BiFunction::of(fn(TestObject $value1) => $value1->setValue("Set"));
+        BiFunction::of(fn(TestObject $value1) => $value1->setValue("ISet"));
     }
 
     function testBiFunctionInvalidType(): void
@@ -97,7 +97,7 @@ class BiFunctionTest extends TestCase
 
         $value1 = new TestObject();
         $value2 = new NotTestObject();
-        $consumer = BiFunction::of(fn(TestObject $value1, TestObject $value2) => $value1->setValue("Set"));
+        $consumer = BiFunction::of(fn(TestObject $value1, TestObject $value2) => $value1->setValue("ISet"));
 
         $consumer->apply($value1, $value2);
     }

@@ -43,7 +43,7 @@ use jhp\util\stream\Stream;
  * collections allow duplicate elements and others do not.  Some are ordered
  * and others unordered.  The JDK does not provide any <i>direct</i>
  * implementations of this interface: it provides implementations of more
- * specific subinterfaces like Set and List.  This interface
+ * specific subinterfaces like ISet and List.  This interface
  * is typically used to pass collections around and manipulate them where
  * maximum generality is desired.
  *
@@ -241,7 +241,7 @@ use jhp\util\stream\Stream;
  *
  * @author  Josh Bloch
  * @author  Neal Gafter
- * @see     Set
+ * @see     ISet
  * @see     List
  * @see     IMap
  * @see     SortedSet

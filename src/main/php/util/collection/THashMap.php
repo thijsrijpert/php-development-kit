@@ -198,7 +198,7 @@ class THashMap extends TIterable implements IMap
         $this->hashmap = [];
     }
 
-    public function keySet(): Set
+    public function keySet(): ISet
     {
         throw new UnsupportedOperationException();
     }
@@ -208,7 +208,7 @@ class THashMap extends TIterable implements IMap
         throw new UnsupportedOperationException();
     }
 
-    public function entrySet(): Set
+    public function entrySet(): ISet
     {
         throw new UnsupportedOperationException();
     }

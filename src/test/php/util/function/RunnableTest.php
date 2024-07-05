@@ -29,12 +29,12 @@ class RunnableTest extends TestCase
     function testRunnableSuccess(): void {
 
         $testobject = new TestObject();
-        $function = Runnable::of(fn() => $testobject->setValue("Set"));
+        $function = Runnable::of(fn() => $testobject->setValue("ISet"));
 
         $function->run();
 
         $this->assertTrue($testobject->isSetterInvoked());
-        $this->assertEquals("Set", $testobject->getValue());
+        $this->assertEquals("ISet", $testobject->getValue());
     }
 }
 

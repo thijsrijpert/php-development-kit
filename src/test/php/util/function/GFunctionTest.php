@@ -32,37 +32,37 @@ class GFunctionTest extends TestCase
     function testGFunctionSuccess(): void
     {
         $value1 = new TestObject();
-        $function = GFunction::of(fn(TestObject $value1) => $value1->setValue("Set"));
+        $function = GFunction::of(fn(TestObject $value1) => $value1->setValue("ISet"));
 
         $result = $function->apply($value1);
 
         $this->assertTrue($value1->isSetterInvoked());
-        $this->assertEquals("Set", $value1->getValue());
-        $this->assertEquals("Set", $result->getValue());
+        $this->assertEquals("ISet", $value1->getValue());
+        $this->assertEquals("ISet", $result->getValue());
     }
 
     function testGFunctionSuccessWithReturnType(): void
     {
         $value1 = new TestObject();
-        $function = GFunction::of(fn(TestObject $value1) => $value1->setValue("Set"), TestObject::class);
+        $function = GFunction::of(fn(TestObject $value1) => $value1->setValue("ISet"), TestObject::class);
 
         $result = $function->apply($value1);
 
         $this->assertTrue($value1->isSetterInvoked());
-        $this->assertEquals("Set", $value1->getValue());
-        $this->assertEquals("Set", $result->getValue());
+        $this->assertEquals("ISet", $value1->getValue());
+        $this->assertEquals("ISet", $result->getValue());
     }
 
     function testGFunctionSuccessDifferentReturnType(): void
     {
         $value1 = new TestObject();
-        $function = GFunction::of(fn(TestObject $value1) => (new NotTestObject())->setValue("Set"), NotTestObject::class);
+        $function = GFunction::of(fn(TestObject $value1) => (new NotTestObject())->setValue("ISet"), NotTestObject::class);
 
         $result = $function->apply($value1);
 
         $this->assertFalse($value1->isSetterInvoked());
         $this->assertEquals("DefaultValue", $value1->getValue());
-        $this->assertEquals("Set", $result->getValue());
+        $this->assertEquals("ISet", $result->getValue());
     }
 
     function testGFunctionInvalidReturnType(): void
@@ -70,7 +70,7 @@ class GFunctionTest extends TestCase
         $this->expectException(TypeError::class);
 
         $value1 = new TestObject();
-        $function = GFunction::of(fn(TestObject $value1) => (new TestObject())->setValue("Set"), NotTestObject::class);
+        $function = GFunction::of(fn(TestObject $value1) => (new TestObject())->setValue("ISet"), NotTestObject::class);
 
         $function->apply($value1);
     }
@@ -78,7 +78,7 @@ class GFunctionTest extends TestCase
     function testGFunctionInvalidParameterCount(): void
     {
         $this->expectException(IllegalArgumentException::class);
-        GFunction::of(fn(TestObject $value1, TestObject $value2) => $value1->setValue("Set"));
+        GFunction::of(fn(TestObject $value1, TestObject $value2) => $value1->setValue("ISet"));
     }
 
     function testGFunctionInvalidType(): void
@@ -86,7 +86,7 @@ class GFunctionTest extends TestCase
         $this->expectException(TypeError::class);
 
         $value1 = new NotTestObject();
-        $consumer = GFunction::of(fn(TestObject $value1) => $value1->setValue("Set"));
+        $consumer = GFunction::of(fn(TestObject $value1) => $value1->setValue("ISet"));
 
         $consumer->apply($value1);
     }

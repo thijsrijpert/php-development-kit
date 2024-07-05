@@ -32,18 +32,18 @@ class ConsumerTest extends TestCase
     {
         $value1 = new TestObject();
         $value2 = new TestObject();
-        $consumer = Consumer::of(fn(TestObject $value1) => $value1->setValue("Set"));
+        $consumer = Consumer::of(fn(TestObject $value1) => $value1->setValue("ISet"));
 
         $consumer->accept($value1, $value2);
 
         $this->assertTrue($value1->isSetterInvoked());
-        $this->assertEquals("Set", $value1->getValue());
+        $this->assertEquals("ISet", $value1->getValue());
     }
 
     function testConsumerInvalidParameterCount(): void
     {
         $this->expectException(IllegalArgumentException::class);
-        Consumer::of(fn(TestObject $value1, TestObject $value2) => $value1->setValue("Set"));
+        Consumer::of(fn(TestObject $value1, TestObject $value2) => $value1->setValue("ISet"));
     }
 
     function testConsumerInvalidType(): void
@@ -51,7 +51,7 @@ class ConsumerTest extends TestCase
         $this->expectException(TypeError::class);
 
         $value1 = new NotTestObject();
-        $consumer = Consumer::of(fn(TestObject $value1) => $value1->setValue("Set"));
+        $consumer = Consumer::of(fn(TestObject $value1) => $value1->setValue("ISet"));
 
         $consumer->accept($value1);
     }
