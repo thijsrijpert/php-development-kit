@@ -24,6 +24,7 @@
  */
 namespace jhp\util\stream;
 
+use jhp\nio\file\Files;
 use jhp\util\collection\Comparator;
 use jhp\util\collection\ICollection;
 use jhp\util\collection\IList;

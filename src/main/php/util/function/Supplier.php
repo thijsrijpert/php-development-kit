@@ -25,6 +25,7 @@
 namespace jhp\util\function;
 
 use Closure;
+use jhp\lang\IObject;
 use jhp\util\function\internal\ClosureValidationHelper;
 
 abstract class Supplier {
@@ -35,7 +36,7 @@ abstract class Supplier {
         protected readonly ?string                 $returnType = null
     ){ }
 
-    abstract function get(): object;
+    abstract function get(): IObject;
 
     public static function of(Closure $closure,
                               ?string $returnType = null
@@ -44,7 +45,7 @@ abstract class Supplier {
         $closureHelper->assertParameterCount(Supplier::CLOSURE_PARAMETER_COUNT);
 
         return new class($closureHelper, $returnType) extends Supplier {
-            function get(): object {
+            function get(): IObject {
                 $result = $this->closureHelper->getClosure()->call($this);
                 if ($this->returnType !== null) {
                     $this->closureHelper->validateType($result, $this->returnType);

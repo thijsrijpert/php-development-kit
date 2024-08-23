@@ -351,7 +351,7 @@ class TInteger extends TNumber implements Comparable {
         $length = TInteger::SIZE - TInteger::numberOfLeadingZeros($value);
         $length += $shift - 1;
         $length /= $shift;
-        $length = TInteger::max($length, 1);
+        $length = TInteger::max((int) $length, 1);
 
         // Calculate the mask
         $radix = 1 << $shift;
