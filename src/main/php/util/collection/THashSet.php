@@ -61,7 +61,7 @@ class THashSet extends TIterable implements ISet
         return $a;
     }
 
-    public function add(IObject $a): bool
+    public function add(IObject $a, null $b = null): bool
     {
         $this->checkObjectType($this->type, $a);
 
