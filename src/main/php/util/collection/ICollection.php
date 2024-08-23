@@ -359,6 +359,7 @@ interface ICollection extends IIterable, IObject
      * In the JHP library we do not allow null to be added to any collection.
      *
      * @param IObject $a element whose presence in this collection is to be ensured
+     * @param null $b Empty parameter
      *
      * @return bool true if this collection changed as a result of the call
      *
@@ -369,7 +370,7 @@ interface ICollection extends IIterable, IObject
      * @throws IllegalStateException if the element cannot be added at this
      *         time due to insertion restrictions
      */
-    public function add(IObject $a): bool;
+    public function add(IObject $a, null $b = null): bool;
 
 
     // Bulk Operations
