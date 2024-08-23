@@ -370,7 +370,7 @@ interface ICollection extends IIterable, IObject
      * @throws IllegalStateException if the element cannot be added at this
      *         time due to insertion restrictions
      */
-    public function add(IObject $a, null $b = null): bool;
+    public function add(IObject|int $a, ?IObject $b = null): bool;
 
 
     // Bulk Operations
