@@ -25,7 +25,6 @@
 
 namespace jhp\util\collection;
 
-use ArrayAccess;
 use Iterator;
 use jhp\lang\exception\IllegalArgumentException;
 use jhp\lang\exception\IllegalStateException;
@@ -237,8 +236,6 @@ use jhp\util\stream\Stream;
  * specific synchronization protocol, then it must override default
  * implementations to apply that protocol.
  *
- * @param <E> the type of elements in this collection
- *
  * @author  Josh Bloch
  * @author  Neal Gafter
  * @see     ISet
@@ -397,16 +394,11 @@ interface ICollection extends IIterable, IObject
      * specified collection is this collection, and this collection is
      * nonempty.)
      *
-     * @param c collection containing elements to be added to this collection
+     * @param ICollection $a collection containing elements to be added to this collection
      *
      * @return true if this collection changed as a result of the call
      * @throws UnsupportedOperationException if the addAll operation
      *         is not supported by this collection
-     * @throws ClassCastException if the class of an element of the specified
-     *         collection prevents it from being added to this collection
-     * @throws NullPointerException if the specified collection contains a
-     *         null element and this collection does not permit null elements,
-     *         or if the specified collection is null
      * @throws IllegalArgumentException if some property of an element of the
      *         specified collection prevents it from being added to this
      *         collection
@@ -514,7 +506,7 @@ interface ICollection extends IIterable, IObject
      * The default implementation creates a sequential Stream from the
      * collection's Spliterator.
      *
-     * @return a sequential Stream over the elements in this collection
+     * @return Stream a sequential Stream over the elements in this collection
      * @since 1.8
      */
     public function stream(): Stream;
@@ -532,7 +524,7 @@ interface ICollection extends IIterable, IObject
      * The default implementation creates a parallel Stream from the
      * collection's Spliterator.
      *
-     * @return a possibly parallel Stream over the elements in this
+     * @return Stream a possibly parallel Stream over the elements in this
      * collection
      * @since 1.8
      */

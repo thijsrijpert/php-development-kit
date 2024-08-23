@@ -58,7 +58,7 @@ interface IList extends ICollection, ArrayAccess
      * @throws IllegalArgumentException if some property of the element
      *         prevents it from being added to this collection
      */
-    public function add(int|IObject $a, ?IObject $b = null): bool;
+    public function add(IObject|int $a, ?IObject $b = null): bool;
 
     // Bulk Modification Operations
 
