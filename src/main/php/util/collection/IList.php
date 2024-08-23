@@ -27,14 +27,14 @@ namespace jhp\util\collection;
 
 
 use jhp\lang\exception\IllegalArgumentException;
-use jhp\lang\exception\IllegalStateException;
 use jhp\lang\exception\IndexOutOfBoundsException;
 use jhp\lang\exception\UnsupportedOperationException;
 use jhp\lang\IObject;
 use jhp\lang\TClass;
 use jhp\util\function\UnaryOperator;
+use ArrayAccess;
 
-interface IList extends ICollection
+interface IList extends ICollection, ArrayAccess
 {
     /**
      * @return TClass the type of the elements contained in this list
@@ -187,13 +187,13 @@ interface IList extends ICollection
      *
      * @param int $index the index of the element to be removed
      *
-     * @return IObject the element previously at the specified position
+     * @return bool wether the removal was a success
      * @throws UnsupportedOperationException if the remove operation
      *         is not supported by this list
      * @throws IndexOutOfBoundsException if the index is out of range
      *         (index < 0 || index >= size())
      */
-    public function remove(int $index): IObject;
+    public function remove(IObject|int $o): bool;
 
 
     // Search Operations

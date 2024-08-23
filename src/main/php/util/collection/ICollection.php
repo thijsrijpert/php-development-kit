@@ -256,7 +256,7 @@ use jhp\util\stream\Stream;
  * @see     AbstractCollection
  * @since 1.2
  */
-interface ICollection extends IIterable, ArrayAccess, IObject
+interface ICollection extends IIterable, IObject
 {
     // Query Operations
 
@@ -435,6 +435,21 @@ interface ICollection extends IIterable, ArrayAccess, IObject
      * @see ICollection::contains(Object)
      */
     public function removeAll(ICollection $c): bool;
+
+    /**
+     * Removes the specified element from this set if it is present
+     * (optional operation).  More formally, removes an element {@code e}
+     * such that
+     * {@code Objects.equals(o, e)}, if
+     * this set contains such an element.  Returns {@code true} if this set
+     * contained the element (or equivalently, if this set changed as a
+     * result of the call).  (This set will not contain the element once the
+     * call returns.)
+     *
+     * @param IObject $o object to be removed from this set, if present
+     * @return bool {@code true} if this set contained the specified element
+     */
+    public function remove(IObject $o): bool;
 
     /**
      * Removes all the elements of this collection that satisfy the given

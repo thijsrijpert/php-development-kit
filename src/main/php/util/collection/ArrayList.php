@@ -154,32 +154,6 @@ class ArrayList extends AbstractList implements IList
         return true;
     }
 
-
-    /**
-     * @param ICollection $c collection containing elements to be retained in this collection
-     *
-     * @return true if this collection changed as a result of the call
-     * @throws UnsupportedOperationException if the retainAll operation
-     *         is not supported by this collection
-     * @throws IllegalArgumentException if the types of one or more elements
-     *         in this collection are incompatible with the specified
-     *         collection
-     * @see ICollection::remove(Object)
-     * @see ICollection::contains(Object)
-     */
-    public function retainAll(ICollection $c): bool
-    {
-        $modified = false;
-        foreach ($this->array as $value) {
-            $index = $this->indexOf($value);
-            if (!$c->contains($value)) {
-                $this->remove($index);
-                $modified = true;
-            }
-        }
-        return $modified;
-    }
-
     /**
      * @param UnaryOperator $operator the operator to apply to each element
      */
@@ -218,10 +192,7 @@ class ArrayList extends AbstractList implements IList
      */
     public function clear(): void
     {
-        foreach ($this->array as $ignored) {
-            // If we remove the 0 index every time eventually the entire array will be cleared
-            $this->remove(0);
-        }
+        $this->array = [];
     }
 
     /**
@@ -241,24 +212,20 @@ class ArrayList extends AbstractList implements IList
      */
     public function set(int $index, IObject $element): IObject
     {
-        $current = $this->remove($index);
+        $current = $this->get($index);
+        $this->remove($index);
         $this->add($index, $element);
         return $current;
     }
 
     /**
-     * @param int $index the index of the element to be removed
-     *
-     * @return IObject the element previously at the specified position
-     *
-     * @throws IndexOutOfBoundsException if the index is out of range
-     *         (index < 0 || index >= size())
+     * @param int $index the index to be removed
+     * @return bool the element previously at the specified position
      */
-    public function remove(int $index): IObject
+    protected function removeInt(int $index): bool
     {
-        $value = $this->get($index);
         array_splice($this->array, $index, 1);
-        return $value;
+        return true;
     }
 
     /**
@@ -342,16 +309,6 @@ class ArrayList extends AbstractList implements IList
         throw new UnsupportedOperationException();
     }
 
-    /**
-     * @param Consumer $action The action to be performed for each element
-     */
-    public function forEach(Consumer $action): void
-    {
-        foreach ($this->array as $value) {
-            $action->accept($value);
-        }
-    }
-
     private function checkObjectType(IObject $objectToBeChecked): void
     {
         if (!$this->type->isInstance($objectToBeChecked)) {
@@ -361,5 +318,4 @@ class ArrayList extends AbstractList implements IList
             );
         }
     }
-
 }
