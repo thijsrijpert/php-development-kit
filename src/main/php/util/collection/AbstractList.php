@@ -195,17 +195,13 @@ abstract class AbstractList extends AbstractCollection implements IList
         $this->remove($offset);
     }
 
-    public function remove(int|IObject $o): bool
+    public function remove(IObject $o): bool
     {
-        if (GType::of($o)->isInteger()) {
-            return $this->removeAt($o);
-        }
         $index = $this->indexOf($o);
         if ($index === -1) {
             return false;
         }
-        return $this->removeAt($index);
+        $this->removeAt($index);
+        return true;
     }
-
-    protected abstract function removeAt(int $index): bool;
 }

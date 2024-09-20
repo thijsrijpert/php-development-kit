@@ -102,7 +102,7 @@ class EmptyList extends AbstractList implements IList
         throw new UnsupportedOperationException();
     }
 
-    public function remove(int $index): IObject
+    public function remove(IObject $o): bool
     {
         throw new UnsupportedOperationException();
     }
@@ -127,7 +127,7 @@ class EmptyList extends AbstractList implements IList
         throw new UnsupportedOperationException();
     }
 
-    protected function removeAt(int $index): bool
+    public function removeAt(int $index): IObject
     {
         throw new UnsupportedOperationException("Cannot remove from an empty list");
     }

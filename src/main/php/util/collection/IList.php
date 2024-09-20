@@ -201,15 +201,31 @@ interface IList extends ICollection, ArrayAccess
      * from their indices).  Returns the element that was removed from the
      * list.
      *
-     * @param int $index the index of the element to be removed
+     * @param int $o the index of the element to be removed
      *
-     * @return bool wether the removal was a success
+     * @return bool whether the removal was a success
      * @throws UnsupportedOperationException if the remove operation
      *         is not supported by this list
      * @throws IndexOutOfBoundsException if the index is out of range
      *         (index < 0 || index >= size())
      */
-    public function remove(IObject|int $o): bool;
+    public function remove(IObject $o): bool;
+
+    /**
+     * Removes the element at the specified position in this list (optional
+     * operation).  Shifts any subsequent elements to the left (subtracts one
+     * from their indices).  Returns the element that was removed from the
+     * list.
+     *
+     * @param int $index the index of the element to be removed
+     *
+     * @return bool whether the removal was a success
+     * @throws UnsupportedOperationException if the remove operation
+     *         is not supported by this list
+     * @throws IndexOutOfBoundsException if the index is out of range
+     *          (index < 0 || index >= size())
+     */
+    public function removeAt(int $index): IObject;
 
 
     // Search Operations

@@ -222,13 +222,13 @@ class ArrayList extends AbstractList implements IList
 
     /**
      * @param int $index the index to be removed
-     * @return bool the element previously at the specified position
+     * @return IObject the element previously at the specified position
      */
-    protected function removeAt(int $index): bool
+    public function removeAt(int $index): IObject
     {
-        $this->get($index);
+        $result = $this->get($index);
         array_splice($this->array, $index, 1);
-        return true;
+        return $result;
     }
 
     /**
