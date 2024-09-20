@@ -78,7 +78,12 @@ class EmptyList extends AbstractList implements IList
         return new ArrayIterator([]);
     }
 
-    public function add(IObject|int $a, ?IObject $b = null): bool
+    public function add(IObject $a): bool
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    public function addAt(int $a, IObject $b): void
     {
         throw new UnsupportedOperationException();
     }
@@ -120,5 +125,10 @@ class EmptyList extends AbstractList implements IList
     public function subList(int $fromIndex, int $toIndex): IList
     {
         throw new UnsupportedOperationException();
+    }
+
+    protected function removeInt(int $index): bool
+    {
+        throw new UnsupportedOperationException("Cannot remove from an empty list");
     }
 }

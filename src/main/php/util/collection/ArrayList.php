@@ -116,8 +116,7 @@ class ArrayList extends AbstractList implements IList
      * @apiNote
      * In the JHP library we do not allow null to be added to any collection.
      *
-     * @param IObject|int  $a element whose presence in this collection is to be ensured, or the index the object should be inserted on
-     * @param IObject|null $b element whose presence in this collection is to be ensured, or null if the object is provided in $a
+     * @param IObject $a element whose presence in this collection is to be ensured
      *
      * @return bool true if this collection changed as a result of the call
      *
@@ -126,32 +125,35 @@ class ArrayList extends AbstractList implements IList
      * @throws IndexOutOfBoundsException if the index is out of range
      *          (index < 0 || index > size())
      */
-    public function add(int|IObject $a, ?IObject $b = null): bool
+    public function add(IObject $a): bool
     {
-        if (GType::of($a)->isObject() && $b !== null) {
-            throw new IllegalArgumentException("B may only be set if A is an int");
-        }
-
-        if (GType::of($a)->isInteger() && $b === null) {
-            throw new IllegalArgumentException("B should be set if A is an int");
-        }
-
-        if ($b === null) {
-            $this->checkObjectType($a);
-            $this->array[$this->size()] = $a;
-        } else {
-            if ($a > $this->size()) {
-                throw new IndexOutOfBoundsException("Trying to insert an index that is larger than the current size of the array");
-            }
-
-            if ($a < 0) {
-                throw new IndexOutOfBoundsException("Trying to insert an index that is negative");
-            }
-            $this->checkObjectType($b);
-            array_splice($this->array, $a, 0, [$b]);
-        }
-
+        $this->checkObjectType($a);
+        $this->array[$this->size()] = $a;
         return true;
+    }
+
+    /**
+     * @ImplNote
+     * In the JHP library we do not allow null to be added to any collection.
+     *
+     * @param int $a the index the object should be inserted on
+     * @param IObject $b element whose presence in this collection is to be ensured
+     *
+     * @throws UnsupportedOperationException if the add operation
+     *         is not supported by this collection
+     * @throws IllegalArgumentException if some property of the element
+     *         prevents it from being added to this collection
+     */
+    public function addAt(int $a, IObject $b): void {
+        if ($a > $this->size()) {
+            throw new IndexOutOfBoundsException("Trying to insert an index that is larger than the current size of the array");
+        }
+
+        if ($a < 0) {
+            throw new IndexOutOfBoundsException("Trying to insert an index that is negative");
+        }
+        $this->checkObjectType($b);
+        array_splice($this->array, $a, 0, [$b]);
     }
 
     /**

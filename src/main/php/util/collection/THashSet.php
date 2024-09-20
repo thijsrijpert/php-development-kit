@@ -181,4 +181,9 @@ class THashSet extends TIterable implements ISet
             );
         }
     }
+
+    public function remove(IObject $o): bool
+    {
+        return true;
+    }
 }

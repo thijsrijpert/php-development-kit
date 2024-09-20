@@ -58,7 +58,23 @@ interface IList extends ICollection, ArrayAccess
      * @throws IllegalArgumentException if some property of the element
      *         prevents it from being added to this collection
      */
-    public function add(IObject|int $a, ?IObject $b = null): bool;
+    public function add(IObject $a): bool;
+
+    /**
+     * @ImplNote
+     * In the JHP library we do not allow null to be added to any collection.
+     *
+     * @param int $a the index the object should be inserted on
+     * @param IObject $b element whose presence in this collection is to be ensured
+     *
+     * @throws UnsupportedOperationException if the add operation
+     *         is not supported by this collection
+     * @throws IllegalArgumentException if some property of the element
+     *         prevents it from being added to this collection
+     */
+    public function addAt(int $a, IObject $b): void;
+
+
 
     // Bulk Modification Operations
 
