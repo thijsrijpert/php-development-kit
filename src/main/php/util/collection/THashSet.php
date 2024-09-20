@@ -2,6 +2,7 @@
 
 namespace jhp\util\collection;
 
+use ArrayIterator;
 use Iterator;
 use jhp\lang\exception\IllegalArgumentException;
 use jhp\lang\exception\IllegalStateException;
@@ -95,9 +96,12 @@ class THashSet extends TIterable implements ISet
         }
 
         foreach ($c as $item) {
-            $this->contains($item);
-
+            if(!$this->contains($item)) {
+                return false;
+            }
         }
+
+        return true;
     }
 
     public function addAll(ICollection $a): bool
@@ -119,27 +123,41 @@ class THashSet extends TIterable implements ISet
 
     public function removeAll(ICollection $c): bool
     {
-        // TODO: Implement removeAll() method.
-    }
+        $result = false;
+        foreach($c as $item) {
+            $result = $this->remove($item) || $result;
+        }
 
-    public function removeObject(IObject $o): bool
-    {
-        // TODO: Implement removeObject() method.
+        return $result;
     }
 
     public function removeIf(Predicate $filter): bool
     {
-        // TODO: Implement removeIf() method.
+        $result = false;
+        foreach($this->toArray() as $entry) {
+            if ($filter->test($entry)) {
+                $result = $this->remove($entry) || $result;
+            }
+        }
+
+        return $result;
     }
 
     public function retainAll(ICollection $c): bool
     {
-        // TODO: Implement retainAll() method.
+        $result = false;
+        foreach($this->toArray() as $entry) {
+            if (!$c->contains($entry)) {
+                $result = $this->remove($entry) || $result;
+            }
+        }
+
+        return $result;
     }
 
     public function clear(): void
     {
-        // TODO: Implement clear() method.
+        $this->set = [];
     }
 
     public function stream(): Stream
@@ -152,9 +170,11 @@ class THashSet extends TIterable implements ISet
         throw new UnsupportedOperationException();
     }
 
-    public function forEach(Consumer $action)
+    public function forEach(Consumer $action): void
     {
-        // TODO: Implement forEach() method.
+        foreach ($this->toArray() as $entry) {
+            $action->accept($entry);
+        }
     }
 
     public function getType(): TClass
@@ -162,9 +182,9 @@ class THashSet extends TIterable implements ISet
         return $this->type;
     }
 
-    public function iterator(): Iterator
+    public function iterator(): ArrayIterator
     {
-        throw new UnsupportedOperationException();
+        return new ArrayIterator($this->toArray());
     }
 
     private function hash(IObject $key): int {
@@ -184,6 +204,14 @@ class THashSet extends TIterable implements ISet
 
     public function remove(IObject $o): bool
     {
-        return true;
+        $bucket = $this->set[$o->hashCode()];
+        foreach ($bucket as $index => $entry) {
+            if ($entry->equals($o)) {
+                array_splice($bucket, $index, 1);
+                return true;
+            }
+        }
+
+        return false;
     }
 }

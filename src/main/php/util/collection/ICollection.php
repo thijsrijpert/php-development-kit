@@ -551,7 +551,7 @@ interface ICollection extends IIterable, IObject
      *
      * @param Consumer $action The action to be performed for each element
      */
-    public function forEach(Consumer $action);
+    public function forEach(Consumer $action): void;
 
     /**
      * Gets the type of the elements contained in this collection
