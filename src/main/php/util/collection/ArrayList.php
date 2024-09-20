@@ -226,6 +226,7 @@ class ArrayList extends AbstractList implements IList
      */
     protected function removeAt(int $index): bool
     {
+        $this->get($index);
         array_splice($this->array, $index, 1);
         return true;
     }

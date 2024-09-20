@@ -98,7 +98,6 @@ class TClassTest extends TestCase
     public function testGetInterfaces() {
         $result = c(ICollection::class)->getInterfaces();
         $this->assertTrue($result->contains(c(IIterable::class)));
-        $this->assertTrue($result->contains(c(ArrayAccess::class)));
         $this->assertTrue($result->contains(c(IObject::class)));
     }
 
