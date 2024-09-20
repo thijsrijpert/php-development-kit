@@ -765,7 +765,7 @@ class ArrayListTest extends TestCase
     public function testRemove() {
         $list = new ArrayList(TClass::from(TestObject::class), $this->data);
 
-        $result = $list->remove(2);
+        $result = $list->removeAt(2);
 
         if (!($result instanceof TestObject)) {
             $this->fail();
