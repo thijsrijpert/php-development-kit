@@ -164,7 +164,7 @@ abstract class AbstractList extends AbstractCollection implements IList
         if (!GType::of($offset)->isInteger()) {
             throw new IllegalArgumentException("Lists use int as an index");
         }
-        $this->add($offset, $value);
+        $this->addAt($offset, $value);
     }
 
     /**
@@ -197,12 +197,15 @@ abstract class AbstractList extends AbstractCollection implements IList
 
     public function remove(int|IObject $o): bool
     {
+        if (GType::of($o)->isInteger()) {
+            return $this->removeAt($o);
+        }
         $index = $this->indexOf($o);
         if ($index === -1) {
             return false;
         }
-        return $this->removeInt($index);
+        return $this->removeAt($index);
     }
 
-    protected abstract function removeInt(int $index): bool;
+    protected abstract function removeAt(int $index): bool;
 }

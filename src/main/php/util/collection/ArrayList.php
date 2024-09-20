@@ -216,7 +216,7 @@ class ArrayList extends AbstractList implements IList
     {
         $current = $this->get($index);
         $this->remove($index);
-        $this->add($index, $element);
+        $this->addAt($index, $element);
         return $current;
     }
 
@@ -224,7 +224,7 @@ class ArrayList extends AbstractList implements IList
      * @param int $index the index to be removed
      * @return bool the element previously at the specified position
      */
-    protected function removeInt(int $index): bool
+    protected function removeAt(int $index): bool
     {
         array_splice($this->array, $index, 1);
         return true;

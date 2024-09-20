@@ -127,7 +127,7 @@ class EmptyList extends AbstractList implements IList
         throw new UnsupportedOperationException();
     }
 
-    protected function removeInt(int $index): bool
+    protected function removeAt(int $index): bool
     {
         throw new UnsupportedOperationException("Cannot remove from an empty list");
     }
