@@ -99,7 +99,7 @@ abstract class AbstractCollection extends TIterable implements ICollection
     {
         $modified = false;
         foreach ($c as $item) {
-            $modified = $modified || $this->remove($item);
+            $modified = $this->remove($item) || $modified;
         }
         return $modified;
     }
