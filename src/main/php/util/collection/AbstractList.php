@@ -192,7 +192,7 @@ abstract class AbstractList extends AbstractCollection implements IList
             throw new IllegalArgumentException("Lists use int as an index");
         }
 
-        $this->remove($offset);
+        $this->removeAt($offset);
     }
 
     public function remove(IObject $o): bool
