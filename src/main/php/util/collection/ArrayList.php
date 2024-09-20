@@ -215,7 +215,7 @@ class ArrayList extends AbstractList implements IList
     public function set(int $index, IObject $element): IObject
     {
         $current = $this->get($index);
-        $this->remove($index);
+        $this->removeAt($index);
         $this->addAt($index, $element);
         return $current;
     }
@@ -279,7 +279,7 @@ class ArrayList extends AbstractList implements IList
      * @implSpec
      * The default implementation traverses all elements of the collection using
      * its {@link #iterator}.  Each matching element is removed using
-     * {@link Iterator#remove()}.  If the collection's iterator does not
+     * {@link Iterator#removeAt()}.  If the collection's iterator does not
      * support removal then an UnsupportedOperationException will be
      * thrown on the first matching element.
      *
@@ -294,7 +294,7 @@ class ArrayList extends AbstractList implements IList
         foreach ($this->array as $value) {
             if ($filter->test($value)) {
                 $modified = true;
-                $this->remove($index);
+                $this->removeAt($index);
             } else {
                 $index++;
             }
