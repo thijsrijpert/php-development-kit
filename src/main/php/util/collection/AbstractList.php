@@ -99,7 +99,7 @@ abstract class AbstractList extends AbstractCollection implements IList
                     " to collection of type " . $this->getType()->getName());
             }
             foreach ($b as $value) {
-                $this->add($a++, $value);
+                $this->addAt($a++, $value);
             }
         }
         return true;
