@@ -70,7 +70,7 @@ use jhp\util\collection\Comparator;
  *
  * @see Comparator
  */
-interface Comparable
+interface Comparable extends IObject
 {
 
     /**

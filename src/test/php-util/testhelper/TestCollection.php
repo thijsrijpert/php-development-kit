@@ -23,6 +23,7 @@ namespace jhp\testhelper;
 use ArrayIterator;
 use Iterator;
 use jhp\lang\exception\UnsupportedOperationException;
+use jhp\lang\IObject;
 use jhp\lang\TClass;
 use jhp\lang\TObject;
 use jhp\util\collection\ICollection;
@@ -139,7 +140,7 @@ class TestCollection extends TObject implements ICollection
         throw new UnsupportedOperationException();
     }
 
-    function forEach(Consumer $action)
+    function forEach(Consumer $action): void
     {
         throw new UnsupportedOperationException();
     }
@@ -147,5 +148,10 @@ class TestCollection extends TObject implements ICollection
     public function getType(): TClass
     {
         return $this->type;
+    }
+
+    public function remove(IObject $o): bool
+    {
+        throw new UnsupportedOperationException();
     }
 }

@@ -25,7 +25,11 @@
 
 namespace jhp\util\collection;
 
-interface ISet
+/**
+ * Only contains the methods from collection
+ * Cannot contain duplicate objects
+ */
+interface ISet extends ICollection
 {
 
 }

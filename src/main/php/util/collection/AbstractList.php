@@ -31,24 +31,17 @@ use jhp\lang\internal\GType;
 use jhp\lang\IObject;
 use jhp\lang\TClass;
 
-abstract class AbstractList extends TIterable implements IList
+abstract class AbstractList extends AbstractCollection implements IList
 {
-    protected readonly TClass $type;
-
-    public function __construct(TClass $type)
-    {
-        $this->type = $type;
-    }
 
     /**
-     * Returns true if this list contains no elements.
-     *
-     * @return bool true if this list contains no elements
+     * @param TClass $type The type of the objects that should be stored in this array
      */
-    public function isEmpty(): bool
+    public function __construct(TClass $type)
     {
-        return $this->size() === 0;
+        parent::__construct($type);
     }
+
 
     /**
      * Returns true if this collection contains the specified element.
@@ -63,59 +56,6 @@ abstract class AbstractList extends TIterable implements IList
     public function contains(IObject $o): bool
     {
         return $this->indexOf($o) >= 0;
-    }
-
-    /**
-     * Gets the type of the elements contained in this collection
-     *
-     * @return TClass the type of the elements in this collection
-     */
-    public function getType(): TClass
-    {
-        return $this->type;
-    }
-
-    /**
-     * @param ICollection $c collection to be checked for containment in this collection
-     *
-     * @return true if this collection contains all the elements in the specified collection
-     *
-     * @throws IllegalArgumentException if the element is not of the same type as the list
-     *
-     * @see    ICollection::contains()
-     */
-    public function containsAll(ICollection $c): bool
-    {
-        foreach ($c as $value) {
-            if (!$this->contains($value)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * @param ICollection $c collection containing elements to be removed from this collection
-     *
-     * @return true if this collection changed as a result of the call
-     *
-     * @throws IllegalArgumentException if the types of one or more elements
-     *         in this collection are incompatible with the specified
-     *         collection
-     * @see ICollection::remove(Object)
-     * @see ICollection::contains(Object)
-     */
-    public function removeAll(ICollection $c): bool
-    {
-        $modified = false;
-        foreach ($c as $value) {
-            $index = $this->indexOf($value);
-            if ($index != -1) {
-                $this->remove($index);
-                $modified = true;
-            }
-        }
-        return $modified;
     }
 
 
@@ -159,7 +99,7 @@ abstract class AbstractList extends TIterable implements IList
                     " to collection of type " . $this->getType()->getName());
             }
             foreach ($b as $value) {
-                $this->add($a++, $value);
+                $this->addAt($a++, $value);
             }
         }
         return true;
@@ -224,7 +164,7 @@ abstract class AbstractList extends TIterable implements IList
         if (!GType::of($offset)->isInteger()) {
             throw new IllegalArgumentException("Lists use int as an index");
         }
-        $this->add($offset, $value);
+        $this->addAt($offset, $value);
     }
 
     /**
@@ -252,6 +192,16 @@ abstract class AbstractList extends TIterable implements IList
             throw new IllegalArgumentException("Lists use int as an index");
         }
 
-        $this->remove($offset);
+        $this->removeAt($offset);
+    }
+
+    public function remove(IObject $o): bool
+    {
+        $index = $this->indexOf($o);
+        if ($index === -1) {
+            return false;
+        }
+        $this->removeAt($index);
+        return true;
     }
 }

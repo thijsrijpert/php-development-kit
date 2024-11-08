@@ -175,25 +175,6 @@ class ArrayListTest extends TestCase
         $this->assertEquals($input, $addedValue);
     }
 
-    public function testAddInvalidObjectOrder()
-    {
-        $this->expectException(IllegalArgumentException::class);
-        $input = (new NotTestObject())->setValue("Six");
-        $list = new ArrayList(TClass::from(TestObject::class), $this->data);
-
-        // Argument 1 should be an index
-        $list->add($input, $input);
-    }
-
-    public function testAddInvalidObjectOrderWithIndex()
-    {
-        $this->expectException(IllegalArgumentException::class);
-        $list = new ArrayList(TClass::from(TestObject::class), $this->data);
-
-        // Argument 2 should be an object
-        $list->add(1);
-    }
-
 
     public function testAddInvalidType()
     {
@@ -209,10 +190,9 @@ class ArrayListTest extends TestCase
         $input = (new TestObject())->setValue("Six");
         $list = new ArrayList(TClass::from(TestObject::class), $this->data);
 
-        $result = $list->add(3, $input);
+        $list->addAt(3, $input);
         $addedValue = $list->get(3);
 
-        $this->assertTrue($result);
         $this->assertEquals($input, $addedValue);
     }
 
@@ -222,7 +202,7 @@ class ArrayListTest extends TestCase
         $input = (new TestObject())->setValue("FarAwayIndex");
         $list = new ArrayList(TClass::from(TestObject::class), $this->data);
 
-        $list->add(6, $input);
+        $list->addAt(6, $input);
     }
 
     public function testAddAndGetIndexedJustInsideOfBounds()
@@ -230,10 +210,9 @@ class ArrayListTest extends TestCase
         $input = (new TestObject())->setValue("JustCloseEnoughIndex");
         $list = new ArrayList(TClass::from(TestObject::class), $this->data);
 
-        $result = $list->add(5, $input);
+        $list->addAt(5, $input);
         $addedValue = $list->get(5);
 
-        $this->assertTrue($result);
         $this->assertEquals($input, $addedValue);
     }
 
@@ -243,7 +222,7 @@ class ArrayListTest extends TestCase
         $input = (new TestObject())->setValue("Negative");
         $list = new ArrayList(TClass::from(TestObject::class), $this->data);
 
-        $list->add(-1, $input);
+        $list->addAt(-1, $input);
     }
 
     public function testAddInvalidIndexed()
@@ -252,7 +231,7 @@ class ArrayListTest extends TestCase
         $input = (new NotTestObject())->setValue("Six");
         $list = new ArrayList(TClass::from(TestObject::class), $this->data);
 
-        $list->add(3, $input);
+        $list->addAt(3, $input);
     }
 
     public function testContainsAllIllegalType()
@@ -786,7 +765,7 @@ class ArrayListTest extends TestCase
     public function testRemove() {
         $list = new ArrayList(TClass::from(TestObject::class), $this->data);
 
-        $result = $list->remove(2);
+        $result = $list->removeAt(2);
 
         if (!($result instanceof TestObject)) {
             $this->fail();

@@ -25,7 +25,6 @@
 
 namespace jhp\util\collection;
 
-use ArrayAccess;
 use Iterator;
 use jhp\lang\exception\IllegalArgumentException;
 use jhp\lang\exception\IllegalStateException;
@@ -237,8 +236,6 @@ use jhp\util\stream\Stream;
  * specific synchronization protocol, then it must override default
  * implementations to apply that protocol.
  *
- * @param <E> the type of elements in this collection
- *
  * @author  Josh Bloch
  * @author  Neal Gafter
  * @see     ISet
@@ -256,7 +253,7 @@ use jhp\util\stream\Stream;
  * @see     AbstractCollection
  * @since 1.2
  */
-interface ICollection extends IIterable, ArrayAccess, IObject
+interface ICollection extends IIterable, IObject
 {
     // Query Operations
 
@@ -362,6 +359,7 @@ interface ICollection extends IIterable, ArrayAccess, IObject
      * In the JHP library we do not allow null to be added to any collection.
      *
      * @param IObject $a element whose presence in this collection is to be ensured
+     * @param null $b Empty parameter
      *
      * @return bool true if this collection changed as a result of the call
      *
@@ -397,16 +395,11 @@ interface ICollection extends IIterable, ArrayAccess, IObject
      * specified collection is this collection, and this collection is
      * nonempty.)
      *
-     * @param c collection containing elements to be added to this collection
+     * @param ICollection $a collection containing elements to be added to this collection
      *
      * @return true if this collection changed as a result of the call
      * @throws UnsupportedOperationException if the addAll operation
      *         is not supported by this collection
-     * @throws ClassCastException if the class of an element of the specified
-     *         collection prevents it from being added to this collection
-     * @throws NullPointerException if the specified collection contains a
-     *         null element and this collection does not permit null elements,
-     *         or if the specified collection is null
      * @throws IllegalArgumentException if some property of an element of the
      *         specified collection prevents it from being added to this
      *         collection
@@ -435,6 +428,21 @@ interface ICollection extends IIterable, ArrayAccess, IObject
      * @see ICollection::contains(Object)
      */
     public function removeAll(ICollection $c): bool;
+
+    /**
+     * Removes the specified element from this set if it is present
+     * (optional operation).  More formally, removes an element {@code e}
+     * such that
+     * {@code Objects.equals(o, e)}, if
+     * this set contains such an element.  Returns {@code true} if this set
+     * contained the element (or equivalently, if this set changed as a
+     * result of the call).  (This set will not contain the element once the
+     * call returns.)
+     *
+     * @param IObject $o object to be removed from this set, if present
+     * @return bool {@code true} if this set contained the specified element
+     */
+    public function remove(IObject $o): bool;
 
     /**
      * Removes all the elements of this collection that satisfy the given
@@ -499,7 +507,7 @@ interface ICollection extends IIterable, ArrayAccess, IObject
      * The default implementation creates a sequential Stream from the
      * collection's Spliterator.
      *
-     * @return a sequential Stream over the elements in this collection
+     * @return Stream a sequential Stream over the elements in this collection
      * @since 1.8
      */
     public function stream(): Stream;
@@ -517,7 +525,7 @@ interface ICollection extends IIterable, ArrayAccess, IObject
      * The default implementation creates a parallel Stream from the
      * collection's Spliterator.
      *
-     * @return a possibly parallel Stream over the elements in this
+     * @return Stream a possibly parallel Stream over the elements in this
      * collection
      * @since 1.8
      */
@@ -543,7 +551,7 @@ interface ICollection extends IIterable, ArrayAccess, IObject
      *
      * @param Consumer $action The action to be performed for each element
      */
-    public function forEach(Consumer $action);
+    public function forEach(Consumer $action): void;
 
     /**
      * Gets the type of the elements contained in this collection

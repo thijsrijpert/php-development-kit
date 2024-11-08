@@ -27,14 +27,14 @@ namespace jhp\util\collection;
 
 
 use jhp\lang\exception\IllegalArgumentException;
-use jhp\lang\exception\IllegalStateException;
 use jhp\lang\exception\IndexOutOfBoundsException;
 use jhp\lang\exception\UnsupportedOperationException;
 use jhp\lang\IObject;
 use jhp\lang\TClass;
 use jhp\util\function\UnaryOperator;
+use ArrayAccess;
 
-interface IList extends ICollection
+interface IList extends ICollection, ArrayAccess
 {
     /**
      * @return TClass the type of the elements contained in this list
@@ -58,7 +58,23 @@ interface IList extends ICollection
      * @throws IllegalArgumentException if some property of the element
      *         prevents it from being added to this collection
      */
-    public function add(int|IObject $a, ?IObject $b = null): bool;
+    public function add(IObject $a): bool;
+
+    /**
+     * @ImplNote
+     * In the JHP library we do not allow null to be added to any collection.
+     *
+     * @param int $a the index the object should be inserted on
+     * @param IObject $b element whose presence in this collection is to be ensured
+     *
+     * @throws UnsupportedOperationException if the add operation
+     *         is not supported by this collection
+     * @throws IllegalArgumentException if some property of the element
+     *         prevents it from being added to this collection
+     */
+    public function addAt(int $a, IObject $b): void;
+
+
 
     // Bulk Modification Operations
 
@@ -185,15 +201,31 @@ interface IList extends ICollection
      * from their indices).  Returns the element that was removed from the
      * list.
      *
-     * @param int $index the index of the element to be removed
+     * @param int $o the index of the element to be removed
      *
-     * @return IObject the element previously at the specified position
+     * @return bool whether the removal was a success
      * @throws UnsupportedOperationException if the remove operation
      *         is not supported by this list
      * @throws IndexOutOfBoundsException if the index is out of range
      *         (index < 0 || index >= size())
      */
-    public function remove(int $index): IObject;
+    public function remove(IObject $o): bool;
+
+    /**
+     * Removes the element at the specified position in this list (optional
+     * operation).  Shifts any subsequent elements to the left (subtracts one
+     * from their indices).  Returns the element that was removed from the
+     * list.
+     *
+     * @param int $index the index of the element to be removed
+     *
+     * @return bool whether the removal was a success
+     * @throws UnsupportedOperationException if the remove operation
+     *         is not supported by this list
+     * @throws IndexOutOfBoundsException if the index is out of range
+     *          (index < 0 || index >= size())
+     */
+    public function removeAt(int $index): IObject;
 
 
     // Search Operations

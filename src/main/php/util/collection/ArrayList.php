@@ -116,8 +116,7 @@ class ArrayList extends AbstractList implements IList
      * @apiNote
      * In the JHP library we do not allow null to be added to any collection.
      *
-     * @param IObject|int  $a element whose presence in this collection is to be ensured, or the index the object should be inserted on
-     * @param IObject|null $b element whose presence in this collection is to be ensured, or null if the object is provided in $a
+     * @param IObject $a element whose presence in this collection is to be ensured
      *
      * @return bool true if this collection changed as a result of the call
      *
@@ -126,58 +125,35 @@ class ArrayList extends AbstractList implements IList
      * @throws IndexOutOfBoundsException if the index is out of range
      *          (index < 0 || index > size())
      */
-    public function add(int|IObject $a, ?IObject $b = null): bool
+    public function add(IObject $a): bool
     {
-        if (GType::of($a)->isObject() && $b !== null) {
-            throw new IllegalArgumentException("B may only be set if A is an int");
-        }
-
-        if (GType::of($a)->isInteger() && $b === null) {
-            throw new IllegalArgumentException("B should be set if A is an int");
-        }
-
-        if ($b === null) {
-            $this->checkObjectType($a);
-            $this->array[$this->size()] = $a;
-        } else {
-            if ($a > $this->size()) {
-                throw new IndexOutOfBoundsException("Trying to insert an index that is larger than the current size of the array");
-            }
-
-            if ($a < 0) {
-                throw new IndexOutOfBoundsException("Trying to insert an index that is negative");
-            }
-            $this->checkObjectType($b);
-            array_splice($this->array, $a, 0, [$b]);
-        }
-
+        $this->checkObjectType($a);
+        $this->array[$this->size()] = $a;
         return true;
     }
 
-
     /**
-     * @param ICollection $c collection containing elements to be retained in this collection
+     * @ImplNote
+     * In the JHP library we do not allow null to be added to any collection.
      *
-     * @return true if this collection changed as a result of the call
-     * @throws UnsupportedOperationException if the retainAll operation
+     * @param int $a the index the object should be inserted on
+     * @param IObject $b element whose presence in this collection is to be ensured
+     *
+     * @throws UnsupportedOperationException if the add operation
      *         is not supported by this collection
-     * @throws IllegalArgumentException if the types of one or more elements
-     *         in this collection are incompatible with the specified
-     *         collection
-     * @see ICollection::remove(Object)
-     * @see ICollection::contains(Object)
+     * @throws IllegalArgumentException if some property of the element
+     *         prevents it from being added to this collection
      */
-    public function retainAll(ICollection $c): bool
-    {
-        $modified = false;
-        foreach ($this->array as $value) {
-            $index = $this->indexOf($value);
-            if (!$c->contains($value)) {
-                $this->remove($index);
-                $modified = true;
-            }
+    public function addAt(int $a, IObject $b): void {
+        if ($a > $this->size()) {
+            throw new IndexOutOfBoundsException("Trying to insert an index that is larger than the current size of the array");
         }
-        return $modified;
+
+        if ($a < 0) {
+            throw new IndexOutOfBoundsException("Trying to insert an index that is negative");
+        }
+        $this->checkObjectType($b);
+        array_splice($this->array, $a, 0, [$b]);
     }
 
     /**
@@ -218,10 +194,7 @@ class ArrayList extends AbstractList implements IList
      */
     public function clear(): void
     {
-        foreach ($this->array as $ignored) {
-            // If we remove the 0 index every time eventually the entire array will be cleared
-            $this->remove(0);
-        }
+        $this->array = [];
     }
 
     /**
@@ -241,24 +214,21 @@ class ArrayList extends AbstractList implements IList
      */
     public function set(int $index, IObject $element): IObject
     {
-        $current = $this->remove($index);
-        $this->add($index, $element);
+        $current = $this->get($index);
+        $this->removeAt($index);
+        $this->addAt($index, $element);
         return $current;
     }
 
     /**
-     * @param int $index the index of the element to be removed
-     *
+     * @param int $index the index to be removed
      * @return IObject the element previously at the specified position
-     *
-     * @throws IndexOutOfBoundsException if the index is out of range
-     *         (index < 0 || index >= size())
      */
-    public function remove(int $index): IObject
+    public function removeAt(int $index): IObject
     {
-        $value = $this->get($index);
+        $result = $this->get($index);
         array_splice($this->array, $index, 1);
-        return $value;
+        return $result;
     }
 
     /**
@@ -309,7 +279,7 @@ class ArrayList extends AbstractList implements IList
      * @implSpec
      * The default implementation traverses all elements of the collection using
      * its {@link #iterator}.  Each matching element is removed using
-     * {@link Iterator#remove()}.  If the collection's iterator does not
+     * {@link Iterator#removeAt()}.  If the collection's iterator does not
      * support removal then an UnsupportedOperationException will be
      * thrown on the first matching element.
      *
@@ -324,7 +294,7 @@ class ArrayList extends AbstractList implements IList
         foreach ($this->array as $value) {
             if ($filter->test($value)) {
                 $modified = true;
-                $this->remove($index);
+                $this->removeAt($index);
             } else {
                 $index++;
             }
@@ -342,16 +312,6 @@ class ArrayList extends AbstractList implements IList
         throw new UnsupportedOperationException();
     }
 
-    /**
-     * @param Consumer $action The action to be performed for each element
-     */
-    public function forEach(Consumer $action): void
-    {
-        foreach ($this->array as $value) {
-            $action->accept($value);
-        }
-    }
-
     private function checkObjectType(IObject $objectToBeChecked): void
     {
         if (!$this->type->isInstance($objectToBeChecked)) {
@@ -361,5 +321,4 @@ class ArrayList extends AbstractList implements IList
             );
         }
     }
-
 }
